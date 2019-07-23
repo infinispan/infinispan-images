@@ -1,0 +1,9 @@
+schema_version: 1
+
+# Due to https://github.com/cekit/cekit/issues/552 and the underlying microdnf issue it's not currently possible
+# to install packages across modules or the root image.yaml, therefore we must install all required packages in this module
+name: dependencies
+packages:
+  install:
+    - bsdtar
+    - java-11-openjdk-devel

@@ -1,0 +1,7 @@
+schema_version: 1
+
+name: runtime
+version: 1.0
+
+execute:
+  - script: extract.sh
