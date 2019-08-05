@@ -3,7 +3,7 @@ version: 1.0
 description: Data Grid Server
 
 # artifacts:
-#   - name: datagrid-8.0.0-server.zip
+#   - name: server.zip
 #     description: TODO
 #     md5: TODO
 

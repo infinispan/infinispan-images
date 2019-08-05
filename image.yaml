@@ -6,7 +6,7 @@ description: Infinispan Server
 from: registry.access.redhat.com/ubi8/ubi-minimal:latest
 
 artifacts:
-  - name: infinispan-server-10.0.0.Beta4.zip
+  - name: server.zip
     sha1: 0833573669418a6a655f6c5597ea35790e0b3ae7
     url: https://downloads.jboss.org/infinispan/10.0.0.Beta4/infinispan-server-10.0.0.Beta4.zip
 

@@ -2,13 +2,13 @@
 set -e
 
 ADDED_DIR=$(dirname $0)/added
-ARTIFACTS_DIR=/tmp/artifacts
-DISTRIBUTION=$(ls $ARTIFACTS_DIR | grep infinispan*)
+# Must be the same as artifact name+path defined in module.yaml
+ARTIFACT=/tmp/artifacts/server.zip
 SERVER_ROOT=/opt/infinispan
 
 mkdir -p $SERVER_ROOT
 cd $SERVER_ROOT
-bsdtar --strip-components=1 -xvf $ARTIFACTS_DIR/$DISTRIBUTION
+bsdtar --strip-components=1 -xvf $ARTIFACT
 
 cp $ADDED_DIR/launch.sh $SERVER_ROOT/bin
 cp $ADDED_DIR/java-opts.sh $SERVER_ROOT/bin
