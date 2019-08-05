@@ -53,6 +53,8 @@ envs:
   - name: JAVA_GC_MAX_METASPACE_SIZE
     description: The maximum metaspace size.
     value: 64m
+  - name: LAUNCH_ISPN_IN_BACKGROUND
+    value: true
 
 modules:
   repositories:
