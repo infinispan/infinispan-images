@@ -10,9 +10,8 @@ mkdir -p $SERVER_ROOT
 cd $SERVER_ROOT
 bsdtar --strip-components=1 -xvf $ARTIFACT
 
-cp $ADDED_DIR/launch.sh $SERVER_ROOT/bin
-cp $ADDED_DIR/java-opts.sh $SERVER_ROOT/bin
-cp $ADDED_DIR/server.conf $SERVER_ROOT/bin
+cp -r $ADDED_DIR/bin/* $SERVER_ROOT/bin
+cp -r $ADDED_DIR/conf/* $SERVER_ROOT/server/conf
 
 chown -R 185 /opt
 chmod -R g+rwX $SERVER_ROOT

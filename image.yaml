@@ -14,8 +14,11 @@ packages:
   manager: microdnf
 
 ports:
-  - value: 11221
-  - value: 11222
+  - value: 7800  # TCP bind_port
+  - value: 11221 # Memcached
+  - value: 11222 # Infinispan Single Port
+  - value: 45700 # MPING
+  - value: 57600 # FD_SOCK
 
 labels:
   - name: name
@@ -53,7 +56,17 @@ envs:
   - name: JAVA_GC_MAX_METASPACE_SIZE
     description: The maximum metaspace size.
     value: 64m
-  - name: JGROUPS_STACK
+  - name: JGROUPS_DNS_PING_ADDRESS
+    description: "Used to define the address of the DNS server used by JGroups.DNS_PING when JGROUPS_DNS_PING_QUERY
+    has been set."
+  - name: JGROUPS_DNS_PING_QUERY
+    description: "A query used to discover cluster members via DNS. If a value is provided for this variable, then the
+    JGroups discover protocol defined in the specified JGROUPS_TRANSPORT is overridden to use the JGroups.DNS_PING protocol
+    with the value of this variable used as the 'dns_query' parameter."
+  - name: JGROUPS_DNS_PING_RECORD_TYPE
+    description: "The DNS record entry type. Either 'SRV' or 'A'."
+    example: SRV
+  - name: JGROUPS_TRANSPORT
     value: udp
   - name: LAUNCH_ISPN_IN_BACKGROUND
     value: true
