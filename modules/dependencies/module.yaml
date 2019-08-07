@@ -9,3 +9,4 @@ packages:
   install:
     - bsdtar
     - java-11-openjdk-devel
+    - openssl

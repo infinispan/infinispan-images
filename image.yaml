@@ -68,6 +68,14 @@ envs:
     example: SRV
   - name: JGROUPS_TRANSPORT
     value: udp
+  - name: KEYSTORE_CRT_PATH
+    description: "The path to a directory containing certificate/key pairs in the format tls.key and tls.crt respectively.
+    When configured, a pkcs12 keystore is generated and encryption is enabled on the single port endpoint."
+  - name: KEYSTORE_P12_PATH
+    description: The path to a .p12 keystore that is used by the server for encrypting the single port endpoint.
+  - name: KEYSTORE_P12_PASSWORD
+    description: "When a existing keystore is provided by KEYSTORE_P12_PATH this var must contain the password used to access
+    the keystore. If provided with KEYSTORE_CRT_PATH, the value of this var is used when creating the pkcs12 keystore."
   - name: LAUNCH_ISPN_IN_BACKGROUND
     value: true
 
