@@ -105,3 +105,8 @@ target-docker/
 
 # OpenShift
 openshift.local.clusterup
+
+# VSCode
+.vscode
+**/.settings
+**/.project
