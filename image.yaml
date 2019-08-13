@@ -6,6 +6,8 @@ description: Infinispan Server
 from: registry.access.redhat.com/ubi8/ubi-minimal:latest
 
 artifacts:
+  - name: config-generator.jar
+    path: config-generator/target/config-generator-1.0-SNAPSHOT.jar
   - name: server.zip
     sha1: c925d92aa4a4f7e5fda06e02d602b01f7de1500a
     url: https://downloads.jboss.org/infinispan/10.0.0.Beta5/infinispan-server-10.0.0.Beta5.zip
@@ -15,7 +17,7 @@ packages:
 
 ports:
   - value: 7800  # TCP bind_port
-  - value: 11221 # Memcached
+  - value: 11221 # Infinispan Memcached
   - value: 11222 # Infinispan Single Port
   - value: 45700 # MPING
   - value: 57600 # FD_SOCK
@@ -41,6 +43,10 @@ labels:
 envs:
   - name: ISPN_HOME
     value: /opt/infinispan
+  - name: CONFIG_PATH
+    description: The path to the .yaml file which contains all Infinispan related configuration.
+  - name: IDENTITIES_PATH
+    description: The path to the .yaml file containing all identity information for configuring endpoints.
   - name: JAVA_DIAGNOSTICS
     description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
     example: true
@@ -56,26 +62,6 @@ envs:
   - name: JAVA_GC_MAX_METASPACE_SIZE
     description: The maximum metaspace size.
     value: 64m
-  - name: JGROUPS_DNS_PING_ADDRESS
-    description: "Used to define the address of the DNS server used by JGroups.DNS_PING when JGROUPS_DNS_PING_QUERY
-    has been set."
-  - name: JGROUPS_DNS_PING_QUERY
-    description: "A query used to discover cluster members via DNS. If a value is provided for this variable, then the
-    JGroups discover protocol defined in the specified JGROUPS_TRANSPORT is overridden to use the JGroups.DNS_PING protocol
-    with the value of this variable used as the 'dns_query' parameter."
-  - name: JGROUPS_DNS_PING_RECORD_TYPE
-    description: "The DNS record entry type. Either 'SRV' or 'A'."
-    example: SRV
-  - name: JGROUPS_TRANSPORT
-    value: udp
-  - name: KEYSTORE_CRT_PATH
-    description: "The path to a directory containing certificate/key pairs in the format tls.key and tls.crt respectively.
-    When configured, a pkcs12 keystore is generated and encryption is enabled on the single port endpoint."
-  - name: KEYSTORE_P12_PATH
-    description: The path to a .p12 keystore that is used by the server for encrypting the single port endpoint.
-  - name: KEYSTORE_P12_PASSWORD
-    description: "When a existing keystore is provided by KEYSTORE_P12_PATH this var must contain the password used to access
-    the keystore. If provided with KEYSTORE_CRT_PATH, the value of this var is used when creating the pkcs12 keystore."
   - name: LAUNCH_ISPN_IN_BACKGROUND
     value: true
 

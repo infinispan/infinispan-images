@@ -4,6 +4,8 @@ name: runtime
 version: 1.0
 
 artifacts:
+  - name: config-generator.jar
+    path: /tmp/artifacts
   - name: server.zip
     path: /tmp/artifacts
 
