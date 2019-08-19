@@ -10,7 +10,7 @@ endpoints:
   rest:
     enabled: true
 jgroups:
-  transport: udp
+  transport: tcp
   dnsPing:
     address: ""
     recordType: A
