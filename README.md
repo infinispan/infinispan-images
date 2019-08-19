@@ -54,6 +54,8 @@ jgroups:
     recordType: A
 keystore:
   alias: server
+xsite:
+  name: ""
 ```
 However, it is not necessary to provide all of these fields when configuring your image. Instead you can just provide
 the relevant parts. For example, to utilise tcp for transport and enable the memcached endpoint, your config woudl be
@@ -123,6 +125,23 @@ Alternatively, existing pkcs12 keystores can be utilised by providing the absolu
 ```yaml
   path: /user-config/keystore.p12
   password: customPassword # Required in order to be able to access the keystore
+```
+
+### XSite Replication
+In order to configure the image for xsite replication, it's necessary to provide the external address and port of the
+local site as well as the external address and port of all remote sites as part of the `config.yaml` at startup.
+Below shows the expected format:
+
+```yaml
+---
+xsite:
+  address: # Externally accessible IP Address of local site
+  name: LON
+  port: 7200
+  backups:
+    - address: # Externally accessible  IP address of NYC site
+      name: NYC
+      port: 7200
 ```
 
 ## Creating Images

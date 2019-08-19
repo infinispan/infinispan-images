@@ -68,4 +68,19 @@
             min_threshold="0.40"
     />
     <FRAG3 frag_size="8000"/>
+
+    <gsp:scriptlet>
+        if (xsite?.backups) {
+    </gsp:scriptlet>
+    <relay site="${xsite.name}">
+        <gsp:scriptlet>
+            xsite.backups.each { backup->
+        </gsp:scriptlet>
+        <remote-site name="${backup.name}" stack="relay-global" cluster="global"/>
+        <gsp:scriptlet>
+            }
+        </gsp:scriptlet>
+        <property name="max_site_masters">1000</property>
+    </relay>
+    <gsp:scriptlet>}</gsp:scriptlet>
 </config>
