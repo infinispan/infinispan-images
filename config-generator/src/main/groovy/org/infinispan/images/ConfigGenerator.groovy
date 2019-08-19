@@ -91,9 +91,11 @@ Map configYaml = args.length == 2 ? defaultConfig : mergeMaps(defaultConfig, new
 // Create Keystore if required
 createKeystore configYaml.keystore, outputDir
 
-// Generate JGroups stack file
+// Generate JGroups stack files
 def transport = configYaml.jgroups.transport
 processTemplate "jgroups-${transport}.xml", "${outputDir}jgroups-${transport}.xml", configYaml
+if (configYaml.xsite?.backups) processTemplate "jgroups-relay.xml", "${outputDir}jgroups-relay.xml", configYaml
+
 
 // Generate Infinispan configuration
 processTemplate 'infinispan.xml', "${outputDir}infinispan.xml", configYaml

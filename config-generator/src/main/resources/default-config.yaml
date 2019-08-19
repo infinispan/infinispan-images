@@ -16,3 +16,5 @@ jgroups:
     recordType: A
 keystore:
   alias: server
+xsite:
+  masterCandidate: true

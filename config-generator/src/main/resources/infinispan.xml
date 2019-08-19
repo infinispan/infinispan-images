@@ -8,6 +8,10 @@
 
     <jgroups>
         <stack-file name="image-${jgroups.transport}" path="jgroups-${jgroups.transport}.xml"/>
+
+        <gsp:scriptlet>if (xsite?.backups) {</gsp:scriptlet>
+        <stack-file name="relay-global" path="jgroups-relay.xml"/>
+        <gsp:scriptlet>}</gsp:scriptlet>
     </jgroups>
 
     <cache-container>
