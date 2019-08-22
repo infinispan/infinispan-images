@@ -1,13 +1,13 @@
 schema_version: 1
 name: infinispan/server
-version: 1.0
+version: 10.0.0-SNAPSHOT
 description: Infinispan Server
 
 from: registry.access.redhat.com/ubi8/ubi-minimal:latest
 
 artifacts:
   - name: config-generator.jar
-    path: config-generator/target/config-generator-1.0-SNAPSHOT.jar
+    path: config-generator-1.0.0-SNAPSHOT.jar
   - name: server.zip
     sha1: c925d92aa4a4f7e5fda06e02d602b01f7de1500a
     url: https://downloads.jboss.org/infinispan/10.0.0.Beta5/infinispan-server-10.0.0.Beta5.zip

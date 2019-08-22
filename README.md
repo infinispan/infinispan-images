@@ -144,6 +144,17 @@ xsite:
       port: 7200
 ```
 
+## Image Architecture
+The image consists of two [Cekit](https://cekit.io) modules, `modules/dependencies` and `modules/runtimes`. The
+dependencies module is a simply yaml file that should be used for installing all dependencies required by the image.
+Whereas the runtimes module contains all scripts required by the server during image execution. Files at the root of
+the `runtimes` modules are used to extract the default server distribution and files/dir in the `added`
+dir are copied to the extracted server's root in order to add/overwrite existing files in the distribution.
+
+The entrypoint for the image is `modules/runtimes/added/bin/launch.sh`, which is a minimal bash script that calls the
+[ConfigGenerator](https://github.com/infinispan/infinispan-image-artifacts/tree/master) program to generate the server
+configuration based upon the user supplied yaml files, before then launching the server.
+
 ## Creating Images
 ### Prerequisites
 All of our images are created using the [Cekit](https://cekit.io) tool. Installation instructions can be found [here](https://docs.cekit.io/en/latest/handbook/installation/instructions.html).
@@ -151,21 +162,30 @@ All of our images are created using the [Cekit](https://cekit.io) tool. Installa
 > The exact [dependencies](https://docs.cekit.io/en/latest/handbook/installation/dependencies.html#) that you will require depends on the "builder" that you want to use in order to create your image. For example OSBS has different requirements to Docker.
 
 ### Infinispan
-This is the default that will create an image using the latest release of the upstream Infinispan server and the
-config-generator. To create this image as `infinispan/server` using the Docker builder, issue the following commands:
+The default image configuration creates an image using the latest release of the Infinispan server and the
+infinispan image artifacts. To create this image as `infinispan/server` using the Docker builder,
+issue the following commands:
 ```bash
 cekit build docker
 ```
 
-#### Snapshot Builds
-In order to create the image using the latest SNAPSHOT release of the Infinispan server and config-generator, execute
-the following commands, updating the path value of the last command to utilise the location of your distribution zip.
+#### Recreate Image Releases
+We recommend pulling stable image releases from [Quay.io](https://quay.io/infinispan/server) or [Docker Hub](https://hub.docker.com/r/jboss/infinispan-server),
+however it is also possible to recreate stable releases of an image.
+
+To recreate a given release, it's necessary to checkout the corresponding git tag and build using `cekit build <build-engine>`.
+
+#### Local Snapshot Builds
+In order to create the image using a local SNAPSHOT version of the Infinispan server, execute the following command,
+updating the path attribute to be equal to the local path of your SNAPSHOT distribution zip.
 
 ```bash
-cd config-generator
-mvn clean install
-cd ..
 cekit build --overrides '{"artifacts": [{"name": "server.zip", "path": "infinispan-server-10.0.0-SNAPSHOT.zip"}]}' docker
+```
+
+Similarly in order to build an image using a SNAPSHOT of the config generator, issue the following commands:
+```bash
+cekit build --overrides '{"artifacts": [{"name": "config-generator.jar", "path": "config-generator-1.0.0-SNAPSHOT.jar"}]}' docker
 ```
 
 ### Data Grid
