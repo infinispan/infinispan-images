@@ -3,7 +3,7 @@ infinispan:
 endpoints:
   hotrod:
     enabled: true
-    qup: auth
+    qop: auth
     serverName: infinispan
   memcached:
     enabled: false
