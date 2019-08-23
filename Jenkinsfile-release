@@ -1,0 +1,112 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent {
+        label 'slave-group-normal'
+    }
+
+    parameters {
+        string(name: 'ispnVersion', description: 'Version of Infinispan artifact to be used')
+        string(name: 'artifactsVersion', defaultValue: '', description: 'Image Artifacts Release version (blank to use existing release')
+        booleanParam(name: 'dryRun', defaultValue: false, description: 'If true, we don\'t deploy to image repositories')
+        gitParameter(name: 'branch', defaultValue: 'origin/master', branchFilter: 'origin/(.*)', type: 'PT_BRANCH', description: 'Branch to release from')
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh "git checkout ${params.branch}"
+            }
+        }
+
+        stage('Update Version and Artifacts') {
+            steps {
+                script {
+                    def fileName = 'image.yaml'
+                    def image = readYaml file: fileName
+                    def buildNumber = 1
+                    if (image.version.contains(params.ispnVersion))
+                        buildNumber += image.version.tokenize('-').last() as Integer
+
+                    IMAGE = image
+                    image.version = "${params.ispnVersion}-${buildNumber}"
+                    if (params.artifactsVersion)
+                        image.artifacts.putAt(0, [name: 'config-generator.jar', url: "https://repository.jboss.org/org/infinispan/images/config-generator/${params.artifactsVersion}/config-generator-${params.artifactsVersion}.jar"])
+
+                    image.artifacts.putAt(1, [name: 'server.zip', url: "https://downloads.jboss.org/infinispan/${params.ispnVersion}/infinispan-server-${params.ispnVersion}.zip"])
+
+                    image.labels.findAll {it.name == 'version' || it.name == 'release'}.each { label ->
+                        label.value = params.ispnVersion
+                    }
+
+                    sh "rm ${fileName}"
+                    writeYaml file: fileName, data: image
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh "cekit build docker"
+            }
+        }
+
+        stage('Deploy Release') {
+            when {
+                expression { !params.dryRun }
+            }
+            steps {
+                script {
+                    // Push latest if not a SNAPSHOT branch and on master branch
+                    def pushLatestTag = !IMAGE.version.contains('SNAPSHOT') && params.branch == 'origin/master'
+                    def registries = [
+                        // [url: 'registry.hub.docker.com', repo: 'jboss/infinispan', credential: 'DockerHub-Infinispan'],
+                        [url: 'registry.hub.docker.com', repo: 'infinispan/server', credential: 'DockerHub-Infinispan'],
+                        [url: 'quay.io', repo: 'infinispan/server', credential: 'Quay-Infinispan']
+                    ]
+                    registries.each { registry ->
+                        withDockerRegistry([ credentialsId: registry.credential, url: "https://${registry.url}" ]) {
+                            def fqImageName = "${registry.url}/${registry.repo}"
+                            sh "docker tag ${IMAGE.name} ${fqImageName}:${IMAGE.version}"
+                            sh "docker push ${fqImageName}:${IMAGE.version}"
+
+                            if (pushLatestTag) {
+                                sh "docker tag ${IMAGE.name} ${fqImageName}"
+                                sh "docker push ${fqImageName}"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Tag') {
+            steps {
+                script {
+                    sh "git add image.yaml"
+                    sh "git commit -m 'Releasing Image ${IMAGE.version}'"
+                    sh "git tag ${IMAGE.version}"
+                    sh "git push origin ${params.branch}"
+                    sh "git push origin ${IMAGE.version}"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'git clean -fdx || echo "git clean failed, exit code $?"'
+        }
+        failure {
+            echo "post build status: failure"
+            emailext to: '${DEFAULT_RECIPIENTS}', subject: '${DEFAULT_SUBJECT}', body: '${DEFAULT_CONTENT}'
+        }
+
+        success {
+            echo "post build status: success"
+            emailext to: '${DEFAULT_RECIPIENTS}', subject: '${DEFAULT_SUBJECT}', body: '${DEFAULT_CONTENT}'
+        }
+    }
+}
