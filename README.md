@@ -180,13 +180,16 @@ In order to create the image using a local SNAPSHOT version of the Infinispan se
 updating the path attribute to be equal to the local path of your SNAPSHOT distribution zip.
 
 ```bash
-cekit build --overrides '{"artifacts": [{"name": "server.zip", "path": "infinispan-server-10.0.0-SNAPSHOT.zip"}]}' docker
+cekit build --overrides '{"version": "SNAPSHOT", "artifacts": [{"name": "server.zip", "path": "infinispan-server-10.0.0-SNAPSHOT.zip"}]}' docker
 ```
 
 Similarly in order to build an image using a SNAPSHOT of the config generator, issue the following commands:
 ```bash
-cekit build --overrides '{"artifacts": [{"name": "config-generator.jar", "path": "config-generator-1.0.0-SNAPSHOT.jar"}]}' docker
+cekit build --overrides '{"version": "SNAPSHOT", "artifacts": [{"name": "config-generator.jar", "path": "config-generator-1.0.0-SNAPSHOT.jar"}]}' docker
 ```
+
+> We also pass the 'version' as part of the override to prevent the existing tag of the image being used for the created snapshot
+image.
 
 ### Data Grid
 In order to create an image using the Red Hat Data Grid server, it's necessary to have an active Red Hat kerberos session. The image can then be created using the following command:
