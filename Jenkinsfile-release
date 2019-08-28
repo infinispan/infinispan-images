@@ -62,7 +62,7 @@ pipeline {
                     // Push latest if not a SNAPSHOT branch and on master branch
                     def pushLatestTag = !IMAGE.version.contains('SNAPSHOT') && params.branch == 'origin/master'
                     def registries = [
-                        // [url: 'registry.hub.docker.com', repo: 'jboss/infinispan', credential: 'DockerHub-Infinispan'],
+                        [url: 'registry.hub.docker.com', repo: 'jboss/infinispan', credential: 'DockerHub-Infinispan'],
                         [url: 'registry.hub.docker.com', repo: 'infinispan/server', credential: 'DockerHub-Infinispan'],
                         [url: 'quay.io', repo: 'infinispan/server', credential: 'Quay-Infinispan']
                     ]
