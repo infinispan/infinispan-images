@@ -2,11 +2,32 @@
 
 This repository contains various artifacts to create Infinispan server images.
 
-## Usage
+## Getting Started
+To get started with infinispan server simply execute:
+
+```bash
+docker run infinispan/server
+```
+
+By default the image has authentication enabled on all exposed endpoints. When executing the above command the image
+automatically generates a username/password combo, prints the values to stdout and then starts the Infinispan server with
+the authenticated Hotrod and Rest endpoints exposed on port 11222. Therefore, it's necessary to utilise the printed
+credentials when attempting to access the exposed endpoints via clients.
+
+It's also possible to provide a username/password combination via environment variables like so:
+
+```bash
+docker run -e USER="Titus Bramble" -e PASSWORD="Shambles" infinispan/server
+```
+
+> We recommend utilising the auto-generated credentials or USER & PASS env variables for initial development only. Providing
+authentication and authorization configuration via a [Identities yaml file](#yaml-configuration) allows for much greater
+control.
+
+## Yaml Configuration
 The infinispan image utilies two yaml configuration files. The identities file provides all identity information, such as
-user credentials, role mapping, oauth service etc, and is mandatory. Whereas the configuration yaml is optional, but
-supplies configuration information required by Infinispan during server startup. This can be used in order to configure
-JGroups, Endpoints etc.
+user credentials, role mapping, oauth service etc. Whereas the configuration yaml is optional, but supplies configuration
+information required by Infinispan during server startup. This can be used in order to configure JGroups, Endpoints etc.
 
 Below shows how a [docker volume](https://docs.docker.com/storage/volumes/) can be created and mounted in order to run
 the Infinispan image with a provided the identity and configuration file.
