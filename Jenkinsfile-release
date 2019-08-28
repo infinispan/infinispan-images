@@ -86,7 +86,7 @@ pipeline {
             steps {
                 script {
                     sh "git add image.yaml"
-                    sh "git commit -m 'Releasing Image ${IMAGE.version}'"
+                    sh "git -c user.name='Infinispan' -c user.email='infinispan@infinispan.org' commit -m 'Releasing Image ${IMAGE.version}'"
                     sh "git tag ${IMAGE.version}"
                     sh "git push origin ${params.branch}"
                     sh "git push origin ${IMAGE.version}"
