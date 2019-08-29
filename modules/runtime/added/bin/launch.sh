@@ -51,7 +51,7 @@ if [ -z ${IDENTITIES_PATH} ]; then
     printLn "endpoints, on all nodes, using the same credentials."
     printLn
     printLn "For example:"
-    printLn "    `docker run -e USER=${USER} -e PASS=${PASS}`"
+    printLn "    'docker run -e USER=${USER} -e PASS=${PASS}''"
     printLn
   fi
   printBorder
