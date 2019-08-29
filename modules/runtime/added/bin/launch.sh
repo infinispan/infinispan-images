@@ -33,16 +33,26 @@ fi
 # If no identities file provided, then use provided user/pass or generate as required
 if [ -z ${IDENTITIES_PATH} ]; then
   printBorder
+  printLn
   printLn "IDENTITIES_PATH not specified"
   if [ -n "${USER}" ] && [ -n "${PASS}" ]; then
-    printLn "Generating Identities yaml using USER and PASS env vars"
+    printLn "Generating Identities yaml using USER and PASS env vars."
   else
     USER=$(generate_user_or_password)
     PASS=$(generate_user_or_password)
-    printLn "USER and/or PASS env variables not specified"
-    printLn "Auto generating user and password"
+    printLn "USER and/or PASS env variables not specified."
+    printLn "Auto generating user and password."
+    printLn
     printLn "Generated User: ${USER}"
     printLn "Generated Password: ${PASS}"
+    printLn
+    printLn "These credentials should be passed via environment variables when adding"
+    printLn "new nodes to the cluster to ensure that clients can access the exposed"
+    printLn "endpoints, on all nodes, using the same credentials."
+    printLn
+    printLn "For example:"
+    printLn "    `docker run -e USER=${USER} -e PASS=${PASS}`"
+    printLn
   fi
   printBorder
 
