@@ -96,9 +96,6 @@ pipeline {
     }
 
     post {
-        always {
-            sh 'git clean -fdx || echo "git clean failed, exit code $?"'
-        }
         failure {
             echo "post build status: failure"
             emailext to: '${DEFAULT_RECIPIENTS}', subject: '${DEFAULT_SUBJECT}', body: '${DEFAULT_CONTENT}'
@@ -107,6 +104,12 @@ pipeline {
         success {
             echo "post build status: success"
             emailext to: '${DEFAULT_RECIPIENTS}', subject: '${DEFAULT_SUBJECT}', body: '${DEFAULT_CONTENT}'
+        }
+
+        cleanup {
+            sh 'git clean -fdx || echo "git clean failed, exit code $?"'
+            sh 'docker container prune -f'
+            sh 'docker rmi $(docker images -f "dangling=true" -q) || true'
         }
     }
 }
