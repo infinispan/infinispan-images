@@ -148,6 +148,48 @@ Alternatively, existing pkcs12 keystores can be utilised by providing the absolu
   password: customPassword # Required in order to be able to access the keystore
 ```
 
+### Logging
+To configure logging you can add the following to your config yaml:
+
+```yaml
+logging:
+  categories:
+    org.infinispan.factories: trace
+    org.infinispan.commons.marshall: warn
+```
+
+By default, all specified log levels will be output to both the console and log file (/opt/infinispan/server/log/server.log).
+If you require different log levels for the console and log file, this is possible by explicitly setting the required
+levels like so:
+
+```yaml
+logging:
+  console:
+    level: info
+  file:
+    level: trace
+  categories:
+    org.infinispan.factories: trace
+```
+
+It's also possible to specify the formatting of a log by providing a `pattern` string for the console and/or
+log file element:
+
+```yaml
+logging:
+  file:
+    pattern: '%K{level}%d{HH\:mm\:ss,SSS} %-5p [%c] (%t) %s%e%n'
+```
+
+Finally, if you require your log file to be located at a specific location, such as a mounted volume, it's possible to
+specify the path of the directory in which it will be stored via:
+
+```yaml
+logging:
+  file:
+    path: some/example/path
+```
+
 ### XSite Replication
 In order to configure the image for xsite replication, it's necessary to provide the external address and port of the
 local site as well as the external address and port of all remote sites as part of the `config.yaml` at startup.
