@@ -8,5 +8,8 @@ version: 1.0
 packages:
   install:
     - bsdtar
-    - java-11-openjdk-devel
+    - java-11-openjdk-headless
     - openssl
+
+execute:
+  - script: trim.sh
