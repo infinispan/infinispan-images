@@ -182,21 +182,18 @@ All of our images are created using the [Cekit](https://cekit.io) tool. Installa
 
 > The exact [dependencies](https://docs.cekit.io/en/latest/handbook/installation/dependencies.html#) that you will require depends on the "builder" that you want to use in order to create your image. For example OSBS has different requirements to Docker.
 
-### Infinispan
-The default image configuration creates an image using the latest release of the Infinispan server and the
-infinispan image artifacts. To create this image as `infinispan/server` using the Docker builder,
-issue the following commands:
-```bash
-cekit build docker
-```
-
-#### Recreate Image Releases
+### Recreate Image Releases
 We recommend pulling stable image releases from [Quay.io](https://quay.io/infinispan/server) or [Docker Hub](https://hub.docker.com/r/jboss/infinispan-server),
 however it is also possible to recreate stable releases of an image.
 
-To recreate a given release, it's necessary to checkout the corresponding git tag and build using `cekit build <build-engine>`.
+To recreate a given release, it's necessary to checkout the corresponding git tag and build using `cekit build <build-engine>`. For example:
 
-#### Local Snapshot Builds
+```bash
+git checkout 10.0.0.CR1-4
+cekit build docker
+```
+
+### Local Snapshot Builds
 In order to create the image using a local SNAPSHOT version of the Infinispan server, execute the following command,
 updating the path attribute to be equal to the local path of your SNAPSHOT distribution zip.
 
