@@ -17,7 +17,7 @@ credentials when attempting to access the exposed endpoints via clients.
 It's also possible to provide a username/password combination via environment variables like so:
 
 ```bash
-docker run -e USER="Titus Bramble" -e PASSWORD="Shambles" infinispan/server
+docker run -e USER="Titus Bramble" -e PASS="Shambles" infinispan/server
 ```
 
 > We recommend utilising the auto-generated credentials or USER & PASS env variables for initial development only. Providing
