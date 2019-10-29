@@ -3,10 +3,10 @@
 This repository contains various artifacts to create Infinispan server images.
 
 ## Getting Started
-To get started with infinispan server simply execute:
+To get started with infinispan server on your local machine simply execute:
 
 ```bash
-docker run infinispan/server
+docker run -p 11222:11222 infinispan/server
 ```
 
 By default the image has authentication enabled on all exposed endpoints. When executing the above command the image
@@ -17,12 +17,22 @@ credentials when attempting to access the exposed endpoints via clients.
 It's also possible to provide a username/password combination via environment variables like so:
 
 ```bash
-docker run -e USER="Titus Bramble" -e PASS="Shambles" infinispan/server
+docker run -p 11222:11222 -e USER="Titus Bramble" -e PASS="Shambles" infinispan/server
 ```
 
 > We recommend utilising the auto-generated credentials or USER & PASS env variables for initial development only. Providing
 authentication and authorization configuration via a [Identities yaml file](#yaml-configuration) allows for much greater
 control.
+
+### HotRod Clients
+When connecting a HotRod client to the image, the following SASL properties must be configured on your client (with the username and password properties changed as required):
+
+```java
+infinispan.remote.auth-realm=default
+infinispan.remote.auth-server-name=infinispan
+infinispan.remote.auth-username=Titus Bramble
+infinispan.remote.auth-password=Shambles
+```
 
 ## Yaml Configuration
 The infinispan image utilies two yaml configuration files. The identities file provides all identity information, such as
