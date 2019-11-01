@@ -69,6 +69,11 @@ pipeline {
                     registries.each { registry ->
                         withDockerRegistry([ credentialsId: registry.credential, url: "https://${registry.url}" ]) {
                             def fqImageName = "${registry.url}/${registry.repo}"
+                            // Create/update Infinispan version tag e.g. 10.0.1.Final
+                            sh "docker tag ${IMAGE.name} ${fqImageName}:${params.ispnVersion}"
+                            sh "docker push ${fqImageName}:${params.ispnVersion}"
+
+                            // Create unique image build tag e.g. 10.0.1.Final-2
                             sh "docker tag ${IMAGE.name} ${fqImageName}:${IMAGE.version}"
                             sh "docker push ${fqImageName}:${IMAGE.version}"
 
