@@ -219,6 +219,15 @@ xsite:
       port: 7200
 ```
 
+## Custom Infinispan XML Configuration
+If you require more control of the server's configuration than it is also possible to configure the Infinispan server directly using XML. To do this, it is necessary to set the entrypoint of the docker image to `/opt/infinispan/bin/server.sh` and for the custom Infinispan/JGroups xml files to be copied to a mounted docker volume like so:
+
+```bash
+docker volume create example-vol
+cp custom-infinispan.xml custom-jgroups.xml /var/lib/docker/volumes/example-vol/_data
+docker run -it -v example-vol:/user-config --entrypoint "/opt/infinispan/bin/server.sh"  infinispan/server -b SITE_LOCAL -c /user-config/custom-infinispan.xml
+```
+
 ## Image Architecture
 The image consists of two [Cekit](https://cekit.io) modules, `modules/dependencies` and `modules/runtimes`. The
 dependencies module is a simply yaml file that should be used for installing all dependencies required by the image.
