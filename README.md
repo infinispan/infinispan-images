@@ -1,4 +1,4 @@
-# Infinispan Server Image
+s# Infinispan Server Image
 
 This repository contains various artifacts to create Infinispan server images.
 
@@ -74,7 +74,7 @@ infinispan:
 endpoints:
   hotrod:
     enabled: true
-    qup: auth
+    qop: auth
     serverName: infinispan
   memcached:
     enabled: false
