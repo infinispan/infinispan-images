@@ -9,4 +9,4 @@ else
   HTTP="http"
 fi
 
-PROBE_URL=${HTTP}://${HOSTNAME}:11222/rest/v2/cache-managers/DefaultCacheManager/health/status
+PROBE_URL=${HTTP}://${HOSTNAME}:11222/rest/v2/cache-managers/default/health/status
