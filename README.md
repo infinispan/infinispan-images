@@ -202,6 +202,46 @@ logging:
     path: some/example/path
 ```
 
+#### Rest Enabling CORS
+It's possible to configure the CORS rules for the REST endpoint as follows:
+
+```yaml
+endpoints:
+  rest:
+    cors:
+      - name: restrict-host1
+        allowedOrigins:
+          - http://host1
+          - https://host1
+        allowedMethods:
+          - GET
+
+      - name: allow-all
+        allowCredentials: true
+        allowedOrigins:
+          - '*'
+        allowedMethods:
+          - GET
+          - OPTIONS
+          - POST
+          - PUT
+          - DELETE
+        allowedHeaders:
+          - X-Custom-Header
+          - Upgrade-Insecure-Requests
+        exposeHeaders:
+          - Key-Content-Type
+        maxAgeSeconds: 1
+```
+
+The `name`, `allowedOrigins` and `allowedMethods` keys are mandatory.
+
+The rules are evaluated sequentially based on the "Origin" header set by the browser; in the example above if the origin
+is either "http://host1" or "https://host1" the rule "restrict host1" will apply, otherwise the next rule will be tested.
+Since the rule "allow ALL" permits all origins, any script coming from a different origin will be able to perform the
+methods specified and use the headers supplied. Detailed information about the different configuration parameters can
+be found in the [Infinispan REST guide](https://infinispan.org/docs/stable/titles/rest/rest.html#rest_server_cors).
+
 ### XSite Replication
 In order to configure the image for xsite replication, it's necessary to provide the external address and port of the
 local site as well as the external address and port of all remote sites as part of the `config.yaml` at startup.
