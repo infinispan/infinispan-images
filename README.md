@@ -1,4 +1,4 @@
-s# Infinispan Server Image
+# Infinispan Server Image
 
 This repository contains various artifacts to create Infinispan server images.
 
@@ -278,6 +278,31 @@ dir are copied to the extracted server's root in order to add/overwrite existing
 The entrypoint for the image is `modules/runtimes/added/bin/launch.sh`, which is a minimal bash script that calls the
 [ConfigGenerator](https://github.com/infinispan/infinispan-image-artifacts/tree/master) program to generate the server
 configuration based upon the user supplied yaml files, before then launching the server.
+
+## Kubernetes
+
+### Liveness and Readiness Probes
+It's recommended to utilise Infinispan's REST endpoint in order to determine if the server is ready/live. To do this, you
+can utilise the Kubernetes [httpGet probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) as follows:
+
+```yaml
+livenessProbe:
+httpGet:
+  path: /rest/v2/cache-managers/clustered/health/status
+  port: 11222
+failureThreshold: 5
+initialDelaySeconds: 10
+successThreshold: 1
+timeoutSeconds: 10
+readinessProbe:
+httpGet:
+  path: /rest/v2/cache-managers/clustered/health/status
+  port: 11222
+failureThreshold: 5
+initialDelaySeconds: 10
+successThreshold: 1
+timeoutSeconds: 10
+```
 
 ## Creating Images
 ### Prerequisites
