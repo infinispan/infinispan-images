@@ -73,25 +73,43 @@ infinispan:
   clusterName: infinispan
 endpoints:
   hotrod:
+    auth: true
     enabled: true
     qop: auth
     serverName: infinispan
   memcached:
     enabled: false
   rest:
+    auth: true
     enabled: true
 jgroups:
-  transport: udp
+  diagnostics: false
+  encrypt: false
+  transport: tcp
   dnsPing:
     address: ""
     recordType: A
 keystore:
   alias: server
+  selfSignCert: false
 xsite:
-  name: ""
+  masterCandidate: true
+
+logging:
+  console:
+    level: trace
+    pattern: '%K{level}%d{HH\:mm\:ss,SSS} %-5p [%c] (%t) %s%e%n'
+  file:
+    level: trace
+    path: server/log
+    pattern: '%d{yyyy-MM-dd HH\:mm\:ss,SSS} %-5p [%c] (%t) %s%e%n'
+  categories:
+    com.arjuna: warn
+    org.infinispan: info
+    org.jgroups: warn
 ```
 However, it is not necessary to provide all of these fields when configuring your image. Instead you can just provide
-the relevant parts. For example, to utilise tcp for transport and enable the memcached endpoint, your config woudl be
+the relevant parts. For example, to utilise udp for transport and enable the memcached endpoint, your config woudl be
 as follows:
 
 ```yaml
@@ -99,11 +117,11 @@ endpoints:
   memcached:
     enabled: true
 jgroups:
-  transport: tcp
+  transport: udp
 ```
 
 ### Clustering
-The default JGroups stack for the image is currently udp.
+The default JGroups stack for the image is currently tcp.
 
 #### Kubernetes/Openshift Clustering
 When running in a managed environment such as Kubernetes, it is not possible to utilise multicasting for initial node
@@ -118,6 +136,14 @@ jgroups:
   transport: tcp
   dnsPing:
     query: infinispan-dns-ping.myproject.svc.cluster.local
+```
+
+#### Encryption
+The JGroups encryption protocol ASYM_ENCRYPT can be enabled by defining the following in the yaml:
+
+```yaml
+jgroups:
+  encrypt: true
 ```
 
 ### Endpoints
