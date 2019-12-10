@@ -1,13 +1,13 @@
 schema_version: 1
 name: infinispan/server
-version: 10.1.0.Beta1-1
+version: 10.1.0.CR1-1
 description: Infinispan Server
 from: registry.access.redhat.com/ubi8/ubi-minimal:latest
 artifacts:
 - name: config-generator.jar
-  url: https://repository.jboss.org/org/infinispan/images/config-generator/1.1.0.Beta1/config-generator-1.1.0.Beta1.jar
+  url: https://repository.jboss.org/org/infinispan/images/config-generator/1.1.0.CR1/config-generator-1.1.0.CR1.jar
 - name: server.zip
-  url: https://downloads.jboss.org/infinispan/10.1.0.Beta1/infinispan-server-10.1.0.Beta1.zip
+  url: https://downloads.jboss.org/infinispan/10.1.0.CR1/infinispan-server-10.1.0.CR1.zip
 packages:
   manager: microdnf
 ports:
@@ -20,9 +20,9 @@ labels:
 - name: name
   value: Infinispan Server
 - name: version
-  value: 10.1.0.Beta1
+  value: 10.1.0.CR1
 - name: release
-  value: 10.1.0.Beta1
+  value: 10.1.0.CR1
 - name: io.k8s.description
   value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
 - name: io.k8s.display-name
