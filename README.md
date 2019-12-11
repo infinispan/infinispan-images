@@ -92,6 +92,7 @@ jgroups:
 keystore:
   alias: server
   selfSignCert: false
+  type: pkcs12
 xsite:
   masterCandidate: true
 
@@ -139,12 +140,26 @@ jgroups:
 ```
 
 #### Encryption
-The JGroups encryption protocol ASYM_ENCRYPT can be enabled by defining the following in the yaml:
+The JGroups encryption protocols ASYM_ENCRYPT and SERIALIZE can be enabled by defining the following in the yaml:
 
 ```yaml
 jgroups:
   encrypt: true
 ```
+
+Unfortunately the ASYM_ENCRYPT protocol is vulnerable to man-in-the-middle attacks when configured by itself (see the [JGroups docs for more details](http://jgroups.org/manual4/index.html#SSL_KEY_EXCHANGE)), therefore
+we automatically add the SSL_KEY_EXCHANGE protocol to the stack if a [keystore](#keystore) is configured. For example,
+the following yaml will ensure that both ASYM_ENCRYPT and SSL_KEY_EXCHANGE protocols are utilised:
+
+```yaml
+jgroups:
+  encrypt: true
+keystore:
+  caFile: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+  crtPath: /var/run/secrets/openshift.io/serviceaccount
+```
+
+> Note, in order for SSL_KEY_EXCHANGE to be able to create the required SSL sockets, it's necessary for both a `caFile` and `caPath` to be configured.
 
 ### Endpoints
 The Infinispan image exposes both the REST and HotRod endpoints via a single port `11222`.
@@ -161,29 +176,36 @@ Similarly, it's also possible to disable the HotRod and/or REST endpoints by set
 endpoint's configuration element.
 
 #### Encryption
-By default encryption is disabled on our endpoints, however it can be enabled by one of two ways.
+Encryption is automatically enabled for all endpoints if a [keystore](#keystore) is configured, otherwise it is disabled.
+
+### Keystore
+In order for the image's endpoint and/or clustering to utilise encryption, it is necessary for a keystore to be defined.
+A keystore can be defined in one of two ways.
 
 ##### Providing a CRT Path
-It's possible to provide a path to a directory accessible to the image, that contains certificate/key pairs in the
-format tls.key and tls.crt respectively. This results in a pkcs12 keystore being created and loaded by the server to
-enable endpoint encryption.
+It's possible to provide a `crtPath` to a directory accessible to the image, that contains a private key and certificate in the
+files `tls.key` and `tls.crt` respectively. This results in a pkcs12 keystore being created and loaded by the server to
+enable endpoint encryption. Furthermore, it's also possible to provide a path to a certificate authority pem bundle via
+the `caFile` key.
 
 ```yaml
 ---
 keystore:
+  caFile: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt # Only required for JGroups encryption
   crtPath: /var/run/secrets/openshift.io/serviceaccount
   password: customPassword # Optional field, which determines the keystore's password, otherwise a default is used.
 ```
 
 > This is ideal for managed environments such as Openshift/Kubernetes, as we can simply pass the certificates of the
-services CA, i.e. `/var/run/secrets/kubernetes.io/serviceaccount`.
+services CA, i.e. `caFile: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt`.
 
 ##### Providing an existing keystore
-Alternatively, existing pkcs12 keystores can be utilised by providing the absolute path of the keystore.
+Alternatively, existing keystores can be utilised by providing the absolute path of the keystore.
 
 ```yaml
-  path: /user-config/keystore.p12
+  path: /user-config/keystore.jks
   password: customPassword # Required in order to be able to access the keystore
+  type: jks # If no type specifed, defaults to pkcs12
 ```
 
 ### Logging
