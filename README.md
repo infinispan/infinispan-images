@@ -314,7 +314,7 @@ can utilise the Kubernetes [httpGet probes](https://kubernetes.io/docs/tasks/con
 ```yaml
 livenessProbe:
 httpGet:
-  path: /rest/v2/cache-managers/clustered/health/status
+  path: /rest/v2/cache-managers/default/health/status
   port: 11222
 failureThreshold: 5
 initialDelaySeconds: 10
@@ -322,7 +322,7 @@ successThreshold: 1
 timeoutSeconds: 10
 readinessProbe:
 httpGet:
-  path: /rest/v2/cache-managers/clustered/health/status
+  path: /rest/v2/cache-managers/default/health/status
   port: 11222
 failureThreshold: 5
 initialDelaySeconds: 10
