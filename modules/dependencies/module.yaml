@@ -8,8 +8,13 @@ version: 1.0
 packages:
   install:
     - bsdtar
+    - findutils
+    - iproute
     - java-11-openjdk-headless
+    - lsof
     - openssl
+    - procps-ng
+    - vim-minimal
 
 execute:
   - script: install.sh

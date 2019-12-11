@@ -327,6 +327,22 @@ The entrypoint for the image is `modules/runtimes/added/bin/launch.sh`, which is
 [ConfigGenerator](https://github.com/infinispan/infinispan-image-artifacts/tree/master) program to generate the server
 configuration based upon the user supplied yaml files, before then launching the server.
 
+### Provided Tools
+In order to keep the image's size as small as possible, we utilise the [ubi-minimal](https://developers.redhat.com/products/rhel/ubi/) image. Consequently, the image does not provide all of the tools that are commonly available in linux distributions.
+Below is a list of common tools/recipes that are useful for debugging.
+
+| Task | Command |
+| ---- | ------- |
+| Text editor | vi |
+| Get the PID of the java process | ps -fC java |
+| Get socket/file information | lsof |
+| List all open files excluding network sockets | lsof |grep -v "IPv[46]" |
+| List all TCP sockets | ss -t -a |
+| List all UDP sockets | ss -u -a |
+| Network configuration | ip |
+| Show unicast routes | ip route |
+| Show multicast routes | ip maddress |
+
 ## Kubernetes
 
 ### Liveness and Readiness Probes
