@@ -12,4 +12,4 @@ packages:
     - openssl
 
 execute:
-  - script: trim.sh
+  - script: install.sh

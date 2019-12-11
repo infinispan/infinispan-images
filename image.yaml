@@ -11,6 +11,7 @@ artifacts:
 packages:
   manager: microdnf
 ports:
+- value: 2157
 - value: 7800
 - value: 11221
 - value: 11222
