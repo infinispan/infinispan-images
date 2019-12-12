@@ -8,3 +8,6 @@ cp $ADDED_DIR/java.config /etc/crypto-policies/back-ends/java.config
 
 # Remove dnf and rpm files as package manager not required at runtime
 rm -rf /var/lib/rpm /var/lib/dnf
+
+# Create symlink between bsdtar and tar to enable `oc copy`
+ln -s $(command -v bsdtar) /usr/bin/tar
