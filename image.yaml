@@ -2,7 +2,7 @@ schema_version: 1
 name: infinispan/server
 version: 10.1.0.CR1-1
 description: Infinispan Server
-from: registry.redhat.io/ubi8/ubi-minimal:8.0-213
+from: registry.access.redhat.com/ubi8/ubi-minimal:8.0-213
 artifacts:
 - name: config-generator.jar
   url: https://repository.jboss.org/org/infinispan/images/config-generator/1.1.0.CR1/config-generator-1.1.0.CR1.jar
