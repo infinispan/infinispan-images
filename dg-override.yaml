@@ -1,11 +1,15 @@
 name: datagrid/datagrid-8
 version: 1.0
 description: Data Grid Server
+from: ubi8-minimal:8.0-released
 
-# artifacts:
-#   - name: server.zip
-#     description: TODO
-#     md5: TODO
+artifacts:
+  - name: server.zip
+    description: Red Hat Data Grid 8.0.0.ER2
+    md5: 0475c411a24b107bce9ca2b13e304831
+
+packages:
+  content_sets_file: content_sets.yml
 
 envs:
   - name: ISPN_HOME
@@ -15,17 +19,17 @@ labels:
   - name: name
     value: DG Server
   - name: version
-    value: 8.0.0-SNAPSHOT
+    value: 8.0.0.ER2
   - name: release
-    value: 8.0.0-SNAPSHOT
+    value: 8.0.0.ER2
   - name: com.redhat.component
-    value: jboss-datagrid-8-datagrid8-openshift-container
+    value: datagrid-8-rhel8-container
   - name: org.jboss.product
     value: datagrid
   - name: org.jboss.product.version
-    value: 8.0.0-SNAPSHOT
+    value: 8.0.0.ER2
   - name: org.jboss.product.datagrid.version
-    value: 8.0.0-SNAPSHOT
+    value: 8.0.0.ER2
   - name: "com.redhat.dev-mode"
     value: "DEBUG:true"
     description: "Environment variable used to enable development mode (debugging). A value of true will enable development mode."
@@ -47,7 +51,6 @@ osbs:
     container:
       compose:
           pulp_repos: true
-  # TODO update to correct name/branch
   repository:
-    name: containers/jboss-datagrid-8
-    branch: jb-datagrid-8.0-openshift-rhel-8
+    name: containers/datagrid-8
+    branch: datagrid-8-rhel8
