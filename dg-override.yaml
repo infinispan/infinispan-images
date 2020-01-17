@@ -11,10 +11,6 @@ artifacts:
 packages:
   content_sets_file: content_sets.yml
 
-envs:
-  - name: ISPN_HOME
-    value: /opt/datagrid
-
 labels:
   - name: name
     value: DG Server

@@ -71,13 +71,6 @@ if [ -n "${DEBUG}" ]; then
   set -x
 fi
 
-SERVER_ROOT=/opt/infinispan
-
-# If $ISPN_HOME does not comply with SERVER_ROOT, then create a symlink. Necessary in order to allow overriding of location at build time
-if [ ${SERVER_ROOT} != ${ISPN_HOME} ]; then
-  ln -s ${SERVER_ROOT} ${ISPN_HOME}
-fi
-
 generate_content
 
 [[ -n ${IDENTITIES_PATH} ]] && IDENTITES_OPT="--identities=${IDENTITIES_PATH}"
@@ -86,7 +79,7 @@ generate_content
 java -jar  ${ISPN_HOME}/bin/config-generator.jar $IDENTITES_OPT $CONFIG_OPT ${ISPN_HOME}/server/conf
 
 if [ -n "${DEBUG}" ]; then
-  cat ${SERVER_ROOT}/server/conf/*.xml
+  cat ${ISPN_HOME}/server/conf/*.xml
 fi
 
 exec ${ISPN_HOME}/bin/server.sh
