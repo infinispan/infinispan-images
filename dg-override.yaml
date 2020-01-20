@@ -42,6 +42,12 @@ labels:
   - name: io.openshift.s2i.scripts-url
     value: image:///usr/local/s2i
 
+modules:
+  install:
+  # Override dependencies module to use datagrid specific version
+  - name: org.infinispan.dependencies
+    version: datagrid
+
 osbs:
   configuration:
     container:

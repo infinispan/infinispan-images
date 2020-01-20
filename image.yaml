@@ -66,8 +66,9 @@ modules:
   repositories:
   - path: modules
   install:
-  - name: dependencies
-  - name: runtime
+  - name: org.infinispan.dependencies
+    version: infinispan
+  - name: org.infinispan.runtime
 run:
   cmd:
   - ./bin/launch.sh

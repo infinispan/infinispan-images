@@ -1,0 +1,10 @@
+schema_version: 1
+
+# Due to https://github.com/cekit/cekit/issues/552 and the underlying microdnf issue it's not currently possible
+# to install packages across modules or the root image.yaml, therefore we must install all required packages in this module
+name: org.infinispan.dependencies
+version: datagrid
+
+modules:
+  install:
+    - name: org.infinispan.dependencies.common
