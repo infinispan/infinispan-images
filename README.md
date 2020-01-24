@@ -28,10 +28,11 @@ control.
 When connecting a HotRod client to the image, the following SASL properties must be configured on your client (with the username and password properties changed as required):
 
 ```java
-infinispan.remote.auth-realm=default
-infinispan.remote.auth-server-name=infinispan
-infinispan.remote.auth-username=Titus Bramble
-infinispan.remote.auth-password=Shambles
+infinispan.client.hotrod.auth_username=Titus Bramble
+infinispan.client.hotrod.auth_password=Shambles
+infinispan.client.hotrod.auth_realm=default
+infinispan.client.hotrod.auth_server_name=infinispan
+infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5
 ```
 
 ## Yaml Configuration
