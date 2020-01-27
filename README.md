@@ -44,17 +44,15 @@ infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5
 ```
 
 ## Yaml Configuration
-The infinispan image utilies two yaml configuration files. The identities file provides all identity information, such as
-user credentials, role mapping, oauth service etc. Whereas the configuration yaml is optional, but supplies configuration
+The infinispan image can utilise two optinal yaml configuration files. The identities file provides all identity information,
+such as user credentials, role mapping, oauth service etc. Whereas the configuration yaml contains configuration
 information required by Infinispan during server startup. This can be used in order to configure JGroups, Endpoints etc.
 
 Below shows how a [docker volume](https://docs.docker.com/storage/volumes/) can be created and mounted in order to run
-the Infinispan image with a provided the identity and configuration file.
+the Infinispan image with a identities and configuration file located in the current working directory.
 
 ```bash
-docker volume create example-vol
-cp config.yaml identities.yaml /var/lib/docker/volumes/example-vol/_data
-docker run -v example-vol:/user-config -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config.yaml" infinispan/server
+docker run -v $(pwd):/user-config -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config.yaml" infinispan/server
 ```
 ### Identities Yaml
 Below is an example Identities yaml, that provides a list of user credentials. All of the users specified in this
