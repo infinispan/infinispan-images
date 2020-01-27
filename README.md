@@ -9,6 +9,14 @@ To get started with infinispan server on your local machine simply execute:
 docker run -p 11222:11222 infinispan/server
 ```
 
+or
+
+```bash
+podman run --net=host -p 11222:11222 infinispan/server
+```
+
+> When utilising [podman](https://podman.io/) it's necessary for the `--net=host` to be passed when not executing as `sudo`.
+
 By default the image has authentication enabled on all exposed endpoints. When executing the above command the image
 automatically generates a username/password combo, prints the values to stdout and then starts the Infinispan server with
 the authenticated Hotrod and Rest endpoints exposed on port 11222. Therefore, it's necessary to utilise the printed
