@@ -8,6 +8,7 @@ pipeline {
     parameters {
         string(name: 'ispnVersion', description: 'Version of Infinispan artifact to be used')
         string(name: 'artifactsVersion', defaultValue: '', description: 'Image Artifacts Release version (blank to use existing release')
+        booleanParam(name: 'pushLatestTag', defaultValue: false, description: 'If true, updates the :latest Infinispan tag to equal this release')
         booleanParam(name: 'dryRun', defaultValue: false, description: 'If true, we don\'t deploy to image repositories')
         gitParameter(name: 'branch', defaultValue: 'origin/master', branchFilter: 'origin/(.*)', type: 'PT_BRANCH', description: 'Branch to release from')
     }
@@ -59,8 +60,6 @@ pipeline {
             }
             steps {
                 script {
-                    // Push latest if not a SNAPSHOT branch and on master branch
-                    def pushLatestTag = !IMAGE.version.contains('SNAPSHOT') && params.branch == 'master'
                     def registries = [
                         [url: 'registry.hub.docker.com', repo: 'jboss/infinispan-server', credential: 'DockerHub-Infinispan'],
                         [url: 'registry.hub.docker.com', repo: 'infinispan/server', credential: 'DockerHub-Infinispan'],
@@ -77,7 +76,7 @@ pipeline {
                             sh "docker tag ${IMAGE.name} ${fqImageName}:${IMAGE.version}"
                             sh "docker push ${fqImageName}:${IMAGE.version}"
 
-                            if (pushLatestTag) {
+                            if (params.pushLatestTag) {
                                 sh "docker tag ${IMAGE.name} ${fqImageName}"
                                 sh "docker push ${fqImageName}"
                             }
