@@ -414,5 +414,14 @@ In order to create an image using the Red Hat Data Grid server, it's necessary t
 cekit build --overrides-file dg-override.yaml docker
 ```
 
+### Debug Container Data Grid
+When running in Infinispan in your local environment, the Debug Port is: `DEBUG_PORT="${DEBUG_PORT:-8787}"`
+When you would like to debug what was deployed in the container, you need to use `DEBUG_PORT="*:8787"`
+
+There is no source code in infinispan-images related with DEBUG_PORT because infinispan-images is calling server.sh in Infinispan Project
+```bash
+docker run -e DEBUG=true -e DEBUG_PORT="*:8787" -p 8787:8787 infinispan/server
+```
+
 ## License
 See [License](LICENSE.md).
