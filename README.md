@@ -70,8 +70,6 @@ credentials:
       - dev
 ```
 
-> It's also possible to provide predigested user passwords by setting `preDigestedPassword: true` on each of the provided credential objects.
-
 ### Config Yaml
 Below is an example configuration file which shows the current default values used by the image if not provided by the
 user configuration yaml.
