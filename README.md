@@ -321,6 +321,21 @@ cp custom-infinispan.xml custom-jgroups.xml /var/lib/docker/volumes/example-vol/
 docker run -it -v example-vol:/user-config --entrypoint "/opt/infinispan/bin/server.sh"  infinispan/server -b SITE_LOCAL -c /user-config/custom-infinispan.xml
 ```
 
+## Debugging
+
+### Image Configuration
+The image scripts that are used to configure and launch the Infinispan server can be debugged by setting the environment variable `DEBUG=TRUE` as follows:
+
+```bash
+ docker run -e DEBUG=true infinispan/server
+```
+
+### Infinispan Server
+It's also possible to debug the Infinispan server in the image by setting the `DEBUG_PORT` environment variable as follows:
+```bash
+docker run -e DEBUG_PORT="*:8787" -p 8787:8787 infinispan/server
+```
+
 ## Image Architecture
 The image consists of two [Cekit](https://cekit.io) modules, `modules/dependencies` and `modules/runtimes`. The
 dependencies module is a simply yaml file that should be used for installing all dependencies required by the image.
