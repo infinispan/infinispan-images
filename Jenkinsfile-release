@@ -1,5 +1,10 @@
 #!/usr/bin/env groovy
 
+void dockerTagAndPush(String srcTag, String destTag){
+    sh "docker tag ${srcTag} ${destTag}"
+    sh "docker push ${destTag}"
+}
+
 pipeline {
     agent {
         label 'slave-group-release'
@@ -69,16 +74,16 @@ pipeline {
                         withDockerRegistry([ credentialsId: registry.credential, url: "https://${registry.url}" ]) {
                             def fqImageName = "${registry.url}/${registry.repo}"
                             // Create/update Infinispan version tag e.g. 10.0.1.Final
-                            sh "docker tag ${IMAGE.name} ${fqImageName}:${params.ispnVersion}"
-                            sh "docker push ${fqImageName}:${params.ispnVersion}"
+                            dockerTagAndPush IMAGE.name, "${fqImageName}:${params.ispnVersion}"
 
                             // Create unique image build tag e.g. 10.0.1.Final-2
-                            sh "docker tag ${IMAGE.name} ${fqImageName}:${IMAGE.version}"
-                            sh "docker push ${fqImageName}:${IMAGE.version}"
+                            dockerTagAndPush IMAGE.name, "${fqImageName}:${IMAGE.version}"
+
+                            // Create Stream tag e.g. 10.0
+                            dockerTagAndPush IMAGE.name, "${fqImageName}:${IMAGE.version.tokenize('.')[0,1].join('.')}"
 
                             if (params.pushLatestTag) {
-                                sh "docker tag ${IMAGE.name} ${fqImageName}"
-                                sh "docker push ${fqImageName}"
+                                dockerTagAndPush IMAGE.name, fqImageName
                             }
                         }
                     }
