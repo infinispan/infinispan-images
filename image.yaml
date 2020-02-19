@@ -1,6 +1,6 @@
 schema_version: 1
 name: infinispan/server
-version: 10.1.2.Final-3
+version: 10.1.2.Final-4
 description: Infinispan Server
 from: registry.access.redhat.com/ubi8/ubi-minimal:8.0-213
 artifacts:
