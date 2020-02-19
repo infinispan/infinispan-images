@@ -1,11 +1,11 @@
 schema_version: 1
 name: infinispan/server
-version: 11.0.0.Alpha1-1
+version: 11.0.0.Alpha1-2
 description: Infinispan Server
 from: registry.access.redhat.com/ubi8/ubi-minimal:8.0-213
 artifacts:
 - name: config-generator.jar
-  url: https://repository.jboss.org/org/infinispan/images/config-generator/1.1.1.Final/config-generator-1.1.1.Final.jar
+  url: https://repository.jboss.org/org/infinispan/images/config-generator/1.1.2.Final/config-generator-1.1.2.Final.jar
 - name: server.zip
   url: https://downloads.jboss.org/infinispan/11.0.0.Alpha1/infinispan-server-11.0.0.Alpha1.zip
 packages:
