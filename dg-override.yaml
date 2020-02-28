@@ -5,8 +5,8 @@ from: ubi8-minimal:8.0-released
 
 artifacts:
   - name: server.zip
-    description: Red Hat Data Grid 8.0.0.ER3
-    md5: 5f07f47da542bacda3e3d6e2e97dce74
+    description: Red Hat Data Grid 8.0.0.ER4
+    md5: 47eafecb868ed30cd4d032511cb166af 
 
 packages:
   content_sets_file: content_sets.yml
@@ -15,17 +15,17 @@ labels:
   - name: name
     value: DG Server
   - name: version
-    value: 8.0.0.ER3
+    value: 8.0.0.ER4
   - name: release
-    value: 8.0.0.ER3
+    value: 8.0.0.ER4
   - name: com.redhat.component
     value: datagrid-8-rhel8-container
   - name: org.jboss.product
     value: datagrid
   - name: org.jboss.product.version
-    value: 8.0.0.ER3
+    value: 8.0.0.ER4
   - name: org.jboss.product.datagrid.version
-    value: 8.0.0.ER3
+    value: 8.0.0.ER4
   - name: "com.redhat.dev-mode"
     value: "DEBUG:true"
     description: "Environment variable used to enable development mode (debugging). A value of true will enable development mode."
