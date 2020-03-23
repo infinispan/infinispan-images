@@ -1,13 +1,13 @@
 schema_version: 1
 name: infinispan/server
-version: 11.0.0.Alpha1-3
+version: 11.0.0.Dev03-1
 description: Infinispan Server
 from: registry.access.redhat.com/ubi8/ubi-minimal:8.0-213
 artifacts:
 - name: config-generator.jar
   url: https://repository.jboss.org/org/infinispan/images/config-generator/1.1.2.Final/config-generator-1.1.2.Final.jar
 - name: server.zip
-  url: https://downloads.jboss.org/infinispan/11.0.0.Alpha1/infinispan-server-11.0.0.Alpha1.zip
+  url: https://downloads.jboss.org/infinispan/11.0.0.Dev03/infinispan-server-11.0.0.Dev03.zip
 packages:
   manager: microdnf
 ports:
@@ -21,9 +21,9 @@ labels:
 - name: name
   value: Infinispan Server
 - name: version
-  value: 11.0.0.Alpha1
+  value: 11.0.0.Dev03
 - name: release
-  value: 11.0.0.Alpha1
+  value: 11.0.0.Dev03
 - name: io.k8s.description
   value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
 - name: io.k8s.display-name
