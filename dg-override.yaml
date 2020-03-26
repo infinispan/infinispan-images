@@ -5,7 +5,7 @@ from: ubi8-minimal:8.0-released
 
 artifacts:
   - name: server.zip
-    description: Red Hat Data Grid 8.0.0.CR2
+    description: Red Hat Data Grid 8.0.0.GA
     md5: f6d302b8cec812c604c45031cc30ee8d
 
 packages:
@@ -15,17 +15,17 @@ labels:
   - name: name
     value: DG Server
   - name: version
-    value: 8.0.0.CR2
+    value: 8.0.0.GA
   - name: release
-    value: 8.0.0.CR2
+    value: 8.0.0.GA
   - name: com.redhat.component
     value: datagrid-8-rhel8-container
   - name: org.jboss.product
     value: datagrid
   - name: org.jboss.product.version
-    value: 8.0.0.CR2
+    value: 8.0.0.GA
   - name: org.jboss.product.datagrid.version
-    value: 8.0.0.CR2
+    value: 8.0.0.GA
   - name: "com.redhat.dev-mode"
     value: "DEBUG:true"
     description: "Environment variable used to enable development mode (debugging). A value of true will enable development mode."
