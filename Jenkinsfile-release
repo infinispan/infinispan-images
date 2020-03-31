@@ -92,6 +92,9 @@ pipeline {
         }
 
         stage('Tag') {
+            when {
+                expression { !params.dryRun }
+            }
             steps {
                 script {
                     sh "git add image.yaml"
