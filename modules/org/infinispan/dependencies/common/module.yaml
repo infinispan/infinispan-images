@@ -10,7 +10,7 @@ packages:
     - bsdtar
     - findutils
     - iproute
-    - java-11-openjdk-headless
+    - java-11-openjdk-devel
     - lsof
     - openssl
     - procps-ng
