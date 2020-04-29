@@ -44,15 +44,20 @@ labels:
 
 modules:
   install:
-  # Override dependencies module to use datagrid specific version
-  - name: org.infinispan.dependencies
-    version: datagrid
+    # Override dependencies module to use datagrid specific version
+    - name: org.infinispan.dependencies
+      version: datagrid
+    - name: org.infinispan.dependencies.jdk
+      version: openjdk
 
 osbs:
   configuration:
     container:
       compose:
-          pulp_repos: true
+        pulp_repos: true
+      platforms:
+        only:
+          - x86_64
   repository:
     name: containers/datagrid-8
-    branch: datagrid-8-rhel8
+    branch: datagrid-8-rhel-8
