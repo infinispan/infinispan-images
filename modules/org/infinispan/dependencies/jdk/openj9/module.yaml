@@ -1,0 +1,11 @@
+schema_version: 1
+
+name: org.infinispan.dependencies.jdk
+version: openj9
+
+packages:
+  install:
+    - java-11-openj9-devel
+
+execute:
+  - script: install.sh
