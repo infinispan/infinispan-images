@@ -67,6 +67,9 @@ modules:
   - path: modules
   install:
   - name: org.infinispan.dnf-workaround
+    # Jdk must be installed before other dependencies to allow for cached dnf files to be removed
+  - name: org.infinispan.dependencies.jdk
+    version: openjdk
   - name: org.infinispan.dependencies
     version: infinispan
   - name: org.infinispan.runtime
