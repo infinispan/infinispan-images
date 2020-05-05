@@ -422,10 +422,20 @@ cekit build --overrides '{"version": "SNAPSHOT", "artifacts": [{"name": "config-
 image.
 
 ### Data Grid
-In order to create an image using the Red Hat Data Grid server, it's necessary to have an active Red Hat kerberos session. The image can then be created using the following command:
+In order to create an image using the Red Hat Data Grid server, it's necessary to have an active Red Hat kerberos session.
+
+To build the OpenJDK (HotSpot) image (x86_64):
 ```bash
-cekit build --overrides-file dg-override.yaml docker
+cekit build --overrides-file dg-override.yaml [docker|podman|osbs|...]
 ```
+
+To build the OpenJ9 image (s390x) you must utilise the `osbs` build engine and provide both override files:
+```bash
+cekit build --overrides-file dg-override.yaml --overrides-file openj9-override.yaml osbs
+```
+
+> The order of the overrides files in the command line matters, as openj9-override.yaml is meant to be applied on top of dg-override.yaml
+
 
 ## License
 See [License](LICENSE.md).
