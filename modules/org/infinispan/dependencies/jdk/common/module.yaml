@@ -1,0 +1,7 @@
+schema_version: 1
+
+name: org.infinispan.dependencies.jdk.common
+version: 1.0
+
+execute:
+  - script: install.sh
