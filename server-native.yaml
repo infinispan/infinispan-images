@@ -1,0 +1,81 @@
+- name: native-builder
+  version: 1.0
+  from: quay.io/quarkus/centos-quarkus-maven:20.0.0-java11
+  description: Builder image for native components
+  artifacts:
+  - name: config-generator-src
+    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.0.0.Dev01.tar.gz
+    target: config-generator-src.tar.gz
+  - name: server-src
+    url: https://github.com/infinispan/infinispan-quarkus/archive/11.0.0.Dev05-01.tar.gz
+    target: server-src.tar.gz
+  modules:
+    repositories:
+    - path: modules
+    install:
+    - name: quarkus.config-generator
+    - name: quarkus.server
+
+- name: infinispan/server-native
+  version: 11.0.0-SNAPSHOT
+  description: Infinispan Quarkus Server
+  from: registry.access.redhat.com/ubi8/ubi-minimal:8.2-267
+  artifacts:
+  - name: config-generator
+    image: native-builder
+    path: /opt/config-generator
+  - name: server
+    image: native-builder
+    path: /opt/server
+  packages:
+    manager: microdnf
+  ports:
+  - value: 2157
+  - value: 7800
+  - value: 11221
+  - value: 11222
+  - value: 45700
+  - value: 57600
+  labels:
+  - name: name
+    value: Infinispan Server
+  - name: version
+    value: 11.0.0.Dev05-01
+  - name: release
+    value: 11.0.0.Dev05-01
+  - name: io.k8s.description
+    value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
+  - name: io.k8s.display-name
+    value: Infinispan Server
+  - name: io.openshift.expose-services
+    value: 8080:http
+  - name: io.openshift.tags
+    value: datagrid,java,jboss,xpaas
+  - name: io.openshift.s2i.scripts-url
+    value: image:///usr/local/s2i
+  envs:
+  - name: ISPN_HOME
+    value: /opt/infinispan
+  - name: CONFIG_PATH
+    description: The path to the .yaml file which contains all Infinispan related configuration.
+  - name: IDENTITIES_PATH
+    description: The path to the .yaml file containing all identity information for configuring endpoints.
+  - name: USER
+    description: When provided with the PASS variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
+  - name: PASS
+    description: When provided with the USER variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
+  modules:
+    repositories:
+    - path: modules
+    install:
+    - name: org.infinispan.dnf-workaround
+    - name: org.infinispan.dependencies
+      version: infinispan
+    - name: org.infinispan.distribution
+      version: native
+    - name: org.infinispan.runtime
+  run:
+    cmd:
+    - ./bin/launch.sh
+    user: 185
+    workdir: /opt/infinispan
