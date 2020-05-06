@@ -3,11 +3,5 @@ schema_version: 1
 name: org.infinispan.runtime
 version: 1.0
 
-artifacts:
-  - name: config-generator.jar
-    path: /tmp/artifacts
-  - name: server.zip
-    path: /tmp/artifacts
-
 execute:
   - script: extract.sh

@@ -76,7 +76,15 @@ generate_content
 [[ -n ${IDENTITIES_PATH} ]] && IDENTITES_OPT="--identities=${IDENTITIES_PATH}"
 [[ -n ${CONFIG_PATH} ]] && CONFIG_OPT="--config=${CONFIG_PATH}"
 
-java -jar  ${ISPN_HOME}/bin/config-generator.jar $IDENTITES_OPT $CONFIG_OPT ${ISPN_HOME}/server/conf
+CONFIG_GENERATOR="${ISPN_HOME}/bin/config-generator"
+CONFIG_GENERATOR_ARGS="$IDENTITES_OPT $CONFIG_OPT ${ISPN_HOME}/server/conf"
+
+# If *.jar, java otherwise native
+if [[ -f "${CONFIG_GENERATOR}.jar" ]]; then
+  java -jar ${ISPN_HOME}/bin/config-generator.jar $CONFIG_GENERATOR_ARGS
+else
+  bin/config-generator $CONFIG_GENERATOR_ARGS
+fi
 
 if [ -n "${DEBUG}" ]; then
   cat ${ISPN_HOME}/server/conf/*.xml

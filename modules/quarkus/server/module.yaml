@@ -1,0 +1,11 @@
+schema_version: 1
+
+name: quarkus.server
+version: 1.0
+
+artifacts:
+  - name: server-src
+    path: /tmp/artifacts
+
+execute:
+  - script: compile.sh

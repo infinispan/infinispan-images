@@ -1,0 +1,13 @@
+schema_version: 1
+
+name: org.infinispan.distribution
+version: native
+
+artifacts:
+  - name: config-generator
+    path: /tmp/artifacts
+  - name: server
+    path: /tmp/artifacts
+
+execute:
+  - script: extract.sh
