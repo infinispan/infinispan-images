@@ -2,7 +2,7 @@
 
 pipeline {
     agent {
-        label 'slave-group-normal'
+        label 'slave-group-graalvm'
     }
 
     options {
@@ -18,7 +18,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh "cekit build docker"
+                sh "cekit -v --descriptor server-native.yaml build docker"
+                sh "cekit -v --descriptor server-openjdk.yaml build docker"
             }
         }
     }
