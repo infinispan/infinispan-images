@@ -1,6 +1,16 @@
-# Infinispan Server Image
+# Infinispan Server Images
 
 This repository contains various artifacts to create Infinispan server images.
+
+## Images
+Currently we provide the following images which are all based upon the [ubi-minimal](https://catalog.redhat.com/software/containers/detail/5c359a62bed8bd75a2c3fba8)
+base image:
+
+- `infinispan/server` - Infinispan is executed using the Java 11 openjdk JVM
+- `infinispan/server-native` - Infinispan is executed natively using the [Infinispan Quarkus](https://github.com/infinispan/infinispan-quarkus) binary.
+
+> The `server` and `server-native` images are configured the same. The instructions throughout these docs are applicable
+to both images unless otherwise stated.
 
 ## Getting Started
 To get started with infinispan server on your local machine simply execute:
@@ -348,7 +358,8 @@ The entrypoint for the image is `modules/runtimes/added/bin/launch.sh`, which is
 configuration based upon the user supplied yaml files, before then launching the server.
 
 ### Provided Tools
-In order to keep the image's size as small as possible, we utilise the [ubi-minimal](https://developers.redhat.com/products/rhel/ubi/) image. Consequently, the image does not provide all of the tools that are commonly available in linux distributions.
+In order to keep the image's size as small as possible, we utilise the [ubi-minimal](https://developers.redhat.com/products/rhel/ubi/) image.
+Consequently, the image does not provide all of the tools that are commonly available in linux distributions.
 Below is a list of common tools/recipes that are useful for debugging.
 
 | Task | Command |
@@ -394,37 +405,35 @@ All of our images are created using the [Cekit](https://cekit.io) tool. Installa
 
 > The exact [dependencies](https://docs.cekit.io/en/latest/handbook/installation/dependencies.html#) that you will require depends on the "builder" that you want to use in order to create your image. For example OSBS has different requirements to Docker.
 
+
+#### Cekit Patch
+Due to https://github.com/cekit/cekit/issues/642, it is necessary to install the following one-off patch for 'cekit' via pip
+in order for multi-stage builds to work as expected:
+
+```bash
+pip3 install -U https://github.com/goldmann/cekit/archive/gh-642-multi-stage-handling-artifacts.zip
+```
+
+### Image
+
+### Descriptor Files
+We leverage [cekit descriptor files](https://docs.cekit.io/en/latest/descriptor/image.html) in order to create the different
+image types.
+
+- `server-openjdk.yaml` - Creates the `infinispan/server` image with a natively compiled config-generator
+- `server-native.yaml` - Creates the `infinispan/server-native` image with a natively compiled config-generator and server
+
+
 ### Recreate Image Releases
 We recommend pulling stable image releases from [Quay.io](https://quay.io/infinispan/server) or [Docker Hub](https://hub.docker.com/r/jboss/infinispan-server),
 however it is also possible to recreate stable releases of an image.
 
-To recreate a given release, it's necessary to checkout the corresponding git tag and build using `cekit build <build-engine>`. For example:
+To recreate a given release, it's necessary to checkout the corresponding git tag and build using `cekit --descriptor <descriptor-file> build <build-engine>`.
+For example, the following commands will recreate the `infinispan/server:10.0.0.Dev05` image.
 
 ```bash
-git checkout 10.0.0.CR1-4
-cekit build docker
-```
-
-### Local Snapshot Builds
-In order to create the image using a local SNAPSHOT version of the Infinispan server, execute the following command,
-updating the path attribute to be equal to the local path of your SNAPSHOT distribution zip.
-
-```bash
-cekit build --overrides '{"version": "SNAPSHOT", "artifacts": [{"name": "server.zip", "path": "infinispan-server-10.0.0-SNAPSHOT.zip"}]}' docker
-```
-
-Similarly in order to build an image using a SNAPSHOT of the config generator, issue the following commands:
-```bash
-cekit build --overrides '{"version": "SNAPSHOT", "artifacts": [{"name": "config-generator.jar", "path": "config-generator-1.0.0-SNAPSHOT.jar"}]}' docker
-```
-
-> We also pass the 'version' as part of the override to prevent the existing tag of the image being used for the created snapshot
-image.
-
-### Data Grid
-In order to create an image using the Red Hat Data Grid server, it's necessary to have an active Red Hat kerberos session. The image can then be created using the following command:
-```bash
-cekit build --overrides-file dg-override.yaml docker
+git checkout 11.0.0.Dev05
+cekit --descriptor server-openjdk.yaml build docker
 ```
 
 ## License
