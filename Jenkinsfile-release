@@ -139,19 +139,20 @@ pipeline {
                     IMAGES.each { name, image ->
                         REGISTRIES.each { registry ->
                             withDockerRegistry([ credentialsId: registry.credential, url: "https://${registry.url}" ]) {
-                                def fqImageName = "${registry.url}/infinispan/${name}"
+                                def imageBuild = "infinispan/${name}"
+                                def fqImageName = "${registry.url}/${imageBuild}"
                                 // Create/update Infinispan version tag e.g. 10.0.1.Final
-                                dockerTagAndPush name, "${fqImageName}:${params.ispnVersion}"
+                                dockerTagAndPush imageBuild, "${fqImageName}:${params.ispnVersion}"
 
                                 // Create unique image build tag e.g. 10.0.1.Final-2
                                 def version = image.version
-                                dockerTagAndPush name, "${fqImageName}:${version}"
+                                dockerTagAndPush imageBuild, "${fqImageName}:${version}"
 
                                 // Create Stream tag e.g. 10.0
-                                dockerTagAndPush name, "${fqImageName}:${version.tokenize('.')[0,1].join('.')}"
+                                dockerTagAndPush imageBuild, "${fqImageName}:${version.tokenize('.')[0,1].join('.')}"
 
                                 if (params.pushLatestTag) {
-                                    dockerTagAndPush name, fqImageName
+                                    dockerTagAndPush imageBuild, fqImageName
                                 }
                             }
                         }
@@ -169,8 +170,8 @@ pipeline {
                     IMAGES.each { name, image ->
                         sh "git add ${image.descriptor}"
                         sh "git -c user.name='Infinispan' -c user.email='infinispan@infinispan.org' commit -m 'Releasing Version ${image.version} of ${name} image'"
-                        sh "git tag ${image.version}"
-                        sh "git push origin ${image.version}"
+                        sh "git tag ${name}-${image.version}"
+                        sh "git push origin ${name}-${image.version}"
                     }
                     sh "git push origin ${params.branch}"
                 }
