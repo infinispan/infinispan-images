@@ -1,19 +1,95 @@
 #!/usr/bin/env groovy
+REGISTRIES = [
+        [
+                url       : 'registry.hub.docker.com',
+                repo      : 'infinispan/server',
+                credential: 'DockerHub-Infinispan'
+        ],
+        [
+                url       : 'quay.io',
+                repo      : 'infinispan/server',
+                credential: 'Quay-Infinispan'
+        ]
+]
 
-void dockerTagAndPush(String srcTag, String destTag){
+IMAGE_CONFIG = [
+        server         : [
+                descriptor        : 'server-openjdk.yaml',
+                'config-generator': [
+                        name  : 'config-generator-src',
+                        url   : "https://github.com/infinispan/infinispan-image-artifacts/archive/${params.artifactsVersion}.tar.gz",
+                        target: 'config-generator-src.tar.gz'
+                ],
+                server            : [
+                        name: 'server',
+                        url : "https://downloads.jboss.org/infinispan/%s/infinispan-server-${params.ispnVersion}.zip"
+                ]
+        ],
+        'server-native': [
+                descriptor        : 'server-native.yaml',
+                'config-generator': [
+                        name  : 'config-generator-src',
+                        url   : "https://github.com/infinispan/infinispan-image-artifacts/archive/${params.artifactsVersion}.tar.gz",
+                        target: 'config-generator-src.tar.gz'
+                ],
+                server            : [
+                        name  : 'server-src',
+                        url   : "https://github.com/infinispan/infinispan-quarkus/archive/${params.ispnVersion}.tar.gz",
+                        target: 'server-src.tar.gz'
+                ]
+        ]
+]
+
+void updateServerDescriptor(imageName, image) {
+    def descriptor = image.descriptor
+    def yaml = readYaml file: descriptor
+    def builder = yaml[0]
+    def runner = yaml[1]
+
+    updateImageVersion image, yaml.version
+    builder.version = image.version
+    runner.version = image.version
+
+    if (params.artifactsVersion)
+        builder.artifacts[0] = image['config-generator']
+
+    if (imageName == 'server-native') {
+        builder.artifacts[1] = image.server
+    } else {
+        runner.artifacts[1] = image.server
+    }
+
+    runner.labels.findAll {it.name == 'version' || it.name == 'release'}.each { label ->
+        label.value = params.ispnVersion
+    }
+
+    sh "rm ${descriptor}"
+    writeYaml file: descriptor, data: yaml
+}
+
+void updateImageVersion(image, version) {
+    def buildNumber = 1
+    if (version.contains(params.ispnVersion))
+        buildNumber += version.tokenize('-').last() as Integer
+
+    image.version = "${params.ispnVersion}-${buildNumber}"
+}
+
+void dockerTagAndPush(String srcTag, String destTag) {
     sh "docker tag ${srcTag} ${destTag}"
     sh "docker push ${destTag}"
 }
 
 pipeline {
     agent {
-        label 'slave-group-release'
+        label 'slave-group-graalvm'
     }
 
     parameters {
         string(name: 'ispnVersion', description: 'Version of Infinispan artifact to be used')
-        string(name: 'artifactsVersion', defaultValue: '', description: 'Image Artifacts Release version (blank to use existing release')
-        booleanParam(name: 'pushLatestTag', defaultValue: false, description: 'If true, updates the :latest Infinispan tag to equal this release')
+        string(name: 'artifactsVersion', defaultValue: '', description: 'Image Artifacts Release version (blank to use existing release)')
+        string(name: 'images', defaultValue: 'server, server-native', description: 'A comma-separated list of images to be released')
+        booleanParam(name: 'pushLatestTag', defaultValue: false, description: 'If true, updates the :latest tag to equal this release for each selected image')
         booleanParam(name: 'dryRun', defaultValue: false, description: 'If true, we don\'t deploy to image repositories')
         gitParameter(name: 'branch', defaultValue: 'origin/master', branchFilter: 'origin/(.*)', type: 'PT_BRANCH', description: 'Branch to release from')
     }
@@ -30,32 +106,29 @@ pipeline {
         stage('Update Version and Artifacts') {
             steps {
                 script {
-                    def fileName = 'image.yaml'
-                    def image = readYaml file: fileName
-                    def buildNumber = 1
-                    if (image.version.contains(params.ispnVersion))
-                        buildNumber += image.version.tokenize('-').last() as Integer
-
-                    IMAGE = image
-                    image.version = "${params.ispnVersion}-${buildNumber}"
-                    if (params.artifactsVersion)
-                        image.artifacts.putAt(0, [name: 'config-generator.jar', url: "https://repository.jboss.org/org/infinispan/images/config-generator/${params.artifactsVersion}/config-generator-${params.artifactsVersion}.jar"])
-
-                    image.artifacts.putAt(1, [name: 'server.zip', url: "https://downloads.jboss.org/infinispan/${params.ispnVersion}/infinispan-server-${params.ispnVersion}.zip"])
-
-                    image.labels.findAll {it.name == 'version' || it.name == 'release'}.each { label ->
-                        label.value = params.ispnVersion
+                    IMAGES = [:]
+                    def images = params.images.contains(',') ? params.images.split(',') : [params.images]
+                    images.each {i ->
+                        def imageName = i.trim()
+                        if (!IMAGE_CONFIG.containsKey(imageName)) {
+                            currentBuild.result = 'ABORTED'
+                            error("Unknown image '${imageName}'")
+                        }
+                        IMAGES[imageName] = IMAGE_CONFIG[imageName]
+                        updateServerDescriptor imageName, IMAGES[imageName]
                     }
-
-                    sh "rm ${fileName}"
-                    writeYaml file: fileName, data: image
                 }
             }
         }
 
         stage('Build') {
             steps {
-                sh "cekit build docker"
+                script {
+                    IMAGES.each { name, image ->
+                        sh "cat ${image.descriptor}"
+                        sh "cekit --descriptor ${image.descriptor} build docker"
+                    }
+                }
             }
         }
 
@@ -65,25 +138,23 @@ pipeline {
             }
             steps {
                 script {
-                    def registries = [
-                        [url: 'registry.hub.docker.com', repo: 'jboss/infinispan-server', credential: 'DockerHub-Infinispan'],
-                        [url: 'registry.hub.docker.com', repo: 'infinispan/server', credential: 'DockerHub-Infinispan'],
-                        [url: 'quay.io', repo: 'infinispan/server', credential: 'Quay-Infinispan']
-                    ]
-                    registries.each { registry ->
-                        withDockerRegistry([ credentialsId: registry.credential, url: "https://${registry.url}" ]) {
-                            def fqImageName = "${registry.url}/${registry.repo}"
-                            // Create/update Infinispan version tag e.g. 10.0.1.Final
-                            dockerTagAndPush IMAGE.name, "${fqImageName}:${params.ispnVersion}"
+                    IMAGES.each { name, image ->
+                        REGISTRIES.each { registry ->
+                            withDockerRegistry([ credentialsId: registry.credential, url: "https://${registry.url}" ]) {
+                                def fqImageName = "${registry.url}/infinispan/${name}"
+                                // Create/update Infinispan version tag e.g. 10.0.1.Final
+                                dockerTagAndPush name, "${fqImageName}:${params.ispnVersion}"
 
-                            // Create unique image build tag e.g. 10.0.1.Final-2
-                            dockerTagAndPush IMAGE.name, "${fqImageName}:${IMAGE.version}"
+                                // Create unique image build tag e.g. 10.0.1.Final-2
+                                def version = image.version
+                                dockerTagAndPush name, "${fqImageName}:${version}"
 
-                            // Create Stream tag e.g. 10.0
-                            dockerTagAndPush IMAGE.name, "${fqImageName}:${IMAGE.version.tokenize('.')[0,1].join('.')}"
+                                // Create Stream tag e.g. 10.0
+                                dockerTagAndPush name, "${fqImageName}:${version.tokenize('.')[0,1].join('.')}"
 
-                            if (params.pushLatestTag) {
-                                dockerTagAndPush IMAGE.name, fqImageName
+                                if (params.pushLatestTag) {
+                                    dockerTagAndPush name, fqImageName
+                                }
                             }
                         }
                     }
@@ -97,11 +168,13 @@ pipeline {
             }
             steps {
                 script {
-                    sh "git add image.yaml"
-                    sh "git -c user.name='Infinispan' -c user.email='infinispan@infinispan.org' commit -m 'Releasing Image ${IMAGE.version}'"
-                    sh "git tag ${IMAGE.version}"
+                    IMAGES.each { name, image ->
+                        sh "git add ${image.descriptor}"
+                        sh "git -c user.name='Infinispan' -c user.email='infinispan@infinispan.org' commit -m 'Releasing Version ${image.version} of ${name} image'"
+                        sh "git tag ${image.version}"
+                        sh "git push origin ${image.version}"
+                    }
                     sh "git push origin ${params.branch}"
-                    sh "git push origin ${IMAGE.version}"
                 }
             }
         }
