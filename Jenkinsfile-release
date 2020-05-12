@@ -2,12 +2,10 @@
 REGISTRIES = [
         [
                 url       : 'registry.hub.docker.com',
-                repo      : 'infinispan/server',
                 credential: 'DockerHub-Infinispan'
         ],
         [
                 url       : 'quay.io',
-                repo      : 'infinispan/server',
                 credential: 'Quay-Infinispan'
         ]
 ]
