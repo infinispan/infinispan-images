@@ -71,6 +71,9 @@ if [ -n "${DEBUG}" ]; then
   set -x
 fi
 
+# Set the umask otherwise created files are not-writable by the group
+umask 0002
+
 generate_content
 
 [[ -n ${IDENTITIES_PATH} ]] && IDENTITES_OPT="--identities=${IDENTITIES_PATH}"
