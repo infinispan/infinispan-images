@@ -20,7 +20,7 @@ IMAGE_CONFIG = [
                 ],
                 server            : [
                         name: 'server',
-                        url : "https://downloads.jboss.org/infinispan/%s/infinispan-server-${params.ispnVersion}.zip"
+                        url : "https://downloads.jboss.org/infinispan/${params.ispnVersion}/infinispan-server-${params.ispnVersion}.zip"
                 ]
         ],
         'server-native': [
