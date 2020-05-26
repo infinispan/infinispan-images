@@ -1,5 +1,5 @@
 - name: native-builder
-  version: 1.0
+  version: 11.0.0.CR1-1
   from: quay.io/quarkus/centos-quarkus-maven:20.0.0-java11
   description: Builder image for native config generator
   artifacts:
@@ -11,9 +11,8 @@
     - path: modules
     install:
     - name: quarkus.config-generator
-
 - name: infinispan/server
-  version: 11.0.0-SNAPSHOT
+  version: 11.0.0.CR1-1
   description: Infinispan Server
   from: registry.access.redhat.com/ubi8/ubi-minimal:8.2-267
   artifacts:
@@ -21,7 +20,7 @@
     image: native-builder
     path: /opt/config-generator
   - name: server
-    url: https://downloads.jboss.org/infinispan/11.0.0.Dev05/infinispan-server-11.0.0.Dev05.zip
+    url: https://downloads.jboss.org/infinispan/11.0.0.CR1/infinispan-server-11.0.0.CR1.zip
   packages:
     manager: microdnf
   ports:
@@ -35,9 +34,9 @@
   - name: name
     value: Infinispan Server
   - name: version
-    value: 11.0.0.Dev05
+    value: 11.0.0.CR1
   - name: release
-    value: 11.0.0.Dev05
+    value: 11.0.0.CR1
   - name: io.k8s.description
     value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
   - name: io.k8s.display-name
@@ -79,7 +78,6 @@
     - path: modules
     install:
     - name: org.infinispan.dnf-workaround
-      # Jdk must be installed before other dependencies to allow for cached dnf files to be removed
     - name: org.infinispan.dependencies.jdk
       version: openjdk
     - name: org.infinispan.dependencies
