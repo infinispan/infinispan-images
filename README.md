@@ -422,6 +422,7 @@ image types.
 
 - `server-openjdk.yaml` - Creates the `infinispan/server` image with a natively compiled config-generator
 - `server-native.yaml` - Creates the `infinispan/server-native` image with a natively compiled config-generator and server
+- `server-dev-jdk.yaml` - Creates the `infinispan/server` image using local artifact paths that must be added to the descriptor.
 
 
 ### Recreate Image Releases
