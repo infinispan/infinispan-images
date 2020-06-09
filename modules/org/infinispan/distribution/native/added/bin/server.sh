@@ -1,11 +1,37 @@
 #!/bin/sh
+BIND_ADDRESS=
+CONFIG_FILE=infinispan.xml
+JAVA_OPTS=${JAVA_OPTIONS:-}
+
+while [ "$#" -gt 0 ]
+do
+    case "$1" in
+      -b)
+          BIND_ADDRESS=$2
+          shift
+          ;;
+      -c)
+          CONFIG_FILE=$2
+          shift
+          ;;
+      -D*)
+          JAVA_OPTS="$JAVA_OPTS $1"
+          ;;
+      *)
+          ARGUMENTS="$ARGUMENTS $1"
+          ;;
+    esac
+    shift
+done
+
 while true; do
    # Execute the process in the background in order for signals to be correctly handled
   bin/server-runner \
-    -Dquarkus.infinispan-server.config-file=infinispan.xml \
+    -Dinfinispan.bind.address=${BIND_ADDRESS} \
+    -Dquarkus.infinispan-server.config-file=${CONFIG_FILE} \
     -Dquarkus.infinispan-server.config-path=server/conf \
     -Dquarkus.infinispan-server.data-path=data \
-    -Dquarkus.infinispan-server.server-path=${ISPN_HOME} &
+    -Dquarkus.infinispan-server.server-path=${ISPN_HOME} ${JAVA_OPTS} ${ARGUMENTS} &
 
    ISPN_PID=$!
    # Trap common signals and relay them to the server process
