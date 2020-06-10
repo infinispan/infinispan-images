@@ -1,5 +1,10 @@
 #!/usr/bin/env groovy
 
+void saveDockerImage(String image, String tag, String tarName) {
+    sh "docker save ${image}:${tag} | gzip > ${tarName}-${tag}.tar.gz"
+    sh "docker rmi ${image}:${tag}"
+}
+
 pipeline {
     agent {
         label 'slave-group-graalvm'
@@ -10,6 +15,15 @@ pipeline {
     }
 
     stages {
+
+        stage('Prepare') {
+            steps {
+                script {
+                    IMAGE_TAG = "PR-${pullRequest.number}"
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -18,21 +32,27 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh "cekit -v --descriptor server-native.yaml build docker"
-                sh "cekit -v --descriptor server-openjdk.yaml build docker"
+                script {
+                    ['server-native', 'server-openjdk'].each { descriptor ->
+                        sh "cekit -v --descriptor ${descriptor}.yaml build --overrides '{'version': '${IMAGE_TAG}'}' docker"
+                    }
+                }
             }
         }
     }
 
     post {
         failure {
-            echo "post build status: failure"
-            emailext to: '${DEFAULT_RECIPIENTS}', subject: '${DEFAULT_SUBJECT}', body: '${DEFAULT_CONTENT}'
+            echo 'post build status: failure'
         }
 
         success {
-            echo "post build status: success"
-            emailext to: '${DEFAULT_RECIPIENTS}', subject: '${DEFAULT_SUBJECT}', body: '${DEFAULT_CONTENT}'
+            script {
+                saveDockerImage 'infinispan/server', IMAGE_TAG, 'server-openjdk'
+                saveDockerImage 'infinispan/server-native', IMAGE_TAG, 'server-native'
+                archiveArtifacts allowEmptyArchive: true, artifacts: '*tar.gz'
+                echo 'post build status: success'
+            }
         }
 
         cleanup {
