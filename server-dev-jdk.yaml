@@ -4,7 +4,7 @@
   from: registry.access.redhat.com/ubi8/ubi-minimal:8.2-267
   artifacts:
   - name: config-generator
-    path: # TODO replace with local path to jar file
+    path: /some/path # TODO replace with path to artifact
   - name: server
     url: https://downloads.jboss.org/infinispan/11.0.0.CR1/infinispan-server-11.0.0.CR1.zip
     #path: # TODO uncomment and add path if local server desired
