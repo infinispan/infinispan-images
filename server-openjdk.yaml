@@ -58,6 +58,8 @@
     description: When provided with the PASS variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
   - name: PASS
     description: When provided with the USER variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
+  - name: JAVA_OPTIONS
+    description: Allows java properties and options to be provided to the JVM when the server is launched.
   - name: JAVA_DIAGNOSTICS
     description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
     example: true
