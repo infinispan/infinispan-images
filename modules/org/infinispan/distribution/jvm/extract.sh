@@ -18,3 +18,6 @@ fi
 
 cp -r $ADDED_DIR/bin/* $SERVER_ROOT/bin
 rm $SERVER_ROOT/server/conf/infinispan-local.xml
+
+# Remove Rocksdb platform dependent files
+zip -d $SERVER_ROOT/lib/rocksdbjni-*.jar "*musl.so" "*dll" "*aarch*so" "*jnilib" "*ppc64*so" "*linux32*so"
