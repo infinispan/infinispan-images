@@ -14,6 +14,7 @@ packages:
     - openssl
     - procps-ng
     - vim-minimal
+    - zip
 
 execute:
   - script: install.sh
