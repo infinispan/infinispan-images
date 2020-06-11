@@ -10,3 +10,6 @@ modules:
 packages:
   install:
     - java-11-openjdk-devel
+
+execute:
+  - script: trim.sh
