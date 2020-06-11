@@ -21,3 +21,9 @@ rm $SERVER_ROOT/server/conf/infinispan-local.xml
 
 # Remove Rocksdb platform dependent files
 zip -d $SERVER_ROOT/lib/rocksdbjni-*.jar "*musl.so" "*dll" "*aarch*so" "*jnilib" "*ppc64*so" "*linux32*so"
+
+# Remove unused windows files
+rm $SERVER_ROOT/bin/*.bat
+
+# Remove schema ~ 650K
+rm -rf $SERVER_ROOT/docs/schema
