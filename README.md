@@ -433,6 +433,7 @@ image types.
 - `server-openjdk.yaml` - Creates the `infinispan/server` image with a natively compiled config-generator
 - `server-native.yaml` - Creates the `infinispan/server-native` image with a natively compiled config-generator and server
 - `server-dev-jdk.yaml` - Creates the `infinispan/server` image using local artifact paths that must be added to the descriptor.
+- `server-dev-native.yaml` - Creates the `infinispan/server-native` image using local artifact paths that must be added to the descriptor.
 
 
 ### Recreate Image Releases
@@ -445,6 +446,16 @@ For example, the following commands will recreate the `infinispan/server:10.0.0.
 ```bash
 git checkout 11.0.0.Dev05
 cekit --descriptor server-openjdk.yaml build docker
+```
+
+### Development Images
+The `*-dev-*.yaml` descriptors can be used to create local images for development purposes. In order to use these it's
+necessary to update the paths of the artifacts in the descriptor then issue the following command:
+
+```
+BUILD_ENGINE="podman"
+DESCRIPTOR="server-dev-native.yaml"
+cekit -v --descriptor $DESCRIPTOR build $BUILD_ENGINE
 ```
 
 ## License
