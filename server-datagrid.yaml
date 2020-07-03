@@ -14,7 +14,7 @@
 - name: datagrid/datagrid-8
   version: 1.0
   description: Data Grid Server
-  from: rh-osbs/ubi8-minimal
+  from: rh-osbs/ubi8-minimal:8-released
   artifacts:
   - name: config-generator
     image: native-builder
