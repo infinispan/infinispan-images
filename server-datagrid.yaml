@@ -1,120 +1,106 @@
-- name: native-builder
-  version: 11.0.1.Final-1
-  from: quay.io/quarkus/centos-quarkus-maven:20.0.0-java11
-  description: Builder image for native config generator
-  artifacts:
-  - name: config-generator-src
-    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.0.0.Final.tar.gz
-    target: config-generator-src.tar.gz
-  modules:
-    repositories:
-    - path: modules
-    install:
-    - name: quarkus.config-generator
-- name: datagrid/datagrid-8
-  version: 1.0
-  description: Data Grid Server
-  from: rh-osbs/ubi8-minimal:8-released
-  artifacts:
-  - name: config-generator
-    image: native-builder
-    path: /opt/config-generator
-  - name: server
-    description: Red Hat Data Grid 8.1.0.GA
-    md5: 7e7b7bcbeb2a799c714a8673d57d6cf1
-  packages:
-    manager: microdnf
-    content_sets_file: content_sets.yml
-  ports:
-  - value: 2157
-  - value: 7800
-  - value: 11221
-  - value: 11222
-  - value: 45700
-  - value: 57600
-  labels:
-    - name: name
-      value: DG Server
-    - name: version
-      value: 8.1.0.GA
-    - name: release
-      value: 8.1.0.GA
-    - name: com.redhat.component
-      value: datagrid-8-rhel8-container
-    - name: org.jboss.product
-      value: datagrid
-    - name: org.jboss.product.version
-      value: 8.1.0.GA
-    - name: org.jboss.product.datagrid.version
-      value: 8.1.0.GA
-    - name: "com.redhat.dev-mode"
-      value: "DEBUG:true"
-      description: "Environment variable used to enable development mode (debugging). A value of true will enable development mode."
-    - name: "com.redhat.dev-mode.port"
-      value: "DEBUG_PORT:8787"
-    - name: io.k8s.description
-      value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
-    - name: io.k8s.display-name
-      value: Data Grid 8.1
-    - name: io.openshift.expose-services
-      value: 8080:http
-    - name: io.openshift.tags
-      value: datagrid,java,jboss,xpaas
-    - name: io.openshift.s2i.scripts-url
-      value: image:///usr/local/s2i
-  envs:
-  - name: ISPN_HOME
-    value: /opt/infinispan
-  - name: CONFIG_PATH
-    description: The path to the .yaml file which contains all Infinispan related configuration.
-  - name: IDENTITIES_PATH
-    description: The path to the .yaml file containing all identity information for configuring endpoints.
-  - name: USER
-    description: When provided with the PASS variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
-  - name: PASS
-    description: When provided with the USER variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
-  - name: JAVA_OPTIONS
-    description: Allows java properties and options to be provided to the JVM when the server is launched.
-  - name: JAVA_DIAGNOSTICS
-    description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
-    example: true
-  - name: JAVA_INIT_MEM_RATIO
-    description: This is used to calculate a default initial heap memory based the maximumal heap memory.  The default is `100` which means 100% of the maximal heap is used for the initial heap size.  You can skip this mechanism by setting this value to `0` in which case no `-Xms` option is added.
-    value: 0
-  - name: JAVA_MAX_MEM_RATIO
-    description: This is used to calculate a default maximal heap memory based on a containers restriction. If used in a container without any memory constraints for the container then this option has no effect. If there is a memory constraint then `-Xmx` is set to a ratio of the container available memory as set here. The default is `50` which means 50% of the available memory is used as an upper boundary. You can skip this mechanism by setting this value to `0` in which case no `-Xmx` option is added.
-    value: 50
-  - name: JAVA_GC_METASPACE_SIZE
-    description: The initial high-water mark for GC.
-    value: 32m
-  - name: JAVA_GC_MAX_METASPACE_SIZE
-    description: The maximum metaspace size.
-    value: 96m
-  modules:
-    repositories:
-    - path: modules
-    install:
-    - name: org.infinispan.dnf-workaround
-    - name: org.infinispan.dependencies.jdk
-      version: openjdk
-    - name: org.infinispan.dependencies
-      version: datagrid
-    - name: org.infinispan.distribution
-      version: jvm
-    - name: org.infinispan.runtime
-  run:
-    cmd:
-    - ./bin/launch.sh
-    user: 185
-    workdir: /opt/infinispan
-  osbs:
-    configuration:
-      container:
-        compose:
-          pulp_repos: true
-        platforms:
-          only:
-            - x86_64
-    repository:
-      name: containers/datagrid-8
-      branch: datagrid-8-rhel-8
+name: datagrid/datagrid-8
+version: 1.0
+description: Data Grid Server
+from: rh-osbs/ubi8-minimal:8-released
+artifacts:
+- name: config-generator
+  url: https://repository.jboss.org/org/infinispan/images/config-generator/2.0.0.Final/config-generator-2.0.0.Final.jar
+- name: server
+  description: Red Hat Data Grid 8.1.0.GA
+  md5: 7e7b7bcbeb2a799c714a8673d57d6cf1
+packages:
+  manager: microdnf
+  content_sets_file: content_sets.yml
+ports:
+- value: 2157
+- value: 7800
+- value: 11221
+- value: 11222
+- value: 45700
+- value: 57600
+labels:
+  - name: name
+    value: DG Server
+  - name: version
+    value: 8.1.0.GA
+  - name: release
+    value: 8.1.0.GA
+  - name: com.redhat.component
+    value: datagrid-8-rhel8-container
+  - name: org.jboss.product
+    value: datagrid
+  - name: org.jboss.product.version
+    value: 8.1.0.GA
+  - name: org.jboss.product.datagrid.version
+    value: 8.1.0.GA
+  - name: "com.redhat.dev-mode"
+    value: "DEBUG:true"
+    description: "Environment variable used to enable development mode (debugging). A value of true will enable development mode."
+  - name: "com.redhat.dev-mode.port"
+    value: "DEBUG_PORT:8787"
+  - name: io.k8s.description
+    value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
+  - name: io.k8s.display-name
+    value: Data Grid 8.1
+  - name: io.openshift.expose-services
+    value: 8080:http
+  - name: io.openshift.tags
+    value: datagrid,java,jboss,xpaas
+  - name: io.openshift.s2i.scripts-url
+    value: image:///usr/local/s2i
+envs:
+- name: ISPN_HOME
+  value: /opt/infinispan
+- name: CONFIG_PATH
+  description: The path to the .yaml file which contains all Infinispan related configuration.
+- name: IDENTITIES_PATH
+  description: The path to the .yaml file containing all identity information for configuring endpoints.
+- name: USER
+  description: When provided with the PASS variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
+- name: PASS
+  description: When provided with the USER variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
+- name: JAVA_OPTIONS
+  description: Allows java properties and options to be provided to the JVM when the server is launched.
+- name: JAVA_DIAGNOSTICS
+  description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
+  example: true
+- name: JAVA_INIT_MEM_RATIO
+  description: This is used to calculate a default initial heap memory based the maximumal heap memory.  The default is `100` which means 100% of the maximal heap is used for the initial heap size.  You can skip this mechanism by setting this value to `0` in which case no `-Xms` option is added.
+  value: 0
+- name: JAVA_MAX_MEM_RATIO
+  description: This is used to calculate a default maximal heap memory based on a containers restriction. If used in a container without any memory constraints for the container then this option has no effect. If there is a memory constraint then `-Xmx` is set to a ratio of the container available memory as set here. The default is `50` which means 50% of the available memory is used as an upper boundary. You can skip this mechanism by setting this value to `0` in which case no `-Xmx` option is added.
+  value: 50
+- name: JAVA_GC_METASPACE_SIZE
+  description: The initial high-water mark for GC.
+  value: 32m
+- name: JAVA_GC_MAX_METASPACE_SIZE
+  description: The maximum metaspace size.
+  value: 96m
+modules:
+  repositories:
+  - path: modules
+  install:
+  - name: org.infinispan.dnf-workaround
+  - name: org.infinispan.dependencies.jdk
+    version: openjdk
+  - name: org.infinispan.dependencies
+    version: datagrid
+  - name: org.infinispan.distribution
+    version: jvm
+  - name: org.infinispan.runtime
+run:
+  cmd:
+  - ./bin/launch.sh
+  user: 185
+  workdir: /opt/infinispan
+osbs:
+  configuration:
+    container:
+      compose:
+        pulp_repos: true
+      platforms:
+        only:
+          - x86_64
+  repository:
+    name: containers/datagrid-8
+    branch: datagrid-8-rhel-8
