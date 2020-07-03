@@ -4,7 +4,9 @@ description: Data Grid Server
 from: rh-osbs/ubi8-minimal:8-released
 
 artifacts:
-  - name: server.zip
+  - name: config-generator
+    url: https://repository.jboss.org/org/infinispan/images/config-generator/2.0.0.Final/config-generator-2.0.0.Final.jar
+  - name: server
     description: Red Hat Data Grid 8.1.0.GA
     md5: 7e7b7bcbeb2a799c714a8673d57d6cf1
 
@@ -44,11 +46,15 @@ labels:
 
 modules:
   install:
+    - name: org.infinispan.dnf-workaround
     - name: org.infinispan.dependencies.jdk
       version: openjdk
     # Override dependencies module to use datagrid specific version
     - name: org.infinispan.dependencies
       version: datagrid
+    - name: org.infinispan.distribution
+      version: jvm
+    - name: org.infinispan.runtime
 
 osbs:
   configuration:
