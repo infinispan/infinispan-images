@@ -48,6 +48,8 @@ labels:
     value: datagrid,java,jboss,xpaas
   - name: io.openshift.s2i.scripts-url
     value: image:///usr/local/s2i
+  - name: maintainer
+    value: remerson@redhat.com
 envs:
 - name: ISPN_HOME
   value: /opt/infinispan
