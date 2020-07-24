@@ -59,6 +59,8 @@ pipeline {
             sh 'git clean -fdx || echo "git clean failed, exit code $?"'
             sh 'docker container prune -f'
             sh 'docker rmi $(docker images -f "dangling=true" -q) || true'
+            sh "docker rm infinispan/server:$IMAGE_TAG || true"
+            sh "docker rm infinispan/server-native:$IMAGE_TAG || true"
         }
     }
 }
