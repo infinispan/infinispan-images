@@ -14,7 +14,7 @@
 - name: infinispan/server
   version: 11.0.1.Final-1
   description: Infinispan Server
-  from: registry.access.redhat.com/ubi8/ubi-minimal:8.2-267
+  from: registry.access.redhat.com/ubi8/ubi-minimal:8.2-345
   artifacts:
   - name: config-generator
     image: native-builder
