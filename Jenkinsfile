@@ -19,7 +19,7 @@ pipeline {
         stage('Prepare') {
             steps {
                 script {
-                    IMAGE_TAG = "PR-${pullRequest.number}"
+                    IMAGE_TAG = env.BRANCH_NAME.startsWith('PR-') ? "PR-${pullRequest.number}" : "latest"
                 }
             }
         }
