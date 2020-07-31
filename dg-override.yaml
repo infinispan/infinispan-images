@@ -1,7 +1,7 @@
 name: datagrid/datagrid-8
 version: 1.0
 description: Data Grid Server
-from: rh-osbs/ubi8-minimal:8.1-407
+from: rh-osbs/ubi8-minimal:8-released
 
 artifacts:
   - name: server.zip
