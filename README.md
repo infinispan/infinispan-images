@@ -305,7 +305,7 @@ Since the rule "allow ALL" permits all origins, any script coming from a differe
 methods specified and use the headers supplied. Detailed information about the different configuration parameters can
 be found in the [Infinispan REST guide](https://infinispan.org/docs/stable/titles/rest/rest.html#rest_server_cors).
 
-> It's also possible to configure basic CORS rules via providing the following java args when running the container `-e JAVA_OPTIONS="-Dinfinispan.cors.enableAll=https://host.domain:port"`.
+> It's also possible to configure basic CORS rules via providing the following java args when running the container `-e JAVA_OPTIONS="-Dinfinispan.server.rest.cors-allow=https://host.domain:port"`.
 
 ### XSite Replication
 In order to configure the image for xsite replication, it's necessary to provide the external address and port of the
