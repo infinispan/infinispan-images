@@ -1,7 +1,7 @@
 - name: infinispan/server
   version: latest
   description: Infinispan Server
-  from: registry.access.redhat.com/ubi8/ubi-minimal:8.2-267
+  from: registry.access.redhat.com/ubi8/ubi-minimal:8.2
   artifacts:
     - name: config-generator
       path: artifacts/config-generator
