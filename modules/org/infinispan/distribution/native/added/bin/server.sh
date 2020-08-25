@@ -7,7 +7,7 @@ while [ "$#" -gt 0 ]
 do
     case "$1" in
       -b)
-          BIND_ADDRESS=$2
+          JAVA_OPTS="$JAVA_OPTS -Dinfinispan.bind.address=$2"
           shift
           ;;
       -c)
@@ -27,7 +27,6 @@ done
 while true; do
    # Execute the process in the background in order for signals to be correctly handled
   bin/server-runner \
-    -Dinfinispan.bind.address=${BIND_ADDRESS} \
     -Dquarkus.infinispan-server.config-file=${CONFIG_FILE} \
     -Dquarkus.infinispan-server.config-path=server/conf \
     -Dquarkus.infinispan-server.data-path=data \
