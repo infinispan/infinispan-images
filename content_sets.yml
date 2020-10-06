@@ -4,3 +4,4 @@ x86_64:
 s390x:
   - rhel-8-for-s390x-baseos-rpms
   - rhel-8-for-s390x-appstream-rpms
+  - openj9-1-for-rhel-8-s390x-rpms
