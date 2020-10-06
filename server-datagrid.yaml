@@ -1,7 +1,9 @@
 name: datagrid/datagrid-8
 version: 1.0
 description: Data Grid Server
-from: rh-osbs/ubi8-minimal:8-released
+
+from: registry.redhat.io/ubi8/ubi-minimal
+
 artifacts:
 - name: config-generator
   url: https://repository.jboss.org/org/infinispan/images/config-generator/2.0.2.Final/config-generator-2.0.2.Final-runner.jar
