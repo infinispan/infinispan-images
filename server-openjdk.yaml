@@ -26,6 +26,7 @@
   ports:
   - value: 2157
   - value: 7800
+  - value: 7900
   - value: 11221
   - value: 11222
   - value: 46655
