@@ -1,6 +1,6 @@
 - name: native-builder
   version: 11.0.3.Final-3
-  from: quay.io/quarkus/centos-quarkus-maven:20.0.0-java11
+  from: quay.io/quarkus/centos-quarkus-maven:20.2.0-java11
   description: Builder image for native components
   artifacts:
   - name: config-generator-src
