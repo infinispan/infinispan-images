@@ -32,6 +32,7 @@ osbs:
       platforms:
         only:
           - s390x
+          - ppc64le
   repository:
     name: containers/datagrid-8-openj9
     branch: datagrid-8-openj9-rhel-8
