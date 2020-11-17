@@ -367,7 +367,7 @@ Infinispan 1 - in network "bridge" - admin port 11222, jgroups port 7300:
 
 Infinispan 2 - in network "Bridge2" (created by `docker network create -d bridge Bridge2`) - admin port 12222, jgroups port 7200:
 
-`docker run --rm -p 12222:11222 -p 7200:7900 -v c:/work/InfiniSpan:/user-config --name infinispan2 -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config2.yaml" --network Bridge2  infinispan/server:11.0.4.Final-2`
+`docker run --rm -p 12222:11222 -p 7200:7900 -v <path/to/config-folder>:/user-config --name infinispan2 -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config2.yaml" --network Bridge2  infinispan/server`
 
 ## Java Properties
 It's possible to provide additional java properties and JVM options to all of the images via the `JAVA_OPTIONS` env variable.
