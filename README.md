@@ -324,6 +324,51 @@ xsite:
       port: 7200
 ```
 
+Next the (local) port 7900 must be mapped to the port defined in the configuration (7200). On Docker for example by using `-p 7200:7900`
+
+Note: Caches won't be created automatically on the other side. So these must be created manually with the same name.
+
+So create a new cache either using the console (http://localhost:11222) or curl (or similar tool)
+`curl -XPOST -u <user>:<password> -H "Content-Type: application/xml" -d "@<path/to/cache.xml>" http://localhost:11222/rest/v2/caches/xsite-cache`
+  
+LON-Site:
+```
+<infinispan>
+  <cache-container>
+    <replicated-cache name="xsite-cache" statistics="true">
+      <backups>
+        <backup site="NYC" strategy="SYNC"/>
+      </backups>
+    </replicated-cache>
+  </cache-container>
+</infinispan>
+```
+
+NYC-Site:
+```
+<infinispan>
+  <cache-container>
+    <replicated-cache name="xsite-cache" statistics="true">
+      <backups>
+        <backup site="LON" strategy="SYNC"/>
+      </backups>
+    </replicated-cache>
+  </cache-container>
+</infinispan>
+```
+
+To test the replication, simply create a key on one site and search for it on the other site, where it will be available then, too.
+
+Docker command example for two sites on same system (but you have to use different ports for both sites):
+
+Infinispan 1 - in network "bridge" - admin port 11222, jgroups port 7300:
+
+`docker run --rm -p 11222:11222 -p 7300:7900 -v c:/work/InfiniSpan:/user-config --name infinispan1 -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config1.yaml" --network bridge infinispan/server:11.0.4.Final-2`
+
+Infinispan 2 - in network "Bridge2" (created by `docker network create -d bridge Bridge2`) - admin port 12222, jgroups port 7200:
+
+`docker run --rm -p 12222:11222 -p 7200:7900 -v c:/work/InfiniSpan:/user-config --name infinispan2 -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config2.yaml" --network Bridge2  infinispan/server:11.0.4.Final-2`
+
 ## Java Properties
 It's possible to provide additional java properties and JVM options to all of the images via the `JAVA_OPTIONS` env variable.
 For example, to quickly configure CORS without providing a server.yaml file, it's possible to do the following:
