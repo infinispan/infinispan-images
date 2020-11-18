@@ -359,7 +359,7 @@ NYC-Site:
 
 To test the replication, simply create a key on one site and search for it on the other site, where it will be available then, too.
 
-Docker command example for two sites on same system (but you have to use different ports for both sites):
+Docker command example for two sites using different ports on the same host:
 
 Config1:
 
