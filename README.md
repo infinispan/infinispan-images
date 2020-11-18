@@ -388,7 +388,7 @@ Infinispan 1 - in network "bridge" - admin port 11222, jgroups port 7300:
 
 `docker run --rm -p 11222:11222 -p 7300:7900 -v <path/to/config-folder>:/user-config --name infinispan1 -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config1.yaml" --network bridge infinispan/server
 
-Config1:
+Config2:
 
 ```
 jgroups:
