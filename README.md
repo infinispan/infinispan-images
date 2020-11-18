@@ -324,7 +324,7 @@ xsite:
       port: 7200
 ```
 
-Next the (local) port 7900 must be mapped to the port defined in the configuration (7200). On Docker for example by using `-p 7200:7900`
+Map the local port `7900` to the port defined in the configuration (`7200`). On Docker, for example, use `-p 7200:7900`
 
 Note: Caches won't be created automatically on the other side. So these must be created manually with the same name.
 
