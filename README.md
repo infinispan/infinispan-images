@@ -357,7 +357,7 @@ NYC-Site:
 </infinispan>
 ```
 
-To test the replication, simply create a key on one site and search for it on the other site, where it will be available then, too.
+To test replication, create a key on one site then search for it on the other site.
 
 Docker command example for two sites using different ports on the same host:
 
