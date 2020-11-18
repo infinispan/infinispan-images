@@ -361,9 +361,54 @@ To test the replication, simply create a key on one site and search for it on th
 
 Docker command example for two sites on same system (but you have to use different ports for both sites):
 
+Config1:
+
+```
+jgroups:
+  diagnostics: true
+  encrypt: false
+xsite:
+  address: <ip of infinispan nyc>
+  name: NYC
+  port: 7300
+  backups:
+    - address: <ip of infinispan lon>
+      name: LON
+      port: 7200
+logging:
+  console:
+    level: debug
+  categories:
+    com.arjuna: warn
+    org.jgroups: debug
+```
+
+
 Infinispan 1 - in network "bridge" - admin port 11222, jgroups port 7300:
 
 `docker run --rm -p 11222:11222 -p 7300:7900 -v <path/to/config-folder>:/user-config --name infinispan1 -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config1.yaml" --network bridge infinispan/server
+
+Config1:
+
+```
+jgroups:
+  diagnostics: true
+  encrypt: false
+xsite:
+  address: <ip of infinispan lon>
+  name: LON
+  port: 7200
+  backups:
+    - address: <ip of infinispan nyc>
+      name: NYC
+      port: 7300
+logging:
+  console:
+    level: debug
+  categories:
+    com.arjuna: warn
+    org.jgroups: debug
+```
 
 Infinispan 2 - in network "Bridge2" (created by `docker network create -d bridge Bridge2`) - admin port 12222, jgroups port 7200:
 
