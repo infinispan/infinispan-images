@@ -328,7 +328,7 @@ Next the (local) port 7900 must be mapped to the port defined in the configurati
 
 Note: Caches won't be created automatically on the other side. So these must be created manually with the same name.
 
-So create a new cache either using the console (http://localhost:11222) or curl (or similar tool)
+To create a new cache, use the console (http://localhost:11222) or a tool such as curl:
 `curl -XPOST -u <user>:<password> -H "Content-Type: application/xml" -d "@<path/to/cache.xml>" http://localhost:11222/rest/v2/caches/xsite-cache`
   
 LON-Site:
