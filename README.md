@@ -326,7 +326,7 @@ xsite:
 
 Map the local port `7900` to the port defined in the configuration (`7200`). On Docker, for example, use `-p 7200:7900`
 
-Note: Caches won't be created automatically on the other side. So these must be created manually with the same name.
+Note: Caches aren't created automatically on the other site. You must manually create caches with identical names.
 
 To create a new cache, use the console (http://localhost:11222) or a tool such as curl:
 `curl -XPOST -u <user>:<password> -H "Content-Type: application/xml" -d "@<path/to/cache.xml>" http://localhost:11222/rest/v2/caches/xsite-cache`
