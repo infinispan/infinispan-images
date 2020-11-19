@@ -415,15 +415,6 @@ All of our images are created using the [Cekit](https://cekit.io) tool. Installa
 
 > The exact [dependencies](https://docs.cekit.io/en/latest/handbook/installation/dependencies.html#) that you will require depends on the "builder" that you want to use in order to create your image. For example OSBS has different requirements to Docker.
 
-
-#### Cekit Patch
-Due to https://github.com/cekit/cekit/issues/642, it is necessary to install the following one-off patch for 'cekit' via pip
-in order for multi-stage builds to work as expected:
-
-```bash
-pip3 install -U https://github.com/goldmann/cekit/archive/gh-642-multi-stage-handling-artifacts.zip
-```
-
 ### Image
 
 ### Descriptor Files
