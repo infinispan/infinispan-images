@@ -1,5 +1,5 @@
 - name: native-builder
-  version: 12.0.0.Dev07-1
+  version: 12.0.0.CR1-1
   from: quay.io/quarkus/centos-quarkus-maven:20.2.0-java11
   description: Builder image for native config generator
   artifacts:
@@ -12,7 +12,7 @@
     install:
     - name: quarkus.config-generator
 - name: infinispan/server
-  version: 12.0.0.Dev07-1
+  version: 12.0.0.CR1-1
   description: Infinispan Server
   from: registry.access.redhat.com/ubi8/ubi-minimal:8.2
   artifacts:
@@ -20,7 +20,7 @@
     image: native-builder
     path: /opt/config-generator
   - name: server
-    url: https://downloads.jboss.org/infinispan/12.0.0.Dev07/infinispan-server-12.0.0.Dev07.zip
+    url: https://downloads.jboss.org/infinispan/12.0.0.CR1/infinispan-server-12.0.0.CR1.zip
   packages:
     manager: microdnf
   ports:
@@ -35,9 +35,9 @@
   - name: name
     value: Infinispan Server
   - name: version
-    value: 12.0.0.Dev07
+    value: 12.0.0.CR1
   - name: release
-    value: 12.0.0.Dev07
+    value: 12.0.0.CR1
   - name: io.k8s.description
     value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
   - name: io.k8s.display-name
