@@ -31,9 +31,9 @@ IMAGE_CONFIG = [
                         target: 'config-generator-src.tar.gz'
                 ],
                 server            : [
-                        name  : 'server-src',
+                        name  : 'quarkus-src',
                         url   : "https://github.com/infinispan/infinispan-quarkus/archive/${params.ispnVersion}.tar.gz",
-                        target: 'server-src.tar.gz'
+                        target: 'quarkus-src.tar.gz'
                 ]
         ]
 ]

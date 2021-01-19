@@ -1,20 +1,21 @@
 - name: native-builder
   version: 12.0.0.Dev06-1
-  from: quay.io/quarkus/centos-quarkus-maven:20.2.0-java11
+  from: quay.io/quarkus/centos-quarkus-maven:20.3.0-java11
   description: Builder image for native components
   artifacts:
   - name: config-generator-src
     url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.1.0.Dev05.tar.gz
     target: config-generator-src.tar.gz
-  - name: server-src
+  - name: quarkus-src
     url: https://github.com/infinispan/infinispan-quarkus/archive/12.0.0.Dev06.tar.gz
-    target: server-src.tar.gz
+    target: quarkus-src.tar.gz
   modules:
     repositories:
     - path: modules
     install:
     - name: quarkus.config-generator
-    - name: quarkus.server
+    - name: quarkus.infinispan.src
+    - name: quarkus.infinispan.server
 - name: infinispan/server-native
   version: 12.0.0.Dev06-1
   description: Infinispan Quarkus Server

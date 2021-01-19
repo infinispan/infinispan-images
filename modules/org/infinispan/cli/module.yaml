@@ -1,0 +1,11 @@
+schema_version: 1
+
+name: org.infinispan.cli
+version: 1.0
+
+artifacts:
+  - name: cli
+    path: /tmp/artifacts
+
+execute:
+  - script: extract.sh
