@@ -1,0 +1,30 @@
+- name: infinispan/cli
+  version: latest
+  description: Infinispan Quarkus Server
+  from: registry.access.redhat.com/ubi8/ubi-minimal:8.2
+  artifacts:
+  - name: cli
+    path: artifacts/cli
+  labels:
+  - name: name
+    value: Infinispan CLI
+  - name: version
+    value: latest
+  - name: release
+    value: latest
+  - name: io.k8s.description
+    value: Provides a CLI to remotely access Infinispan servers.
+  - name: io.k8s.display-name
+    value: Infinispan CLI
+  - name: io.openshift.tags
+    value: datagrid,java,jboss,xpaas
+  modules:
+    repositories:
+    - path: modules
+    install:
+    - name: org.infinispan.cli
+  run:
+    entrypoint:
+      - ./cli
+    user: 185
+    workdir: /opt/infinispan

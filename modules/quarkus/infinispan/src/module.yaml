@@ -1,0 +1,11 @@
+schema_version: 1
+
+name: quarkus.infinispan.src
+version: 1.0
+
+artifacts:
+  - name: quarkus-src
+    path: /tmp/artifacts
+
+execute:
+  - script: extract.sh
