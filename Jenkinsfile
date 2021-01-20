@@ -33,7 +33,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    ['server-native', 'server-openjdk'].each { descriptor ->
+                    ['server-native', 'server-openjdk', 'cli'].each { descriptor ->
                         sh "cekit -v --descriptor ${descriptor}.yaml build --overrides '{'version': '${IMAGE_TAG}'}' docker"
                     }
                 }
@@ -50,6 +50,7 @@ pipeline {
             script {
                 saveDockerImage 'infinispan/server', IMAGE_TAG, 'server-openjdk'
                 saveDockerImage 'infinispan/server-native', IMAGE_TAG, 'server-native'
+                saveDockerImage 'infinispan/cli', IMAGE_TAG, 'cli'
                 archiveArtifacts allowEmptyArchive: true, artifacts: '*tar.gz'
                 echo 'post build status: success'
             }
@@ -61,6 +62,7 @@ pipeline {
             sh 'docker rmi $(docker images -f "dangling=true" -q) || true'
             sh "docker rm infinispan/server:$IMAGE_TAG || true"
             sh "docker rm infinispan/server-native:$IMAGE_TAG || true"
+            sh "docker rm infinispan/cli:$IMAGE_TAG || true"
         }
     }
 }
