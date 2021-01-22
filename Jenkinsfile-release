@@ -35,6 +35,14 @@ IMAGE_CONFIG = [
                         url   : "https://github.com/infinispan/infinispan-quarkus/archive/${params.ispnVersion}.tar.gz",
                         target: 'quarkus-src.tar.gz'
                 ]
+        ],
+        'cli': [
+                descriptor        : 'cli.yaml',
+                cli            : [
+                        name  : 'quarkus-src',
+                        url   : "https://github.com/infinispan/infinispan-quarkus/archive/${params.ispnVersion}.tar.gz",
+                        target: 'quarkus-src.tar.gz'
+                ]
         ]
 ]
 
@@ -52,7 +60,7 @@ void updateServerDescriptor(imageName, image) {
     if (params.artifactsVersion)
         builder.artifacts[0] = image['config-generator']
 
-    if (imageName == 'server-native') {
+    if (imageName != 'server') {
         builder.artifacts[1] = image.server
     } else {
         runner.artifacts[1] = image.server
@@ -87,7 +95,7 @@ pipeline {
     parameters {
         string(name: 'ispnVersion', description: 'Version of Infinispan artifact to be used')
         string(name: 'artifactsVersion', defaultValue: '', description: 'Image Artifacts Release version (blank to use existing release)')
-        string(name: 'images', defaultValue: 'server, server-native', description: 'A comma-separated list of images to be released')
+        string(name: 'images', defaultValue: 'server, server-native, cli', description: 'A comma-separated list of images to be released')
         booleanParam(name: 'pushLatestTag', defaultValue: false, description: 'If true, updates the :latest tag to equal this release for each selected image')
         booleanParam(name: 'dryRun', defaultValue: false, description: 'If true, we don\'t deploy to image repositories')
         gitParameter(name: 'branch', defaultValue: 'origin/master', branchFilter: 'origin/(.*)', type: 'PT_BRANCH', description: 'Branch to release from')
