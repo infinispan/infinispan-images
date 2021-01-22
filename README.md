@@ -23,6 +23,8 @@ The image's endpoint is the CLI binary, so it's possible to pass the usual CLI a
 docker run -it infinispan/cli --connect http://<server-url>:11222
 ```
 
+You can find complete documentation for the CLI, in our [CLI User Guide](https://infinispan.org/docs/stable/titles/cli/cli.html).
+
 ## Server
 
 ### Getting Started
