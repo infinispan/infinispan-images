@@ -324,6 +324,96 @@ xsite:
       port: 7200
 ```
 
+Map the local port `7900` to the port defined in the configuration (`7200`). On Docker, for example, use `-p 7200:7900`
+
+Note: Caches aren't created automatically on the other site. You must manually create caches with identical names.
+
+To create a new cache, use the console (http://localhost:11222) or a tool such as curl:
+`curl -XPOST -u <user>:<password> -H "Content-Type: application/xml" -d "@<path/to/cache.xml>" http://localhost:11222/rest/v2/caches/xsite-cache`
+  
+LON-Site:
+```
+<infinispan>
+  <cache-container>
+    <replicated-cache name="xsite-cache" statistics="true">
+      <backups>
+        <backup site="NYC" strategy="SYNC"/>
+      </backups>
+    </replicated-cache>
+  </cache-container>
+</infinispan>
+```
+
+NYC-Site:
+```
+<infinispan>
+  <cache-container>
+    <replicated-cache name="xsite-cache" statistics="true">
+      <backups>
+        <backup site="LON" strategy="SYNC"/>
+      </backups>
+    </replicated-cache>
+  </cache-container>
+</infinispan>
+```
+
+To test replication, create a key on one site then search for it on the other site.
+
+Docker command example for two sites using different ports on the same host:
+
+Config1:
+
+```
+jgroups:
+  diagnostics: true
+  encrypt: false
+xsite:
+  address: <ip of infinispan nyc>
+  name: NYC
+  port: 7300
+  backups:
+    - address: <ip of infinispan lon>
+      name: LON
+      port: 7200
+logging:
+  console:
+    level: debug
+  categories:
+    com.arjuna: warn
+    org.jgroups: debug
+```
+
+
+Infinispan 1 - in network "bridge" - admin port 11222, jgroups port 7300:
+
+`docker run --rm -p 11222:11222 -p 7300:7900 -v <path/to/config-folder>:/user-config --name infinispan1 -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config1.yaml" --network bridge infinispan/server
+
+Config2:
+
+```
+jgroups:
+  diagnostics: true
+  encrypt: false
+xsite:
+  address: <ip of infinispan lon>
+  name: LON
+  port: 7200
+  backups:
+    - address: <ip of infinispan nyc>
+      name: NYC
+      port: 7300
+logging:
+  console:
+    level: debug
+  categories:
+    com.arjuna: warn
+    org.jgroups: debug
+```
+
+Infinispan 2 - in network "Bridge2" (created by `docker network create -d bridge Bridge2`) - admin port 12222, jgroups port 7200:
+
+`docker run --rm -p 12222:11222 -p 7200:7900 -v <path/to/config-folder>:/user-config --name infinispan2 -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config2.yaml" --network Bridge2  infinispan/server`
+
 ## Java Properties
 It's possible to provide additional java properties and JVM options to all of the images via the `JAVA_OPTIONS` env variable.
 For example, to quickly configure CORS without providing a server.yaml file, it's possible to do the following:
