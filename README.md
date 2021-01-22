@@ -1,18 +1,31 @@
-# Infinispan Server Images
+# Infinispan Images
 
-This repository contains various artifacts to create Infinispan server images.
+This repository contains various artifacts to create Infinispan server and CLI images.
 
-## Images
 Currently we provide the following images which are all based upon the [ubi-minimal](https://catalog.redhat.com/software/containers/detail/5c359a62bed8bd75a2c3fba8)
 base image:
 
 - `infinispan/server` - Infinispan is executed using the Java 11 openjdk JVM
 - `infinispan/server-native` - Infinispan is executed natively using the [Infinispan Quarkus](https://github.com/infinispan/infinispan-quarkus) binary.
+- `infinispan/cli` - A natively compiled version of the Infinispan CLI.
 
-> The `server` and `server-native` images are configured the same. The instructions throughout these docs are applicable
+> The `server` and `server-native` images are configured the same. The server instructions throughout these docs are applicable
 to both images unless otherwise stated.
 
-## Getting Started
+## CLI
+```bash
+docker run -it infinispan/cli
+```
+
+The image's endpoint is the CLI binary, so it's possible to pass the usual CLI args straight to the image. For example:
+
+```bash
+docker run -it infinispan/cli --connect http://<server-url>:11222
+```
+
+## Server
+
+### Getting Started
 To get started with infinispan server on your local machine simply execute:
 
 ```bash
@@ -42,7 +55,7 @@ docker run -p 11222:11222 -e USER="Titus Bramble" -e PASS="Shambles" infinispan/
 authentication and authorization configuration via a [Identities yaml file](#yaml-configuration) allows for much greater
 control.
 
-### HotRod Clients
+#### HotRod Clients
 When connecting a HotRod client to the image, the following SASL properties must be configured on your client (with the username and password properties changed as required):
 
 ```java
@@ -53,7 +66,7 @@ infinispan.client.hotrod.auth_server_name=infinispan
 infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5
 ```
 
-## Yaml Configuration
+### Yaml Configuration
 The infinispan image can utilise two optinal yaml configuration files. The identities file provides all identity information,
 such as user credentials, role mapping, oauth service etc. Whereas the configuration yaml contains configuration
 information required by Infinispan during server startup. This can be used in order to configure JGroups, Endpoints etc.
@@ -64,7 +77,7 @@ the Infinispan image with a identities and configuration file located in the cur
 ```bash
 docker run -v $(pwd):/user-config -e IDENTITIES_PATH="/user-config/identities.yaml" -e CONFIG_PATH="/user-config/config.yaml" infinispan/server
 ```
-### Identities Yaml
+#### Identities Yaml
 Below is an example Identities yaml, that provides a list of user credentials. All of the users specified in this
 file are loaded by the server and there credentials can then be used to access the configured endpoints, e.g. HotRod.
 
@@ -80,7 +93,7 @@ credentials:
       - dev
 ```
 
-### Config Yaml
+#### Config Yaml
 Below is an example configuration file which shows the current default values used by the image if not provided by the
 user configuration yaml.
 ```yaml
@@ -136,10 +149,10 @@ jgroups:
   transport: udp
 ```
 
-### Clustering
+#### Clustering
 The default JGroups stack for the image is currently tcp.
 
-#### Kubernetes/Openshift Clustering
+##### Kubernetes/Openshift Clustering
 When running in a managed environment such as Kubernetes, it is not possible to utilise multicasting for initial node
 discovery, thefore we must utilise the JGroups [DNS_PING](http://jgroups.org/manual4/index.html#_dns_ping) protocol to
 discover cluster members. To enable this, we must provide the `jgroups.dnsPing.query` element in the configuration yaml.
@@ -154,7 +167,7 @@ jgroups:
     query: infinispan-dns-ping.myproject.svc.cluster.local
 ```
 
-#### Encryption
+##### Encryption
 The JGroups encryption protocols ASYM_ENCRYPT and SERIALIZE can be enabled by defining the following in the yaml:
 
 ```yaml
@@ -176,7 +189,7 @@ keystore:
 
 > Note, in order for SSL_KEY_EXCHANGE to be able to create the required SSL sockets, it's necessary for both a `caFile` and `caPath` to be configured.
 
-### Endpoints
+#### Endpoints
 The Infinispan image exposes both the REST and HotRod endpoints via a single port `11222`.
 
 The memcached port is also available via port `11221`, however it currently does not support authentication and therefore
@@ -190,14 +203,14 @@ endpoints:
 Similarly, it's also possible to disable the HotRod and/or REST endpoints by setting `enabled: false` on the respective
 endpoint's configuration element.
 
-#### Encryption
+##### Encryption
 Encryption is automatically enabled for all endpoints if a [keystore](#keystore) is configured, otherwise it is disabled.
 
-### Keystore
+#### Keystore
 In order for the image's endpoint and/or clustering to utilise encryption, it is necessary for a keystore to be defined.
 A keystore can be defined in one of two ways.
 
-##### Providing a CRT Path
+###### Providing a CRT Path
 It's possible to provide a `crtPath` to a directory accessible to the image, that contains a private key and certificate in the
 files `tls.key` and `tls.crt` respectively. This results in a pkcs12 keystore being created and loaded by the server to
 enable endpoint encryption. Furthermore, it's also possible to provide a path to a certificate authority pem bundle via
@@ -214,7 +227,7 @@ keystore:
 > This is ideal for managed environments such as Openshift/Kubernetes, as we can simply pass the certificates of the
 services CA, i.e. `caFile: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt`.
 
-##### Providing an existing keystore
+###### Providing an existing keystore
 Alternatively, existing keystores can be utilised by providing the absolute path of the keystore.
 
 ```yaml
@@ -223,7 +236,7 @@ Alternatively, existing keystores can be utilised by providing the absolute path
   type: jks # If no type specifed, defaults to pkcs12
 ```
 
-### Logging
+#### Logging
 To configure logging you can add the following to your config yaml:
 
 ```yaml
@@ -265,7 +278,7 @@ logging:
     path: some/example/path
 ```
 
-#### Rest Enabling CORS
+##### Rest Enabling CORS
 It's possible to configure the CORS rules for the REST endpoint as follows:
 
 ```yaml
@@ -307,7 +320,7 @@ be found in the [Infinispan REST guide](https://infinispan.org/docs/stable/title
 
 > It's also possible to configure basic CORS rules via providing the following java args when running the container `-e JAVA_OPTIONS="-Dinfinispan.server.rest.cors-allow=https://host.domain:port"`.
 
-### XSite Replication
+#### XSite Replication
 In order to configure the image for xsite replication, it's necessary to provide the external address and port of the
 local site as well as the external address and port of all remote sites as part of the `config.yaml` at startup.
 Below shows the expected format:
@@ -324,15 +337,15 @@ xsite:
       port: 7200
 ```
 
-## Java Properties
-It's possible to provide additional java properties and JVM options to all of the images via the `JAVA_OPTIONS` env variable.
+### Java Properties
+It's possible to provide additional java properties and JVM options to the server images via the `JAVA_OPTIONS` env variable.
 For example, to quickly configure CORS without providing a server.yaml file, it's possible to do the following:
 
 ```bash
 docker run -e JAVA_OPTIONS="-Dinfinispan.cors.enableAll=https://host.domain:port" infinispan/server
 ```
 
-## Custom Infinispan XML Configuration
+### Custom Infinispan XML Configuration
 If you require more control of the server's configuration than it is also possible to configure the Infinispan server directly using XML. To do this, it is necessary to set the entrypoint of the docker image to `/opt/infinispan/bin/server.sh` and for the custom Infinispan/JGroups xml files to be copied to a mounted docker volume like so:
 
 ```bash
@@ -344,10 +357,10 @@ docker run -it -v example-vol:/user-config --entrypoint "/opt/infinispan/bin/ser
 ## Debugging
 
 ### Image Configuration
-The image scripts that are used to configure and launch the Infinispan server can be debugged by setting the environment variable `DEBUG=TRUE` as follows:
+The image scripts that are used to configure and launch the executables can be debugged by setting the environment variable `DEBUG=TRUE` as follows:
 
 ```bash
- docker run -e DEBUG=true infinispan/server
+ docker run -e DEBUG=true infinispan/<image-name>
 ```
 
 ### Infinispan Server
@@ -355,19 +368,7 @@ It's also possible to debug the Infinispan server in the image by setting the `D
 ```bash
 docker run -e DEBUG_PORT="*:8787" -p 8787:8787 infinispan/server
 ```
-
-## Image Architecture
-The image consists of two [Cekit](https://cekit.io) modules, `modules/dependencies` and `modules/runtimes`. The
-dependencies module is a simply yaml file that should be used for installing all dependencies required by the image.
-Whereas the runtimes module contains all scripts required by the server during image execution. Files at the root of
-the `runtimes` modules are used to extract the default server distribution and files/dir in the `added`
-dir are copied to the extracted server's root in order to add/overwrite existing files in the distribution.
-
-The entrypoint for the image is `modules/runtimes/added/bin/launch.sh`, which is a minimal bash script that calls the
-[ConfigGenerator](https://github.com/infinispan/infinispan-image-artifacts/tree/master) program to generate the server
-configuration based upon the user supplied yaml files, before then launching the server.
-
-### Provided Tools
+### Image Tools
 In order to keep the image's size as small as possible, we utilise the [ubi-minimal](https://developers.redhat.com/products/rhel/ubi/) image.
 Consequently, the image does not provide all of the tools that are commonly available in linux distributions.
 Below is a list of common tools/recipes that are useful for debugging.
@@ -423,9 +424,10 @@ image types.
 
 - `server-openjdk.yaml` - Creates the `infinispan/server` image with a natively compiled config-generator
 - `server-native.yaml` - Creates the `infinispan/server-native` image with a natively compiled config-generator and server
+- `cli.yaml` - Creates the `infinispan/cli` image with a natively compiled cli
 - `server-dev-jdk.yaml` - Creates the `infinispan/server` image using local artifact paths that must be added to the descriptor.
 - `server-dev-native.yaml` - Creates the `infinispan/server-native` image using local artifact paths that must be added to the descriptor.
-
+- `cli-dev.yaml` - Creates the `infinispan/cli` image using a local cli executable that must be added to the descriptor.
 
 ### Recreate Image Releases
 We recommend pulling stable image releases from [Quay.io](https://quay.io/infinispan/server) or [Docker Hub](https://hub.docker.com/r/jboss/infinispan-server),
