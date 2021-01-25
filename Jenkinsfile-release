@@ -57,13 +57,17 @@ void updateServerDescriptor(imageName, image) {
     builder.version = image.version
     runner.version = image.version
 
-    if (params.artifactsVersion)
-        builder.artifacts[0] = image['config-generator']
-
-    if (imageName != 'server') {
-        builder.artifacts[1] = image.server
+    if (imageName == 'cli') {
+        builder.artifacts[0] = image.cli;
     } else {
-        runner.artifacts[1] = image.server
+        if (params.artifactsVersion)
+            builder.artifacts[0] = image['config-generator']
+
+        if (imageName != 'server') {
+            builder.artifacts[1] = image.server
+        } else {
+            runner.artifacts[1] = image.server
+        }
     }
 
     runner.labels.findAll {it.name == 'version' || it.name == 'release'}.each { label ->
