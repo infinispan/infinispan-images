@@ -101,16 +101,19 @@ user configuration yaml.
 ```yaml
 infinispan:
   clusterName: infinispan
+  zeroCapacityNode: false
+  locks:
+    owners: -1
+    reliability: consistent
 endpoints:
+  auth: true
   hotrod:
-    auth: true
     enabled: true
     qop: auth
     serverName: infinispan
   memcached:
     enabled: false
   rest:
-    auth: true
     enabled: true
 jgroups:
   diagnostics: false
@@ -125,15 +128,17 @@ keystore:
   type: pkcs12
 xsite:
   masterCandidate: true
+  maxSiteMasters: 1
+  transport: tcp
 
 logging:
   console:
     level: trace
-    pattern: '%K{level}%d{HH\:mm\:ss,SSS} %-5p [%c] (%t) %s%e%n'
+    pattern: '%d{HH:mm:ss,SSS} %-5p (%t) [%c] %m%throwable%n'
   file:
     level: trace
-    path: server/log
-    pattern: '%d{yyyy-MM-dd HH\:mm\:ss,SSS} %-5p [%c] (%t) %s%e%n'
+    path: '${sys:infinispan.server.log.path}/server.log'
+    pattern: '%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p (%t) [%c] %m%throwable%n'
   categories:
     com.arjuna: warn
     org.infinispan: info
