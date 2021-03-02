@@ -29,6 +29,7 @@
   - value: 7900
   - value: 11221
   - value: 11222
+  - value: 11223
   - value: 46655
   - value: 57600
   labels:
@@ -54,7 +55,9 @@
   - name: CONFIG_PATH
     description: The path to the .yaml file which contains all Infinispan related configuration.
   - name: IDENTITIES_PATH
-    description: The path to the .yaml file containing all identity information for configuring endpoints.
+    description: The path to the .yaml file containing all identity information for the user endpoint.
+  - name: ADMIN_IDENTITIES_PATH
+    description: The path to the .yaml file containing all identity information for the admin endpoint.
   - name: USER
     description: When provided with the PASS variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
   - name: PASS

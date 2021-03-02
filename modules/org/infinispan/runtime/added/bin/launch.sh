@@ -76,11 +76,12 @@ umask 0002
 
 generate_content
 
+[[ -n ${ADMIN_IDENTITIES_PATH} ]] && ADMIN_IDENTITES_OPT="--admin-identities=${ADMIN_IDENTITIES_PATH}"
 [[ -n ${IDENTITIES_PATH} ]] && IDENTITES_OPT="--identities=${IDENTITIES_PATH}"
 [[ -n ${CONFIG_PATH} ]] && CONFIG_OPT="--config=${CONFIG_PATH}"
 
 CONFIG_GENERATOR="${ISPN_HOME}/bin/config-generator"
-CONFIG_GENERATOR_ARGS="$IDENTITES_OPT $CONFIG_OPT ${ISPN_HOME}/server/conf"
+CONFIG_GENERATOR_ARGS="${ADMIN_IDENTITES_OPT} ${IDENTITES_OPT} ${CONFIG_OPT} ${ISPN_HOME}/server/conf"
 
 # If *.jar, java otherwise native
 if [[ -f "${CONFIG_GENERATOR}.jar" ]]; then

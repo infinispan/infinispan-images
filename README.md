@@ -95,6 +95,10 @@ credentials:
       - dev
 ```
 
+##### Admin Identities Yaml
+If `endpoints.dedicatedAdmin: true` it's also possible to provide a identities yaml for the admin security realm by
+setting the `ADMIN_IDENTITIES_PATH` env var. The format of this file is the same as the identities yaml.
+
 #### Config Yaml
 Below is an example configuration file which shows the current default values used by the image if not provided by the
 user configuration yaml.
@@ -107,6 +111,7 @@ infinispan:
     reliability: consistent
 endpoints:
   auth: true
+  dedicatedAdmin: false
   hotrod:
     enabled: true
     qop: auth
@@ -212,6 +217,19 @@ endpoint's configuration element.
 
 ##### Encryption
 Encryption is automatically enabled for all endpoints if a [keystore](#keystore) is configured, otherwise it is disabled.
+
+#### Admin Endpoint
+In addition to the user endpoint, it's also possible to expose a REST endpoint on port `11223` for admin operations. This
+is useful for environments where the admin and application users are distinct, for example the [infinispan operator](https://github.com/infinispan/infinispan-operator).
+
+To enable the admin endpoint provide admin identities file via the `ADMIN_IDENTITIES_PATH` and add the following to the config yaml:
+
+```yaml
+endpoints:
+  dedicatedAdmin: true
+```
+
+> By default this endpoint is disabled.
 
 #### Keystore
 In order for the image's endpoint and/or clustering to utilise encryption, it is necessary for a keystore to be defined.
