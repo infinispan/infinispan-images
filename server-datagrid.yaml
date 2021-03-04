@@ -1,5 +1,5 @@
 name: datagrid/datagrid-8
-version: 1.1
+version: 1.2
 description: Data Grid Server
 
 from: registry.redhat.io/ubi8/ubi-minimal
@@ -24,17 +24,17 @@ labels:
   - name: name
     value: DG Server
   - name: version
-    value: 8.1.1.GA.4
+    value: 8.2.0.CD
   - name: release
-    value: 8.1.1.GA.4
+    value: 8.2.0.CD
   - name: com.redhat.component
     value: datagrid-8-rhel8-container
   - name: org.jboss.product
     value: datagrid
   - name: org.jboss.product.version
-    value: 8.1.1.GA.4
+    value: 8.2.0.CD
   - name: org.jboss.product.datagrid.version
-    value: 8.1.1.GA.4
+    value: 8.2.0.CD
   - name: "com.redhat.dev-mode"
     value: "DEBUG:true"
     description: "Environment variable used to enable development mode (debugging). A value of true will enable development mode."
@@ -43,7 +43,7 @@ labels:
   - name: io.k8s.description
     value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
   - name: io.k8s.display-name
-    value: Data Grid 8.1
+    value: Data Grid 8.2
   - name: io.openshift.expose-services
     value: 8080:http
   - name: io.openshift.tags
