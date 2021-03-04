@@ -2,17 +2,17 @@ name: datagrid/datagrid-8-openj9
 
 labels:
   - name: version
-    value: 8.1.1.GA.4
+    value: 8.2.0.CD
   - name: release
-    value: 8.1.1.GA.4
+    value: 8.2.0.CD
   - name: com.redhat.component
     value: datagrid-8-openj9-11-rhel8-container
   - name: org.jboss.product.version
-    value: 8.1.1.GA.4
+    value: 8.2.0.CD
   - name: org.jboss.product.datagrid.version
-    value: 8.1.1.GA.4
+    value: 8.2.0.CD
   - name: io.k8s.display-name
-    value: Data Grid 8.1 OpenJ9
+    value: Data Grid 8.2 OpenJ9
 
 modules:
   install:
