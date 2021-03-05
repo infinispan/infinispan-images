@@ -8,8 +8,8 @@ artifacts:
 - name: config-generator
   url: https://repository.jboss.org/org/infinispan/images/config-generator/2.1.2.Final/config-generator-2.1.2.Final-runner.jar
 - name: server
-  description: Red Hat Data Grid 8.1.1.GA
-  md5: 6ff7cfd37c2085ecb3d09fc39eab877c
+  description: ~
+  md5: ~
 packages:
   manager: microdnf
   content_sets_file: content_sets.yml
