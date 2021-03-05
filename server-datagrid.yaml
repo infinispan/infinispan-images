@@ -7,9 +7,6 @@ from: registry.redhat.io/ubi8/ubi-minimal
 artifacts:
 - name: config-generator
   url: https://repository.jboss.org/org/infinispan/images/config-generator/2.1.2.Final/config-generator-2.1.2.Final-runner.jar
-- name: server
-  description: ~
-  md5: ~
 packages:
   manager: microdnf
   content_sets_file: content_sets.yml
