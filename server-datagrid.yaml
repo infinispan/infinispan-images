@@ -6,7 +6,11 @@ from: registry.redhat.io/ubi8/ubi-minimal
 
 artifacts:
 - name: config-generator
-  url: https://repository.jboss.org/org/infinispan/images/config-generator/2.1.4.Final/config-generator-2.1.4.Final-runner.jar
+  description: Image Artifacts 2.1.4.Final_redhat_00001
+  md5: 958d5087ad6ec6f9f424ddc1284fde1b
+- name: server
+  description: Red Hat Data Grid 8.2.0.GA
+  md5: fb2e0b15131eaa607b1afeb51f5dd215
 packages:
   manager: microdnf
   content_sets_file: content_sets.yml
@@ -21,17 +25,17 @@ labels:
   - name: name
     value: DG Server
   - name: version
-    value: 8.2.0.CD
+    value: 8.2.0.GA.1
   - name: release
-    value: 8.2.0.CD
+    value: 8.2.0.GA.1
   - name: com.redhat.component
     value: datagrid-8-rhel8-container
   - name: org.jboss.product
     value: datagrid
   - name: org.jboss.product.version
-    value: 8.2.0.CD
+    value: 8.2.0.GA.1
   - name: org.jboss.product.datagrid.version
-    value: 8.2.0.CD
+    value: 8.2.0.GA.1
   - name: "com.redhat.dev-mode"
     value: "DEBUG:true"
     description: "Environment variable used to enable development mode (debugging). A value of true will enable development mode."
