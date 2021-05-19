@@ -6,10 +6,3 @@ version: openjdk
 modules:
   install:
     - name: org.infinispan.dependencies.jdk.common
-
-packages:
-  install:
-    - java-11-openjdk-devel
-
-execute:
-  - script: trim.sh
