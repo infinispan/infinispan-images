@@ -14,7 +14,7 @@
 - name: infinispan/server
   version: 12.1.0.Final-1
   description: Infinispan Server
-  from: registry.access.redhat.com/ubi8/ubi-minimal:8.4
+  from: registry.access.redhat.com/ubi8/openjdk-11-runtime:1.9
   artifacts:
   - name: config-generator
     image: native-builder
@@ -62,6 +62,9 @@
     description: When provided with the PASS variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
   - name: PASS
     description: When provided with the USER variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
+  - name: JAVA_HOME
+    value: /usr/lib/jvm/jre
+    description: Workaround for issue with openjdk-runtime image where JAVA_HOME is wrongly set to /usr/lib/jvm/java-11
   - name: JAVA_OPTIONS
     description: Allows java properties and options to be provided to the JVM when the server is launched.
   - name: JAVA_DIAGNOSTICS
@@ -84,8 +87,7 @@
     - path: modules
     install:
     - name: org.infinispan.dnf-workaround
-    - name: org.infinispan.dependencies.jdk
-      version: openjdk
+    - name: org.infinispan.dependencies.jdk.common
     - name: org.infinispan.dependencies
       version: infinispan
     - name: org.infinispan.distribution

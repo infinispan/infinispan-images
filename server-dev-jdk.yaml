@@ -1,7 +1,7 @@
 - name: infinispan/server
   version: latest
   description: Infinispan Server
-  from: registry.access.redhat.com/ubi8/ubi-minimal:8.4
+  from: registry.access.redhat.com/ubi8/openjdk-11-runtime:1.9
   artifacts:
     - name: config-generator
       path: artifacts/config-generator
@@ -39,6 +39,9 @@
   envs:
   - name: ISPN_HOME
     value: /opt/infinispan
+  - name: JAVA_HOME
+    value: /usr/lib/jvm/jre
+    description: Workaround for issue with openjdk-runtime image where JAVA_HOME is wrongly set to /usr/lib/jvm/java-11
   - name: JAVA_INIT_MEM_RATIO
     description: This is used to calculate a default initial heap memory based the maximumal heap memory.  The default is `100` which means 100% of the maximal heap is used for the initial heap size.  You can skip this mechanism by setting this value to `0` in which case no `-Xms` option is added.
     value: 0
@@ -56,8 +59,7 @@
     - path: modules
     install:
     - name: org.infinispan.dnf-workaround
-    - name: org.infinispan.dependencies.jdk
-      version: openjdk
+    - name: org.infinispan.dependencies.jdk.common
     - name: org.infinispan.dependencies
       version: infinispan
     - name: org.infinispan.distribution
