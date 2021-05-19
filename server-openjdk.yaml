@@ -4,7 +4,7 @@
   description: Builder image for native config generator
   artifacts:
   - name: config-generator-src
-    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.1.3.Final.tar.gz
+    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.1.4.Final.tar.gz
     target: config-generator-src.tar.gz
   modules:
     repositories:
