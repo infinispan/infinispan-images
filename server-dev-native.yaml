@@ -42,7 +42,6 @@
     repositories:
     - path: modules
     install:
-    - name: org.infinispan.dnf-workaround
     - name: org.infinispan.dependencies
       version: infinispan
     - name: org.infinispan.distribution

@@ -1,9 +1,0 @@
-schema_version: 1
-
-# Due to https://github.com/rpm-software-management/microdnf/issues/50 it's necessary to create the directory
-# /run/user/$UID before `microdnf --setopt=tsflags=nodocs install` is called
-name: org.infinispan.dnf-workaround
-version: 1.0
-
-execute:
-  - script: workaround.sh
