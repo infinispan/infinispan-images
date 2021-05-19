@@ -86,7 +86,6 @@
     repositories:
     - path: modules
     install:
-    - name: org.infinispan.dnf-workaround
     - name: org.infinispan.dependencies.jdk.common
     - name: org.infinispan.dependencies
       version: infinispan
