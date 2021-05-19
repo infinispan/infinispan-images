@@ -1,7 +1,7 @@
 - name: infinispan/server-native
   version: latest
   description: Infinispan Quarkus Server
-  from: registry.access.redhat.com/ubi8/ubi-minimal:8.2
+  from: registry.access.redhat.com/ubi8/ubi-minimal:8.4
   artifacts:
     - name: config-generator
       path: artifacts/config-generator
