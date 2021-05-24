@@ -42,12 +42,12 @@ podman run --net=host -p 11222:11222 infinispan/server
 
 > When utilising [podman](https://podman.io/) it's necessary for the `--net=host` to be passed when not executing as `sudo`.
 
-By default the image has authentication enabled on all exposed endpoints. When executing the above command the image
-automatically generates a username/password combo, prints the values to stdout and then starts the Infinispan server with
+By default the image has authentication and enabled on all exposed endpoints. When executing the above command the image
+automatically generates a username/password combo with the "admin" role, prints the values to stdout and then starts the Infinispan server with
 the authenticated Hotrod and Rest endpoints exposed on port 11222. Therefore, it's necessary to utilise the printed
 credentials when attempting to access the exposed endpoints via clients.
 
-It's also possible to provide a username/password combination via environment variables like so:
+It's also possible to provide a admin username/password combination via environment variables like so:
 
 ```bash
 docker run -p 11222:11222 -e USER="Titus Bramble" -e PASS="Shambles" infinispan/server
@@ -104,14 +104,17 @@ Below is an example configuration file which shows the current default values us
 user configuration yaml.
 ```yaml
 infinispan:
+  authorization:
+    enabled: true
   clusterName: infinispan
   zeroCapacityNode: false
   locks:
     owners: -1
     reliability: consistent
 endpoints:
-  auth: true
   dedicatedAdmin: false
+  auth: true
+  clientCert: none # none | validate | authenticate
   hotrod:
     enabled: true
     qop: auth

@@ -49,6 +49,8 @@ identities=$(cat <<-YamlEnd
 credentials:
   - username: ${USER}
     password: ${PASS}
+    roles:
+      - admin
 YamlEnd
 )
     export IDENTITIES_PATH=${ISPN_HOME}/server/conf/generated-identities.yaml
