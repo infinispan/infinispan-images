@@ -15,7 +15,7 @@
 - name: infinispan/cli
   version: 12.1.3.Final-1
   description: Infinispan Quarkus Server
-  from: registry.access.redhat.com/ubi8/ubi-minimal:8.2
+  from: registry.access.redhat.com/ubi8/ubi-minimal
   artifacts:
   - name: cli
     image: native-builder
