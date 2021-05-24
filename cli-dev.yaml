@@ -1,7 +1,7 @@
 - name: infinispan/cli
   version: latest
   description: Infinispan Quarkus Server
-  from: registry.access.redhat.com/ubi8/ubi-minimal:8.2
+  from: registry.access.redhat.com/ubi8/ubi-minimal
   artifacts:
   - name: cli
     path: artifacts/cli
