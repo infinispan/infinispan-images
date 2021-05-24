@@ -1,10 +1,10 @@
 - name: native-builder
-  version: 12.1.3.Final-1
+  version: 12.1.3.Final-2
   from: quay.io/quarkus/centos-quarkus-maven:20.3.0-java11
   description: Builder image for native config generator
   artifacts:
   - name: config-generator-src
-    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.1.4.Final.tar.gz
+    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.1.5.Final.tar.gz
     target: config-generator-src.tar.gz
   modules:
     repositories:
@@ -12,7 +12,7 @@
     install:
     - name: quarkus.config-generator
 - name: infinispan/server
-  version: 12.1.3.Final-1
+  version: 12.1.3.Final-2
   description: Infinispan Server
   from: registry.access.redhat.com/ubi8/ubi-minimal
   artifacts:
