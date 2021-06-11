@@ -90,6 +90,7 @@ void updateImageVersion(image, version) {
 void dockerTagAndPush(String srcTag, String destTag) {
     sh "docker tag ${srcTag} ${destTag}"
     sh "docker push ${destTag}"
+    sh "docker rmi ${destTag}"
 }
 
 pipeline {
@@ -152,9 +153,9 @@ pipeline {
             steps {
                 script {
                     IMAGES.each { name, image ->
+                        def imageBuild = "infinispan/${name}"
                         REGISTRIES.each { registry ->
                             withDockerRegistry([ credentialsId: registry.credential, url: "https://${registry.url}" ]) {
-                                def imageBuild = "infinispan/${name}"
                                 def fqImageName = "${registry.url}/${imageBuild}"
                                 // Create/update Infinispan version tag e.g. 10.0.1.Final
                                 dockerTagAndPush imageBuild, "${fqImageName}:${params.ispnVersion}"
@@ -171,6 +172,7 @@ pipeline {
                                 }
                             }
                         }
+                        sh "docker rmi ${imageBuild}"
                     }
                 }
             }
