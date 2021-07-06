@@ -9,8 +9,8 @@ artifacts:
   description: Image Artifacts 2.1.7.Final_redhat_00001
   md5: 737f5638e589d8540289e9a0aa849668
 - name: server
-  description: Red Hat Data Grid 8.2.0.GA
-  md5: 9b45e022b4cc15cd6777d13f6f44912b
+  description: Red Hat Data Grid 8.2.1.GA
+  md5: 467340345e85d82352ccaa6f9540deff
 packages:
   manager: microdnf
   content_sets_file: content_sets.yml
@@ -25,17 +25,17 @@ labels:
   - name: name
     value: DG Server
   - name: version
-    value: 8.2.0.GA.4
+    value: 8.2.1.GA
   - name: release
-    value: 8.2.0.GA.4
+    value: 8.2.1.GA
   - name: com.redhat.component
     value: datagrid-8-rhel8-container
   - name: org.jboss.product
     value: datagrid
   - name: org.jboss.product.version
-    value: 8.2.0.GA.4
+    value: 8.2.1.GA
   - name: org.jboss.product.datagrid.version
-    value: 8.2.0.GA.4
+    value: 8.2.1.GA
   - name: "com.redhat.dev-mode"
     value: "DEBUG:true"
     description: "Environment variable used to enable development mode (debugging). A value of true will enable development mode."
