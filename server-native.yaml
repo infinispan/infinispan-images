@@ -4,7 +4,7 @@
   description: Builder image for native components
   artifacts:
   - name: config-generator-src
-    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.1.7.Final.tar.gz
+    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.1.8.Final.tar.gz
     target: config-generator-src.tar.gz
   - name: quarkus-src
     url: https://github.com/infinispan/infinispan-quarkus/archive/12.1.6.Final.tar.gz
