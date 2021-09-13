@@ -10,6 +10,7 @@ packages:
     - file
     - bsdtar
     - findutils
+    - gzip
     - iproute
     - lsof
     - openssl
