@@ -5,6 +5,8 @@
   artifacts:
     - name: config-generator
       path: artifacts/config-generator
+    - name: cli
+      path: artifacts/cli
     - name: server
       path: artifacts/server
   packages:
@@ -42,13 +44,14 @@
     repositories:
     - path: modules
     install:
+    - name: org.infinispan.cli
     - name: org.infinispan.dependencies
       version: infinispan
     - name: org.infinispan.distribution
       version: native
     - name: org.infinispan.runtime
   run:
-    cmd:
+    entrypoint:
     - ./bin/launch.sh
     user: 185
     workdir: /opt/infinispan

@@ -15,6 +15,7 @@
     install:
     - name: quarkus.config-generator
     - name: quarkus.infinispan.src
+    - name: quarkus.infinispan.cli
     - name: quarkus.infinispan.server
 - name: infinispan/server-native
   version: 13.0.0.Dev01-1
@@ -24,6 +25,9 @@
   - name: config-generator
     image: native-builder
     path: /opt/config-generator
+  - name: cli
+    image: native-builder
+    path: /opt/cli
   - name: server
     image: native-builder
     path: /opt/server
@@ -74,13 +78,14 @@
     repositories:
     - path: modules
     install:
+    - name: org.infinispan.cli
     - name: org.infinispan.dependencies
       version: infinispan
     - name: org.infinispan.distribution
       version: native
     - name: org.infinispan.runtime
   run:
-    cmd:
+    entrypoint:
     - ./bin/launch.sh
     user: 185
     workdir: /opt/infinispan
