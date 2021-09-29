@@ -20,10 +20,9 @@ generate_user_or_password() {
 
 generate_identities_yaml() {
   # If no identities file provided, then use provided user/pass or generate as required
-  if [ -z ${IDENTITIES_PATH} ]; then
+  if [ -z ${IDENTITIES_BATCH} ]; then
     printBorder
-    printLn
-    printLn "IDENTITIES_PATH not specified"
+    printLn "IDENTITIES_BATCH not specified"
     if [ -n "${USER}" ] && [ -n "${PASS}" ]; then
       printLn "Generating Identities yaml using USER and PASS env vars."
     else
@@ -45,16 +44,8 @@ generate_identities_yaml() {
     fi
     printBorder
 
-identities=$(cat <<-YamlEnd
-credentials:
-  - username: ${USER}
-    password: ${PASS}
-    roles:
-      - admin
-YamlEnd
-)
-    export IDENTITIES_PATH=${ISPN_HOME}/server/conf/generated-identities.yaml
-    echo "${identities}" > ${IDENTITIES_PATH}
+    export IDENTITIES_BATCH=${ISPN_HOME}/server/conf/generated-identities.batch
+    echo "user create ${USER} -p ${PASS} -g admin" > ${IDENTITIES_BATCH}
   fi
 }
 
@@ -82,18 +73,59 @@ generate_content
 [[ -n ${IDENTITIES_PATH} ]] && IDENTITES_OPT="--identities=${IDENTITIES_PATH}"
 [[ -n ${CONFIG_PATH} ]] && CONFIG_OPT="--config=${CONFIG_PATH}"
 
-CONFIG_GENERATOR="${ISPN_HOME}/bin/config-generator"
-CONFIG_GENERATOR_ARGS="${ADMIN_IDENTITES_OPT} ${IDENTITES_OPT} ${CONFIG_OPT} ${ISPN_HOME}/server/conf"
+legacy=false
+if [[ -n ${ADMIN_IDENTITIES_PATH} ]]; then
+  echo "'ADMIN_IDENTITIES_PATH' env var has been deprecated and will be removed in :14.x images. Credentials should be defined using a cli.batch script via 'ADMIN_IDENTITIES_PATH' env var instead."
+  legacy=true
+fi
 
-# If *.jar, java otherwise native
-if [[ -f "${CONFIG_GENERATOR}.jar" ]]; then
-  java -jar ${ISPN_HOME}/bin/config-generator.jar $CONFIG_GENERATOR_ARGS
-else
-  bin/config-generator $CONFIG_GENERATOR_ARGS
+if [[ -n ${IDENTITIES_PATH} ]]; then
+  echo "'IDENTITIES_PATH' env var has been deprecated and will be removed in :14.x images. Credentials should be defined using a cli.batch script via 'IDENTITIES_PATH' env var instead."
+  legacy=true
+fi
+
+if [[ -n ${CONFIG_PATH} ]]; then
+  echo "'CONFIG_PATH' env var has been deprecated. Infinispan configurations should be provided directly to the image."
+  legacy=true
+fi
+
+# ===================================================================================
+# Configuration Initialization
+# ===================================================================================
+
+
+if [ "$legacy" = true ]; then
+  CONFIG_GENERATOR="${ISPN_HOME}/bin/config-generator"
+  CONFIG_GENERATOR_ARGS="${ADMIN_IDENTITES_OPT} ${IDENTITES_OPT} ${CONFIG_OPT} ${ISPN_HOME}/server/conf"
+
+  # If *.jar, java otherwise native
+  if [[ -f "${CONFIG_GENERATOR}.jar" ]]; then
+    java -jar ${ISPN_HOME}/bin/config-generator.jar $CONFIG_GENERATOR_ARGS
+  else
+    bin/config-generator $CONFIG_GENERATOR_ARGS
+  fi
+fi
+
+# IDENTITIES_BATCH will not be set if IDENTITIES_PATH provided
+if [[ -n ${IDENTITIES_BATCH} ]]; then
+  # Use the native CLI if present
+  if [[ -f "${ISPN_HOME}/cli" ]]; then
+    ${ISPN_HOME}/cli --file ${IDENTITIES_BATCH}
+  else
+    ${ISPN_HOME}/bin/cli.sh --file ${IDENTITIES_BATCH}
+  fi
 fi
 
 if [ -n "${DEBUG}" ]; then
-  cat ${ISPN_HOME}/server/conf/*.xml
+  cat ${ISPN_HOME}/server/conf/*
 fi
 
-exec ${ISPN_HOME}/bin/server.sh
+# ===================================================================================
+# Server Execution
+# ===================================================================================
+
+if [ "$legacy" = true ]; then
+  exec ${ISPN_HOME}/bin/server.sh
+else
+  exec ${ISPN_HOME}/bin/server.sh "$@"
+fi

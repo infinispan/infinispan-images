@@ -65,7 +65,7 @@
       version: jvm
     - name: org.infinispan.runtime
   run:
-    cmd:
+    entrypoint:
     - ./bin/launch.sh
     user: 185
     workdir: /opt/infinispan
