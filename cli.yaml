@@ -1,6 +1,6 @@
 - name: native-builder
   version: 13.0.0.CR2-1
-  from: quay.io/quarkus/centos-quarkus-maven:20.3.2-java11
+  from: quay.io/quarkus/centos-quarkus-maven:21.2.0-java11
   description: Builder image for native components
   artifacts:
   - name: quarkus-src
