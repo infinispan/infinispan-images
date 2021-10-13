@@ -117,7 +117,7 @@ if [[ -n ${IDENTITIES_BATCH} ]]; then
 fi
 
 if [ -n "${DEBUG}" ]; then
-  cat ${ISPN_HOME}/server/conf/*
+  tail -n +1 ${ISPN_HOME}/server/conf/*
 fi
 
 # ===================================================================================
