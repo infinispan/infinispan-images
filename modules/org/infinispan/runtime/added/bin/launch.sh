@@ -75,12 +75,12 @@ generate_content
 
 legacy=false
 if [[ -n ${ADMIN_IDENTITIES_PATH} ]]; then
-  echo "'ADMIN_IDENTITIES_PATH' env var has been deprecated and will be removed in :14.x images. Credentials should be defined using a cli.batch script via 'ADMIN_IDENTITIES_PATH' env var instead."
+  echo "'ADMIN_IDENTITIES_PATH' env var has been deprecated and will be removed in :14.x images. Credentials should be defined using a cli.batch script via 'IDENTITIES_BATCH' env var instead."
   legacy=true
 fi
 
 if [[ -n ${IDENTITIES_PATH} ]]; then
-  echo "'IDENTITIES_PATH' env var has been deprecated and will be removed in :14.x images. Credentials should be defined using a cli.batch script via 'IDENTITIES_PATH' env var instead."
+  echo "'IDENTITIES_PATH' env var has been deprecated and will be removed in :14.x images. Credentials should be defined using a cli.batch script via 'IDENTITIES_BATCH' env var instead."
   legacy=true
 fi
 
