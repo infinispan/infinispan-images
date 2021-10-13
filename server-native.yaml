@@ -1,13 +1,13 @@
 - name: native-builder
-  version: 13.0.0.Dev01-1
+  version: 13.0.0.Final-1
   from: quay.io/quarkus/centos-quarkus-maven:21.2.0-java11
   description: Builder image for native components
   artifacts:
   - name: config-generator-src
-    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.1.8.Final.tar.gz
+    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.2.0.Final.tar.gz
     target: config-generator-src.tar.gz
   - name: quarkus-src
-    url: https://github.com/infinispan/infinispan-quarkus/archive/13.0.0.Dev01.tar.gz
+    url: https://github.com/infinispan/infinispan-quarkus/archive/13.0.0.Final.tar.gz
     target: quarkus-src.tar.gz
   modules:
     repositories:
@@ -18,7 +18,7 @@
     - name: quarkus.infinispan.cli
     - name: quarkus.infinispan.server
 - name: infinispan/server-native
-  version: 13.0.0.Dev01-1
+  version: 13.0.0.Final-1
   description: Infinispan Quarkus Server
   from: registry.access.redhat.com/ubi8/ubi-minimal
   artifacts:
@@ -46,9 +46,9 @@
   - name: name
     value: Infinispan Server
   - name: version
-    value: 13.0.0.Dev01
+    value: 13.0.0.Final
   - name: release
-    value: 13.0.0.Dev01
+    value: 13.0.0.Final
   - name: io.k8s.description
     value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
   - name: io.k8s.display-name
