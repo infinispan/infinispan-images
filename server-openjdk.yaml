@@ -62,6 +62,8 @@ envs:
 - name: JAVA_GC_MAX_METASPACE_SIZE
   description: The maximum metaspace size.
   value: 96m
+- name: SERVER_LIBS
+  description: A list of artifacts to install in the server lib directory.
 modules:
   repositories:
   - path: modules
@@ -77,3 +79,4 @@ run:
   - ./bin/launch.sh
   user: 185
   workdir: /opt/infinispan
+

@@ -60,7 +60,7 @@ control.
 #### HotRod Clients
 When connecting a HotRod client to the image, the following SASL properties must be configured on your client (with the username and password properties changed as required):
 
-```java
+```properties
 infinispan.client.hotrod.auth_username=admin
 infinispan.client.hotrod.auth_password=changme
 infinispan.client.hotrod.auth_realm=default
@@ -76,7 +76,7 @@ fail as it requires a connection to an Infinispan server.
 
 Below is an example Identities batch CLI file `identities.batch`, that defines two users and their role:
 
-```yaml
+```bash
 user create "Alan Shearer" -p "striker9" -g admin
 user create "Nolberto Solano" -p "winger7" -g dev
 ```
@@ -117,6 +117,16 @@ For example, to quickly configure CORS without providing a server.yaml file, it'
 ```bash
 docker run -e JAVA_OPTIONS="-Dinfinispan.cors.enableAll=https://host.domain:port" infinispan/server
 ```
+
+#### Deploying artifacts to the server lib directory
+Deploy artifacts to the server lib directory using the `SERVER_LIBS` env variable.
+For example, to add the PostgreSQL JDBC driver to the server:
+
+```bash
+docker run -e SERVER_LIBS="org.postgresql:postgresql:42.3.1" infinispan/server
+```
+
+The `SERVER_LIBS` variable supports multiple, space-separated artifacts represented as URLs or as Maven coordinates. Archive artifacts in `.tar`, `.tar.gz` or `.zip` formats will be extracted. Refer to the [CLI](https://infinispan.org/docs/stable/titles/cli/cli.html#install1) `install` command help to learn about all possible arguments and options. 
 
 ## Debugging
 
