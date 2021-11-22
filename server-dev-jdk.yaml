@@ -3,8 +3,6 @@
   description: Infinispan Server
   from: registry.access.redhat.com/ubi8/openjdk-11-runtime
   artifacts:
-    - name: config-generator
-      path: artifacts/config-generator
     - name: server
       path: artifacts/server
 

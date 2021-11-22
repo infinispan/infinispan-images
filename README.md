@@ -118,16 +118,6 @@ For example, to quickly configure CORS without providing a server.yaml file, it'
 docker run -e JAVA_OPTIONS="-Dinfinispan.cors.enableAll=https://host.domain:port" infinispan/server
 ```
 
-### Deprecated Features
-Since Infinispan 13.0 the `IDENTITIES_PATH`, `ADMIN_IDENTITIES_PATH` and `CONFIG_PATH` env variables have all been deprecated.
-The intention is for this functionality to be removed in the 14.0 images.
-
-- The [IDENTITIES_BATCH](#identities-batch) env variable should be used instead of `IDENTITIES_PATH` and `ADMIN_IDENTITIES_PATH`
-- The yaml configuration supported by `CONFIG_PATH` does not have a direct replacement. Instead, users should configure the
-server directly by supplying their own server configuration via the docker args. See [#server-configuration] for more details.
-
-> The 13.0 images will continue to work as before if the `IDENTITIES_PATH` and/or `CONFIG_PATH` are configured.
-
 ## Debugging
 
 ### Image Configuration

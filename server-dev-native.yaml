@@ -3,8 +3,6 @@
   description: Infinispan Quarkus Server
   from: registry.access.redhat.com/ubi8/ubi-minimal
   artifacts:
-    - name: config-generator
-      path: artifacts/config-generator
     - name: cli
       path: artifacts/cli
     - name: server

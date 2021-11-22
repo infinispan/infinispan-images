@@ -69,42 +69,9 @@ umask 0002
 
 generate_content
 
-[[ -n ${ADMIN_IDENTITIES_PATH} ]] && ADMIN_IDENTITES_OPT="--admin-identities=${ADMIN_IDENTITIES_PATH}"
-[[ -n ${IDENTITIES_PATH} ]] && IDENTITES_OPT="--identities=${IDENTITIES_PATH}"
-[[ -n ${CONFIG_PATH} ]] && CONFIG_OPT="--config=${CONFIG_PATH}"
-
-legacy=false
-if [[ -n ${ADMIN_IDENTITIES_PATH} ]]; then
-  echo "'ADMIN_IDENTITIES_PATH' env var has been deprecated and will be removed in :14.x images. Credentials should be defined using a cli.batch script via 'IDENTITIES_BATCH' env var instead."
-  legacy=true
-fi
-
-if [[ -n ${IDENTITIES_PATH} ]]; then
-  echo "'IDENTITIES_PATH' env var has been deprecated and will be removed in :14.x images. Credentials should be defined using a cli.batch script via 'IDENTITIES_BATCH' env var instead."
-  legacy=true
-fi
-
-if [[ -n ${CONFIG_PATH} ]]; then
-  echo "'CONFIG_PATH' env var has been deprecated. Infinispan configurations should be provided directly to the image."
-  legacy=true
-fi
-
 # ===================================================================================
 # Configuration Initialization
 # ===================================================================================
-
-
-if [ "$legacy" = true ]; then
-  CONFIG_GENERATOR="${ISPN_HOME}/bin/config-generator"
-  CONFIG_GENERATOR_ARGS="${ADMIN_IDENTITES_OPT} ${IDENTITES_OPT} ${CONFIG_OPT} ${ISPN_HOME}/server/conf"
-
-  # If *.jar, java otherwise native
-  if [[ -f "${CONFIG_GENERATOR}.jar" ]]; then
-    java -jar ${ISPN_HOME}/bin/config-generator.jar $CONFIG_GENERATOR_ARGS
-  else
-    bin/config-generator $CONFIG_GENERATOR_ARGS
-  fi
-fi
 
 # IDENTITIES_BATCH will not be set if IDENTITIES_PATH provided
 if [[ -n ${IDENTITIES_BATCH} ]]; then
@@ -124,12 +91,8 @@ fi
 # Server Execution
 # ===================================================================================
 
-if [ "$legacy" = true ]; then
-  exec ${ISPN_HOME}/bin/server.sh
-else
-  ARGS="$@"
-  if [[ ! ${ARGS} =~ "--bind-address" ]]; then
-    ARGS="--bind-address=0.0.0.0 ${ARGS}"
-  fi
-  exec ${ISPN_HOME}/bin/server.sh ${ARGS}
+ARGS="$@"
+if [[ ! ${ARGS} =~ "--bind-address" ]]; then
+  ARGS="--bind-address=0.0.0.0 ${ARGS}"
 fi
+exec ${ISPN_HOME}/bin/server.sh ${ARGS}
