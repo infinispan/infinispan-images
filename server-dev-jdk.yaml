@@ -1,7 +1,7 @@
 - name: infinispan/server
   version: latest
   description: Infinispan Server
-  from: registry.access.redhat.com/ubi8/openjdk-11-runtime
+  from: registry.access.redhat.com/ubi8/openjdk-17-runtime
   artifacts:
     - name: server
       path: artifacts/server
