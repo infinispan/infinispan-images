@@ -4,8 +4,6 @@ name: org.infinispan.distribution
 version: jvm
 
 artifacts:
-  - name: config-generator
-    path: /tmp/artifacts
   - name: server
     path: /tmp/artifacts
 

@@ -14,5 +14,4 @@ touch $CONF/users.properties $CONF/groups.properties
 cd $SERVER_ROOT
 cp /tmp/artifacts/server $BIN/server-runner
 cp -r $ADDED_DIR/server/conf/* $CONF
-cp -r /tmp/artifacts/config-generator $ADDED_DIR/bin/* $BIN
 cp -r $ADDED_DIR/bin/* $BIN

@@ -3,9 +3,6 @@
   from: quay.io/quarkus/centos-quarkus-maven:21.2.0-java11
   description: Builder image for native components
   artifacts:
-  - name: config-generator-src
-    url: https://github.com/infinispan/infinispan-image-artifacts/archive/2.2.1.Final.tar.gz
-    target: config-generator-src.tar.gz
   - name: quarkus-src
     url: https://github.com/infinispan/infinispan-quarkus/archive/13.0.2.Final.tar.gz
     target: quarkus-src.tar.gz
@@ -13,7 +10,6 @@
     repositories:
     - path: modules
     install:
-    - name: quarkus.config-generator
     - name: quarkus.infinispan.src
     - name: quarkus.infinispan.cli
     - name: quarkus.infinispan.server
@@ -22,9 +18,6 @@
   description: Infinispan Quarkus Server
   from: registry.access.redhat.com/ubi8/ubi-minimal
   artifacts:
-  - name: config-generator
-    image: native-builder
-    path: /opt/config-generator
   - name: cli
     image: native-builder
     path: /opt/cli
@@ -62,12 +55,8 @@
   envs:
   - name: ISPN_HOME
     value: /opt/infinispan
-  - name: CONFIG_PATH
-    description: The path to the .yaml file which contains all Infinispan related configuration.
-  - name: IDENTITIES_PATH
-    description: The path to the .yaml file containing all identity information for the user endpoint.
-  - name: ADMIN_IDENTITIES_PATH
-    description: The path to the .yaml file containing all identity information for the admin endpoint.
+  - name: IDENTITIES_BATCH
+    description: The path to the cli batch file used to create user identities.
   - name: USER
     description: When provided with the PASS variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
   - name: PASS
