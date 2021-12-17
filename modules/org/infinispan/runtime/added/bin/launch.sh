@@ -4,6 +4,24 @@
 # executing the server.
 # ===================================================================================
 
+tree() {
+  find $1 | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/"
+}
+
+tailAll() {
+  dir=$1
+  for f in $dir/*; do
+    if [ -d "$f" ]; then
+      tailAll $f
+    else
+      printf "\n$f\n"
+      printf ">>>>>>>>>>>\n"
+      tail -n +1 $f
+      printf "\n<<<<<<<<<<<\n"
+    fi
+  done
+}
+
 printLn() {
   printf "# %-76s #\n" "$1"
 }
@@ -96,7 +114,12 @@ if [[ -n ${SERVER_LIBS} ]]; then
 fi
 
 if [ -n "${DEBUG}" ]; then
-  tail -n +1 "${ISPN_HOME}"/server/conf/*
+  set +x
+  tree ${ISPN_HOME}
+  tail -n +1 ${ISPN_HOME}/server/data/*.state || true
+  tail -n +1 ${ISPN_HOME}/server/data/*.xml || true
+  tailAll ${ISPN_HOME}/server/conf
+  set -x
 fi
 
 # ===================================================================================
