@@ -74,6 +74,8 @@
     description: When provided with the USER variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
   - name: JAVA_OPTIONS
     description: Allows java properties and options to be provided to the JVM when the server is launched.
+  - name: SERVER_LIBS
+    description: A list of artifacts to install in the server lib directory.
   modules:
     repositories:
     - path: modules

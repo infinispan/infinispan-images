@@ -23,8 +23,7 @@ tailAll() {
 }
 
 printLn() {
-  format='# %-76s #\n'
-  printf "$format" "$1"
+  printf "# %-76s #\n" "$1"
 }
 
 printBorder() {
@@ -38,7 +37,7 @@ generate_user_or_password() {
 
 generate_identities_yaml() {
   # If no identities file provided, then use provided user/pass or generate as required
-  if [ -z ${IDENTITIES_BATCH} ]; then
+  if [ -z "${IDENTITIES_BATCH}" ]; then
     printBorder
     printLn "IDENTITIES_BATCH not specified"
     if [ -n "${USER}" ] && [ -n "${PASS}" ]; then
@@ -71,6 +70,16 @@ generate_content() {
   if [ "${MANAGED_ENV^^}" != "TRUE" ]; then
     generate_identities_yaml
   fi
+}
+
+execute_cli() {
+  # Use the native CLI if present
+  if [[ -f "${ISPN_HOME}/cli" ]]; then
+    "${ISPN_HOME}/cli" "$@"
+  else
+    "${ISPN_HOME}/bin/cli.sh" "$@"
+  fi
+  return $?
 }
 
 # ===================================================================================
@@ -126,11 +135,14 @@ fi
 
 # IDENTITIES_BATCH will not be set if IDENTITIES_PATH provided
 if [[ -n ${IDENTITIES_BATCH} ]]; then
-  # Use the native CLI if present
-  if [[ -f "${ISPN_HOME}/cli" ]]; then
-    ${ISPN_HOME}/cli --file ${IDENTITIES_BATCH}
-  else
-    ${ISPN_HOME}/bin/cli.sh --file ${IDENTITIES_BATCH}
+  execute_cli --file "${IDENTITIES_BATCH}"
+fi
+
+if [[ -n ${SERVER_LIBS} ]]; then
+  execute_cli install --server-home="${ISPN_HOME}" "${SERVER_LIBS}"
+  if [ $? -ne 0 ]; then
+    printLn "Server libraries installation failed. Aborting server start."
+    exit 1
   fi
 fi
 
