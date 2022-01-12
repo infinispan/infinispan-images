@@ -140,7 +140,8 @@ pipeline {
                 script {
                     IMAGES.each { name, image ->
                         sh "cat ${image.descriptor}"
-                        sh "cekit --descriptor ${image.descriptor} build docker"
+                        // Only generate the files for the image. It will be built by buildx
+                        sh "cekit --descriptor ${image.descriptor} --target target-${name} build --dry-run docker"
                     }
                 }
             }
@@ -157,19 +158,13 @@ pipeline {
                         REGISTRIES.each { registry ->
                             withDockerRegistry([ credentialsId: registry.credential, url: "https://${registry.url}" ]) {
                                 def fqImageName = "${registry.url}/${imageBuild}"
-                                // Create/update Infinispan version tag e.g. 10.0.1.Final
-                                dockerTagAndPush imageBuild, "${fqImageName}:${params.ispnVersion}"
-
-                                // Create unique image build tag e.g. 10.0.1.Final-2
-                                def version = image.version
-                                dockerTagAndPush imageBuild, "${fqImageName}:${version}"
-
-                                // Create Stream tag e.g. 10.0
-                                dockerTagAndPush imageBuild, "${fqImageName}:${version.tokenize('.')[0,1].join('.')}"
+                                
+                                def tags = "-t ${fqImageName}:${params.ispnVersion} -t ${fqImageName}:${version} -t ${fqImageName}:${version.tokenize('.')[0,1].join('.')"
 
                                 if (params.pushLatestTag) {
-                                    dockerTagAndPush imageBuild, fqImageName
+                                    tags = "${tags} -t ${fqImageName}"
                                 }
+                                sh "docker buildx build --platform linux/amd64,linux/arm64 ${tags} --push target-${name}/image"
                             }
                         }
                         sh "docker rmi ${imageBuild}"
