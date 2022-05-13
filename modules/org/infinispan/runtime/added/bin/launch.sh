@@ -146,6 +146,11 @@ if [[ -n ${SERVER_LIBS} ]]; then
   fi
 fi
 
+# If INIT_CONTAINER is true, then we return before starting the server
+if [ "${INIT_CONTAINER^^}" == "TRUE" ]; then
+  exit 0
+fi
+
 if [ -n "${DEBUG}" ]; then
   set +x
   tree ${ISPN_HOME}
