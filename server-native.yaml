@@ -1,5 +1,5 @@
 - name: native-builder
-  version: 13.0.10.Final-1
+  version: 13.0.10.Final-2
   from: quay.io/quarkus/centos-quarkus-maven:21.2.0-java11
   description: Builder image for native components
   artifacts:
@@ -18,7 +18,7 @@
     - name: quarkus.infinispan.cli
     - name: quarkus.infinispan.server
 - name: infinispan/server-native
-  version: 13.0.10.Final-1
+  version: 13.0.10.Final-2
   description: Infinispan Quarkus Server
   from: registry.access.redhat.com/ubi8/ubi-minimal
   artifacts:
