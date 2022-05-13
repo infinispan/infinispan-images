@@ -139,7 +139,10 @@ if [[ -n ${IDENTITIES_BATCH} ]]; then
 fi
 
 if [[ -n ${SERVER_LIBS} ]]; then
-  execute_cli install --server-home="${ISPN_HOME}" ${SERVER_LIBS}
+  if [[ -n ${SERVER_LIBS_DIR} ]]; then
+    SERVER_ROOT="--server-root=${SERVER_LIBS_DIR}"
+  fi
+  execute_cli install --server-home="${ISPN_HOME}" ${SERVER_ROOT} ${SERVER_LIBS}
   if [ $? -ne 0 ]; then
     printLn "Server libraries installation failed. Aborting server start."
     exit 1
