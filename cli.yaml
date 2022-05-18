@@ -15,7 +15,7 @@
 - name: infinispan/cli
   version: 15.0.0.Dev05-1
   description: Infinispan Quarkus Server
-  from: registry.access.redhat.com/ubi8/ubi-minimal
+  from: registry.access.redhat.com/ubi9/ubi-minimal
   artifacts:
   - name: cli
     image: native-builder
