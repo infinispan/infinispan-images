@@ -199,7 +199,6 @@ image types.
 - `server-openjdk.yaml` - Creates the `infinispan/server` image.
 - `server-native.yaml` - Creates the `infinispan/server-native` image.
 - `cli.yaml` - Creates the `infinispan/cli` image with a natively compiled cli.
-- `server-dev-jdk.yaml` - Creates the `infinispan/server` image using local artifact paths that must be added to the descriptor.
 - `server-dev-native.yaml` - Creates the `infinispan/server-native` image using local artifact paths that must be added to the descriptor.
 - `cli-dev.yaml` - Creates the `infinispan/cli` image using a local cli executable that must be added to the descriptor.
 
