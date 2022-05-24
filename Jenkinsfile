@@ -33,8 +33,11 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    ['server-native', 'server-openjdk', 'cli'].each { descriptor ->
-                        sh "cekit -v --descriptor ${descriptor}.yaml build --overrides '{'version': '${IMAGE_TAG}'}' docker"
+                    ['server-native', 'server-openjdk', 'cli'].each { name ->
+                        sh "cekit -v --descriptor ${name}.yaml --target target-${name} build --overrides '{'version': '${IMAGE_TAG}'}' --dry-run docker"
+                        sh "docker run --rm --privileged multiarch/qemu-user-static --reset -p yes"
+                        sh "docker buildx use multiarch"
+                        sh "docker buildx build --platform linux/amd64,linux/arm64 target-${name}/image"
                     }
                 }
             }

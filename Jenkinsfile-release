@@ -85,12 +85,6 @@ void updateImageVersion(image, version) {
     image.version = "${params.ispnVersion}-${buildNumber}"
 }
 
-void dockerTagAndPush(String srcTag, String destTag) {
-    sh "docker tag ${srcTag} ${destTag}"
-    sh "docker push ${destTag}"
-    sh "docker rmi ${destTag}"
-}
-
 pipeline {
     agent {
         label 'slave-group-graalvm'
@@ -132,12 +126,13 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build Dry Run') {
             steps {
                 script {
                     IMAGES.each { name, image ->
                         sh "cat ${image.descriptor}"
-                        sh "cekit --descriptor ${image.descriptor} build docker"
+                        // Only generate the files for the image. It will be built by buildx
+                        sh "cekit --descriptor ${image.descriptor} --target target-${name} build --dry-run docker"
                     }
                 }
             }
@@ -149,23 +144,26 @@ pipeline {
             }
             steps {
                 script {
+                    // Initialize docker buildx
+                    sh "docker run --rm --privileged multiarch/qemu-user-static --reset -p yes"
+                    sh "docker buildx use multiarch"
+
                     IMAGES.each { name, image ->
                         def imageBuild = "infinispan/${name}"
                         REGISTRIES.each { registry ->
                             withDockerRegistry([ credentialsId: registry.credential, url: "https://${registry.url}" ]) {
                                 def fqImageName = "${registry.url}/${imageBuild}"
-                                // Create/update Infinispan version tag e.g. 10.0.1.Final
-                                dockerTagAndPush imageBuild, "${fqImageName}:${params.ispnVersion}"
 
-                                // Create unique image build tag e.g. 10.0.1.Final-2
-                                def version = image.version
-                                dockerTagAndPush imageBuild, "${fqImageName}:${version}"
-
-                                // Create Stream tag e.g. 10.0
-                                dockerTagAndPush imageBuild, "${fqImageName}:${version.tokenize('.')[0,1].join('.')}"
-
+                                def tags = ["${fqImageName}:${params.ispnVersion}", "${fqImageName}:${version}", "${fqImageName}:${version.tokenize('.')[0,1].join('.')}"]
                                 if (params.pushLatestTag) {
-                                    dockerTagAndPush imageBuild, fqImageName
+                                    tags << ${fqImageName}
+                                }
+
+                                def tagArgs = tags.collect{ "-t $it" }.join(' ')
+
+                                sh "docker buildx build --platform linux/amd64,linux/arm64 ${tagArgs} --push target-${name}/image"
+                                tags.each { tag ->
+                                    sh "docker rmi ${rag}"
                                 }
                             }
                         }
