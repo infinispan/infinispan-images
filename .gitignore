@@ -110,3 +110,6 @@ openshift.local.clusterup
 .vscode
 **/.settings
 **/.project
+
+# Cekit
+target-*/
