@@ -156,7 +156,7 @@ pipeline {
                         REGISTRIES.each { registry ->
                             withDockerRegistry([ credentialsId: registry.credential, url: "https://${registry.url}" ]) {
                                 def fqImageName = "${registry.url}/${imageBuild}"
-                                def version = image.version
+                                def version = "${image.version}"
 
                                 def tags = ["${fqImageName}:${params.ispnVersion}", "${fqImageName}:${version}", "${fqImageName}:${version.tokenize('.')[0,1].join('.')}"]
                                 if (params.pushLatestTag) {
