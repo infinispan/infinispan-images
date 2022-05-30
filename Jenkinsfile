@@ -38,7 +38,8 @@ pipeline {
                     ['server-openjdk'].each { name ->
                         sh "cekit -v --descriptor ${name}.yaml --target target-${name} build --overrides '{'version': '${IMAGE_TAG}'}' --dry-run docker"
                         sh "docker run --rm --privileged quay.io/infinispan-test/qemu-user-static --reset -p yes"
-                        sh "docker buildx use multiarch"
+                        sh "docker buildx rm multiarch || true"
+                        sh "docker buildx create --name multiarch --use"
                         sh "docker buildx build --platform linux/amd64,linux/arm64 -t infinispan/server:${IMAGE_TAG} target-${name}/image"
                         // Build the image again separately to overcome https://github.com/docker/buildx/issues/59 so that we can still archive the image
                         sh "docker buildx build --load -t infinispan/server:${IMAGE_TAG} target-${name}/image"
