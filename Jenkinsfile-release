@@ -147,10 +147,6 @@ pipeline {
             }
             steps {
                 script {
-                    // Initialize docker buildx
-                    sh "docker run --rm --privileged quay.io/infinispan-test/qemu-user-static --reset -p yes"
-                    sh "docker buildx use multiarch"
-
                     IMAGES.each { name, image ->
                         def imageBuild = "infinispan/${name}"
                         REGISTRIES.each { registry ->
@@ -165,13 +161,13 @@ pipeline {
 
                                 def tagArgs = tags.collect{ "-t $it" }.join(' ')
 
+                                // Initialize docker buildx
+                                sh "docker run --rm --privileged quay.io/infinispan-test/qemu-user-static --reset -p yes"
+                                sh "docker buildx rm multiarch || true"
+                                sh "docker buildx create --name multiarch --use"
                                 sh "docker buildx build --platform ${image.platforms} ${tagArgs} --push target-${name}/image"
-                                tags.each { tag ->
-                                    sh "docker rmi ${rag}"
-                                }
                             }
                         }
-                        sh "docker rmi ${imageBuild}"
                     }
                 }
             }
