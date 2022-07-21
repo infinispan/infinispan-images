@@ -2,5 +2,5 @@
 set -e
 
 cd /opt/build
-mvn clean install -s /tmp/scripts/quarkus.infinispan.src/maven-settings.xml -Dnative -DskipTests -pl '!cli,!integration-tests,!integration-tests/embedded,!integration-tests/server'
+./mvnw clean install -s /tmp/scripts/quarkus.infinispan.src/maven-settings.xml -Dnative -DskipTests -pl '!cli,!integration-tests,!integration-tests/embedded,!integration-tests/server'
 cp /opt/build/server-runner/target/infinispan-quarkus-server-runner-*-runner /opt/server
