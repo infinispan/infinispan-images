@@ -47,6 +47,8 @@ envs:
   description: Workaround for issue with openjdk-runtime image where JAVA_HOME is wrongly set to /usr/lib/jvm/java-11
 - name: JAVA_OPTIONS
   description: Allows java properties and options to be provided to the JVM when the server is launched.
+- name: CLI_JAVA_OPTIONS
+  description: Allows java properties and options to be provided to the JVM when the CLI is launched.
 - name: JAVA_DIAGNOSTICS
   description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
   example: true
