@@ -69,6 +69,8 @@
     description: Allows java properties and options to be provided to the JVM when the server is launched.
   - name: CLI_JAVA_OPTIONS
     description: Allows java properties and options to be provided to the JVM when the CLI is launched.
+  - name: ROUTER_JAVA_OPTIONS
+    description: Allows java properties and options to be provided to the JVM when the Gossip Router is launched.
   - name: JAVA_DIAGNOSTICS
     description: Set this to get some diagnostics information to standard output when things are happening. **Disabled by default.**
     example: true
