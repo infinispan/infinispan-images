@@ -15,4 +15,4 @@ if [ ! -f "${JGROUPS_JAR}" ]; then
     exit 1
 fi
 
-exec java -cp ${JGROUPS_JAR} ${GOSSIP_CLASS} $@
+exec java ${ROUTER_JAVA_OPTIONS} -cp ${JGROUPS_JAR} ${GOSSIP_CLASS} $@
