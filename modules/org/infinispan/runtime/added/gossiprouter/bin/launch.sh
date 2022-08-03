@@ -5,7 +5,7 @@
 
 set -e
 
-JGROUPS_JAR=`find ${ISPN_HOME} -type f -name "jgroups-*.jar" | head -n 1`
+JGROUPS_JAR=$(find ${ISPN_HOME}/lib -type f -name "jgroups-*.jar" | head -n 1)
 GOSSIP_CLASS="org.jgroups.stack.GossipRouter"
 
 if [ ! -f "${JGROUPS_JAR}" ]; then
@@ -15,4 +15,11 @@ if [ ! -f "${JGROUPS_JAR}" ]; then
     exit 1
 fi
 
-exec java ${ROUTER_JAVA_OPTIONS} -cp ${JGROUPS_JAR} ${GOSSIP_CLASS} $@
+GOSSIP_CLASS="org.jgroups.stack.GossipRouter"
+CLASSPATH="${JGROUPS_JAR}"
+
+for jar in $(find ${ISPN_HOME}/lib -type f -name "wildfly-openssl-*.jar"); do
+    CLASSPATH="${CLASSPATH}:${jar}"
+done
+
+exec java ${ROUTER_JAVA_OPTIONS} -cp "${CLASSPATH}" "${GOSSIP_CLASS}" $@
