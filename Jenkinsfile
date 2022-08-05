@@ -35,19 +35,16 @@ pipeline {
                 script {
 
                     // Build a multi-arch image for the Openjdk image
-                    ['server-openjdk'].each { name ->
+                    ['server-openjdk', 'server-native', 'cli'].each { name ->
+                        def image = 'infinispan/' + (name.equals('server-openjdk') ? 'server' : name)
+                        def imageFQN = "${image}:${IMAGE_TAG}"
                         sh "cekit -v --descriptor ${name}.yaml --target target-${name} build --overrides '{'version': '${IMAGE_TAG}'}' --dry-run docker"
                         sh "docker run --rm --privileged quay.io/infinispan-test/qemu-user-static --reset -p yes"
                         sh "docker buildx rm multiarch || true"
                         sh "docker buildx create --name multiarch --use"
-                        sh "docker buildx build --platform linux/amd64,linux/arm64 -t infinispan/server:${IMAGE_TAG} target-${name}/image"
+                        sh "docker buildx build --platform linux/amd64,linux/arm64 -t ${imageFQN} target-${name}/image"
                         // Build the image again separately to overcome https://github.com/docker/buildx/issues/59 so that we can still archive the image
-                        sh "docker buildx build --load -t infinispan/server:${IMAGE_TAG} target-${name}/image"
-                    }
-
-                    // Multi-arch images are not possible for the native images due to ISPN-13920, so build for adm64 only
-                    ['server-native', 'cli'].each { name ->
-                        sh "cekit -v --descriptor ${name}.yaml build --overrides '{'version': '${IMAGE_TAG}'}' docker"
+                        sh "docker buildx build --load -t ${imageFQN} target-${name}/image"
                     }
                 }
             }
