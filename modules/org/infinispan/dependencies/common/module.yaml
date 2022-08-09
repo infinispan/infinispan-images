@@ -17,3 +17,5 @@ packages:
     - procps-ng
     - vim-minimal
     - zip
+    - rsync
+    - tar
