@@ -13,6 +13,7 @@ packages:
     - gzip
     - iproute
     - lsof
+    - nss-tools
     - openssl
     - procps-ng
     - vim-minimal
