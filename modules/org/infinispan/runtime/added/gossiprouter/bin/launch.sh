@@ -5,9 +5,6 @@
 
 set -e
 
-# Disabled by default
-WF_OPENSSL_ENABLED=${WF_OPENSSL_ENABLED:-false}
-
 JGROUPS_JAR=$(find ${ISPN_HOME}/lib -type f -name "jgroups-*.jar" | head -n 1)
 GOSSIP_CLASS="org.jgroups.stack.GossipRouter"
 
@@ -21,10 +18,8 @@ fi
 GOSSIP_CLASS="org.jgroups.stack.GossipRouter"
 CLASSPATH="${JGROUPS_JAR}"
 
-if [[ "${WF_OPENSSL_ENABLED}" == "true" ]]; then
-    for jar in $(find ${ISPN_HOME}/lib -type f -name "wildfly-openssl-*.jar"); do
-        CLASSPATH="${CLASSPATH}:${jar}"
-    done
-fi
+for jar in $(find ${ISPN_HOME}/lib -type f -name "wildfly-openssl-*.jar"); do
+    CLASSPATH="${CLASSPATH}:${jar}"
+done
 
 exec java ${ROUTER_JAVA_OPTIONS} -cp "${CLASSPATH}" "${GOSSIP_CLASS}" $@
