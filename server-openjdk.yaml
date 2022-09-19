@@ -1,5 +1,5 @@
 name: infinispan/server
-version: 14.0.0.CR2-1
+version: 14.0.0.CR2-2
 description: Infinispan Server
 from: registry.access.redhat.com/ubi8/openjdk-17-runtime
 artifacts:
