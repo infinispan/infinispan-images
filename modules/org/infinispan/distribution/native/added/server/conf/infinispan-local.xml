@@ -1,9 +1,9 @@
 <infinispan
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="urn:infinispan:config:13.0 https://infinispan.org/schemas/infinispan-config-13.0.xsd
-                            urn:infinispan:server:13.0 https://infinispan.org/schemas/infinispan-server-13.0.xsd"
-      xmlns="urn:infinispan:config:13.0"
-      xmlns:server="urn:infinispan:server:13.0">
+      xsi:schemaLocation="urn:infinispan:config:14.0 https://infinispan.org/schemas/infinispan-config-14.0.xsd
+                            urn:infinispan:server:14.0 https://infinispan.org/schemas/infinispan-server-14.0.xsd"
+      xmlns="urn:infinispan:config:14.0"
+      xmlns:server="urn:infinispan:server:14.0">
 
    <cache-container name="default" statistics="true">
       <security>
@@ -11,7 +11,7 @@
       </security>
    </cache-container>
 
-   <server xmlns="urn:infinispan:server:13.0">
+   <server xmlns="urn:infinispan:server:14.0">
       <interfaces>
          <interface name="public">
             <inet-address value="${infinispan.bind.address:127.0.0.1}"/>
@@ -30,7 +30,7 @@
                <!-- server-identities>
                   <ssl>
                      <keystore path="application.keystore"
-                               keystore-password="password" alias="server" key-password="password"
+                               password="password" alias="server"
                                generate-self-signed-certificate-host="localhost"/>
                   </ssl>
                </server-identities-->
@@ -42,17 +42,6 @@
          </security-realms>
       </security>
 
-      <endpoints>
-         <endpoint socket-binding="default" security-realm="default">
-            <ip-filter>
-               <reject from="172.16.0.0/16"/>
-               <accept from="127.0.0.0/8"/>
-            </ip-filter>
-            <hotrod-connector name="hotrod"/>
-            <rest-connector name="rest"/>
-            <!-- Uncomment to enable the memcached connector -->
-            <!-- memcached-connector socket-binding="memcached" / -->
-         </endpoint>
-      </endpoints>
+      <endpoints socket-binding="default" security-realm="default" />
    </server>
 </infinispan>
