@@ -63,8 +63,6 @@ When connecting a HotRod client to the image, the following SASL properties must
 ```properties
 infinispan.client.hotrod.auth_username=admin
 infinispan.client.hotrod.auth_password=changme
-infinispan.client.hotrod.auth_realm=default
-infinispan.client.hotrod.auth_server_name=infinispan
 infinispan.client.hotrod.sasl_mechanism=DIGEST-MD5
 ```
 
@@ -74,17 +72,24 @@ All of the cli commands defined in this file are executed before the server is s
 execute offline commands otherwise the container will fail. For example, including `create cache ...` in the batch would
 fail as it requires a connection to an Infinispan server.
 
-Below is an example Identities batch CLI file `identities.batch`, that defines two users and their role:
+Infinispan provides implicit roles for some users.
+
+[TIP] Check Infinispan [documentation](https://infinispan.org/docs/stable/titles/configuring/configuring.html#default-user-roles_security-authorization)
+to know more about implicit roles and authorization
+
+Below is an example Identities batch CLI file `identities.batch`, that defines four users and their role:
 
 ```bash
 user create "Alan Shearer" -p "striker9" -g admin
-user create "Nolberto Solano" -p "winger7" -g dev
+user create "observer" -p "secret1" 
+user create "deployer" -p "secret2" 
+user create "Rigoberta Baldini" -p "secret3" -g monitor
 ```
 
-To run the image using a local `idenitities.batch`, execute:
+To run the image using a local `identities.batch`, execute:
 
 ```bash
-docker run -v $(pwd):/user-config -e IDENTITIES_BATCH="/user-config/identities.batch" infinispan/server
+docker run -v $(pwd):/user-config -e IDENTITIES_BATCH="/user-config/identities.batch" -p 11222:11222 infinispan/server
 ```
 
 ### Server Configuration
@@ -95,7 +100,7 @@ Below shows how a [docker volume](https://docs.docker.com/storage/volumes/) can 
 the Infinispan image with the local configuration file `my-infinispan-config.xml` located in the users current working directory.
 
 ```bash
-docker run -v $(pwd):/user-config -e IDENTITIES_BATCH="/user-config/identities.batch" infinispan/server -c `/user-config/my-infinispan-config.xml`
+docker run -v $(pwd):/user-config -e IDENTITIES_BATCH="/user-config/identities.batch" -p 11222:11222 infinispan/server -c `/user-config/my-infinispan-config.xml`
 ```
 
 #### Kubernetes/Openshift Clustering
