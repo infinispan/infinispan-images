@@ -9,6 +9,7 @@
       path: artifacts/server
   packages:
     manager: microdnf
+    manager_flags: --setopt=tsflags=nodocs
   ports:
   - value: 2157
   - value: 7800
