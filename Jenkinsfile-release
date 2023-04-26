@@ -25,7 +25,7 @@ IMAGE_CONFIG = [
                 platforms         : 'linux/amd64,linux/arm64',
                 server            : [
                         name  : 'quarkus-src',
-                        url   : "https://github.com/infinispan/infinispan-quarkus/archive/${QUARKUS_VERSION}.tar.gz",
+                        url   : "https://github.com/infinispan/infinispan/archive/${QUARKUS_VERSION}.tar.gz",
                         target: 'quarkus-src.tar.gz'
                 ]
         ],
@@ -34,7 +34,7 @@ IMAGE_CONFIG = [
                 platforms         : 'linux/amd64,linux/arm64',
                 cli            : [
                         name  : 'quarkus-src',
-                        url   : "https://github.com/infinispan/infinispan-quarkus/archive/${QUARKUS_VERSION}.tar.gz",
+                        url   : "https://github.com/infinispan/infinispan/archive/${QUARKUS_VERSION}.tar.gz",
                         target: 'quarkus-src.tar.gz'
                 ]
         ]
