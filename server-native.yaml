@@ -4,7 +4,7 @@
   description: Builder image for native components
   artifacts:
   - name: quarkus-src
-    url: https://github.com/infinispan/infinispan-quarkus/archive/14.0.2.Final.tar.gz
+    url: https://github.com/infinispan/infinispan/archive/14.0.2.Final.tar.gz
     target: quarkus-src.tar.gz
   modules:
     repositories:

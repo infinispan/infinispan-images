@@ -6,7 +6,7 @@ Currently we provide the following images which are all based upon the [ubi-mini
 base image:
 
 - `infinispan/server` - Infinispan is executed using the Java 11 openjdk JVM
-- `infinispan/server-native` - Infinispan is executed natively using the [Infinispan Quarkus](https://github.com/infinispan/infinispan-quarkus) binary.
+- `infinispan/server-native` - Infinispan is executed natively.
 - `infinispan/cli` - A natively compiled version of the Infinispan CLI.
 
 > The `server` and `server-native` images are configured the same. The server instructions throughout these docs are applicable
