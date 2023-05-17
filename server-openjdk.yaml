@@ -91,7 +91,7 @@ modules:
   install:
   - name: org.infinispan.dependencies.jdk.common
   - name: org.infinispan.dependencies
-    version: infinispan
+    version: datagrid
   - name: org.infinispan.distribution
     version: jvm
   - name: org.infinispan.runtime
