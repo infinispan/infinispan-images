@@ -8,3 +8,6 @@ version: datagrid
 modules:
   install:
     - name: org.infinispan.dependencies.common
+
+execute:
+  - script: install.sh
