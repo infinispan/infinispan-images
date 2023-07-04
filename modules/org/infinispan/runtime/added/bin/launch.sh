@@ -109,7 +109,7 @@ if [[ -n ${SERVER_LIBS} ]]; then
   if [[ -n ${SERVER_LIBS_DIR} ]]; then
     SERVER_ROOT="--server-root=${SERVER_LIBS_DIR}"
   fi
-  execute_cli install --server-home="${ISPN_HOME}" ${SERVER_ROOT} ${SERVER_LIBS}
+  execute_cli install --overwrite --server-home="${ISPN_HOME}" ${SERVER_ROOT} ${SERVER_LIBS}
   if [ $? -ne 0 ]; then
     printLn "Server libraries installation failed. Aborting server start."
     exit 1
