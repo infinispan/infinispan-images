@@ -22,4 +22,4 @@ for jar in $(find ${ISPN_HOME}/lib -type f -name "wildfly-openssl-*.jar"); do
     CLASSPATH="${CLASSPATH}:${jar}"
 done
 
-exec java ${ROUTER_JAVA_OPTIONS} -cp "${CLASSPATH}" "${GOSSIP_CLASS}" $@
+exec java -Djava.net.preferIPv4Stack=true ${ROUTER_JAVA_OPTIONS} -cp "${CLASSPATH}" "${GOSSIP_CLASS}" $@
