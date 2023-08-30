@@ -39,7 +39,10 @@ calc() {
 max_memory() {
   # High number which is the max limit until which memory is supposed to be
   # unbounded.
-  local mem_file="/sys/fs/cgroup/memory/memory.limit_in_bytes"
+  local mem_file="/sys/fs/cgroup/memory.max"
+  if [ ! -r "${mem_file}" ]; then
+    mem_file="/sys/fs/cgroup/memory/memory.limit_in_bytes"
+  fi
   if [ -r "${mem_file}" ]; then
     local max_mem_cgroup="$(cat ${mem_file})"
     local max_mem_meminfo_kb="$(cat /proc/meminfo | awk '/MemTotal/ {print $2}')"
