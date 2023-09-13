@@ -1,7 +1,7 @@
 name: infinispan/server
 version: 15.0.0.Dev02-1
 description: Infinispan Server
-from: registry.access.redhat.com/ubi8/openjdk-17-runtime
+from: registry-proxy.engineering.redhat.com/rh-osbs/ubi9-openjdk-21-runtime:openjdk-21-runtime-ubi9-containers-candidate-55206-20230913095201
 artifacts:
 - name: server
   url: https://downloads.jboss.org/infinispan/15.0.0.Dev02/infinispan-server-15.0.0.Dev02.zip
