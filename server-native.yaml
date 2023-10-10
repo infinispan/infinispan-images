@@ -1,10 +1,10 @@
 - name: native-builder
-  version: 14.0.17.Final-1
+  version: 14.0.18.Final-1
   from: quay.io/quarkus/ubi-quarkus-native-image:22.3-java17
   description: Builder image for native components
   artifacts:
   - name: quarkus-src
-    url: https://github.com/infinispan/infinispan-quarkus/archive/14.0.17.Final.tar.gz
+    url: https://github.com/infinispan/infinispan-quarkus/archive/14.0.18.Final.tar.gz
     target: quarkus-src.tar.gz
   modules:
     repositories:
@@ -14,7 +14,7 @@
     - name: quarkus.infinispan.cli
     - name: quarkus.infinispan.server
 - name: infinispan/server-native
-  version: 14.0.17.Final-1
+  version: 14.0.18.Final-1
   description: Infinispan Quarkus Server
   from: registry.access.redhat.com/ubi8/ubi-minimal
   artifacts:
@@ -39,12 +39,11 @@
   - name: name
     value: Infinispan Server
   - name: version
-    value: 14.0.17.Final
+    value: 14.0.18.Final
   - name: release
-    value: 14.0.17.Final
+    value: 14.0.18.Final
   - name: io.k8s.description
-    value: Provides a scalable in-memory distributed database designed for fast access
-      to large volumes of data.
+    value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
   - name: io.k8s.display-name
     value: Infinispan Server
   - name: io.openshift.expose-services
@@ -59,14 +58,11 @@
   - name: IDENTITIES_BATCH
     description: The path to the cli batch file used to create user identities.
   - name: USER
-    description: When provided with the PASS variable, this value is used to generate
-      a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
+    description: When provided with the PASS variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
   - name: PASS
-    description: When provided with the USER variable, this value is used to generate
-      a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
+    description: When provided with the USER variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
   - name: JAVA_OPTIONS
-    description: Allows java properties and options to be provided to the JVM when
-      the server is launched.
+    description: Allows java properties and options to be provided to the JVM when the server is launched.
   - name: SERVER_LIBS
     description: A list of artifacts to install in the server lib directory.
   modules:
