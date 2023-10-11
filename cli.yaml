@@ -1,10 +1,10 @@
 - name: native-builder
-  version: 15.0.0.Dev03-1
+  version: 15.0.0.Dev04-1
   from: quay.io/quarkus/ubi-quarkus-native-image:22.3-java17
   description: Builder image for native components
   artifacts:
   - name: quarkus-src
-    url: https://github.com/infinispan/infinispan/archive/15.0.0.Dev03.tar.gz
+    url: https://github.com/infinispan/infinispan/archive/15.0.0.Dev04.tar.gz
     target: quarkus-src.tar.gz
   modules:
     repositories:
@@ -13,7 +13,7 @@
     - name: quarkus.infinispan.src
     - name: quarkus.infinispan.cli
 - name: infinispan/cli
-  version: 15.0.0.Dev03-1
+  version: 15.0.0.Dev04-1
   description: Infinispan Quarkus Server
   from: registry.access.redhat.com/ubi8/ubi-minimal
   artifacts:
@@ -24,9 +24,9 @@
   - name: name
     value: Infinispan CLI
   - name: version
-    value: 15.0.0.Dev03
+    value: 15.0.0.Dev04
   - name: release
-    value: 15.0.0.Dev03
+    value: 15.0.0.Dev04
   - name: io.k8s.description
     value: Provides a CLI to remotely access Infinispan servers.
   - name: io.k8s.display-name
