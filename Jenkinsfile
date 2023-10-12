@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     ['server-native', 'server-openjdk', 'cli'].each { descriptor ->
-                        sh "cekit -v --descriptor ${descriptor}.yaml build --overrides '{'version': '${IMAGE_TAG}'}' docker"
+                        sh "cekit -v --descriptor ${descriptor}.yaml build --overrides '{'version': '${IMAGE_TAG}'}' docker --pull"
                     }
                 }
             }
