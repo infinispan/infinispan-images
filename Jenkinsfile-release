@@ -140,7 +140,7 @@ pipeline {
                 script {
                     IMAGES.each { name, image ->
                         sh "cat ${image.descriptor}"
-                        sh "cekit --descriptor ${image.descriptor} build docker"
+                        sh "cekit --descriptor ${image.descriptor} build docker --pull"
                     }
                 }
             }
