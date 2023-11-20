@@ -1,6 +1,6 @@
 - name: native-builder
   version: 15.0.0.Dev05-1
-  from: quay.io/quarkus/ubi-quarkus-native-image:22.3-java17
+  from: quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21
   description: Builder image for native components
   artifacts:
   - name: quarkus-src
