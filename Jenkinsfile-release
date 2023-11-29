@@ -135,7 +135,7 @@ pipeline {
                     IMAGES.each { name, image ->
                         sh "cat ${image.descriptor}"
                         // Only generate the files for the image. It will be built by buildx
-                        sh "cekit --descriptor ${image.descriptor} --target target-${name} build --dry-run docker"
+                        sh "cekit --descriptor ${image.descriptor} --target target-${name} build --dry-run docker --pull"
                     }
                 }
             }
