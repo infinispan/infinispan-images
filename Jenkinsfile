@@ -38,7 +38,7 @@ pipeline {
                     ['server-openjdk', 'server-native', 'cli'].each { name ->
                         def image = 'infinispan/' + (name.equals('server-openjdk') ? 'server' : name)
                         def imageFQN = "${image}:${IMAGE_TAG}"
-                        sh "cekit -v --descriptor ${name}.yaml --target target-${name} build --overrides '{'version': '${IMAGE_TAG}'}' --dry-run docker"
+                        sh "cekit -v --descriptor ${name}.yaml --target target-${name} build --overrides '{'version': '${IMAGE_TAG}'}' --dry-run docker --pull"
                         sh "docker run --rm --privileged quay.io/infinispan-test/qemu-user-static --reset -p yes"
                         sh "docker buildx rm multiarch || true"
                         sh "docker buildx create --name multiarch --use"
