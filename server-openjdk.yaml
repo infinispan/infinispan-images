@@ -1,5 +1,5 @@
 - name: native-builder
-  version: 13.0.20.Final-1
+  version: 13.0.21.Final-1
   from: quay.io/quarkus/centos-quarkus-maven:21.2.0-java11
   description: Builder image for native config generator
   artifacts:
@@ -12,7 +12,7 @@
     install:
     - name: quarkus.config-generator
 - name: infinispan/server
-  version: 13.0.20.Final-1
+  version: 13.0.21.Final-1
   description: Infinispan Server
   from: registry.access.redhat.com/ubi8/openjdk-11-runtime
   artifacts:
@@ -20,7 +20,7 @@
     image: native-builder
     path: /opt/config-generator
   - name: server
-    url: https://downloads.jboss.org/infinispan/13.0.20.Final/infinispan-server-13.0.20.Final.zip
+    url: https://downloads.jboss.org/infinispan/13.0.21.Final/infinispan-server-13.0.21.Final.zip
   packages:
     manager: microdnf
   ports:
@@ -36,9 +36,9 @@
   - name: name
     value: Infinispan Server
   - name: version
-    value: 13.0.20.Final
+    value: 13.0.21.Final
   - name: release
-    value: 13.0.20.Final
+    value: 13.0.21.Final
   - name: io.k8s.description
     value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
   - name: io.k8s.display-name
