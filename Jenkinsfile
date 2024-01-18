@@ -35,14 +35,14 @@ pipeline {
                 script {
 
                     // Build a multi-arch image for the Openjdk image
-                    ['server-openjdk', 'server-native', 'cli'].each { name ->
+                    ['server-native'].each { name ->
                         def image = 'infinispan/' + (name.equals('server-openjdk') ? 'server' : name)
                         def imageFQN = "${image}:${IMAGE_TAG}"
                         sh "cekit -v --descriptor ${name}.yaml --target target-${name} build --overrides '{'version': '${IMAGE_TAG}'}' --dry-run docker --pull"
                         sh "docker run --rm --privileged quay.io/infinispan-test/binfmt:qemu-v8.0.4-33  --install arm64"
                         sh "docker buildx rm multiarch || true"
                         sh "docker buildx create --name multiarch --use"
-                        sh "docker buildx build --platform linux/amd64,linux/arm64 -t ${imageFQN} target-${name}/image"
+                        sh "docker buildx build --platform linux/arm64 -t ${imageFQN} target-${name}/image"
                         // Build the image again separately to overcome https://github.com/docker/buildx/issues/59 so that we can still archive the image
                         sh "docker buildx build --load -t ${imageFQN} target-${name}/image"
                     }
@@ -58,9 +58,9 @@ pipeline {
 
         success {
             script {
-                saveDockerImage 'infinispan/server', IMAGE_TAG, 'server-openjdk'
+                // saveDockerImage 'infinispan/server', IMAGE_TAG, 'server-openjdk'
                 saveDockerImage 'infinispan/server-native', IMAGE_TAG, 'server-native'
-                saveDockerImage 'infinispan/cli', IMAGE_TAG, 'cli'
+                // saveDockerImage 'infinispan/cli', IMAGE_TAG, 'cli'
                 archiveArtifacts allowEmptyArchive: true, artifacts: '*tar.gz'
                 echo 'post build status: success'
             }
@@ -70,9 +70,9 @@ pipeline {
             sh 'git clean -fdx || echo "git clean failed, exit code $?"'
             sh 'docker container prune -f'
             sh 'docker rmi $(docker images -f "dangling=true" -q) || true'
-            sh "docker rm infinispan/server:$IMAGE_TAG || true"
+            // sh "docker rm infinispan/server:$IMAGE_TAG || true"
             sh "docker rm infinispan/server-native:$IMAGE_TAG || true"
-            sh "docker rm infinispan/cli:$IMAGE_TAG || true"
+            // sh "docker rm infinispan/cli:$IMAGE_TAG || true"
         }
     }
 }
