@@ -1,10 +1,10 @@
 name: infinispan/server
-version: 15.0.0.Dev06-1
+version: 15.0.0.Dev07-1
 description: Infinispan Server
 from: registry.access.redhat.com/ubi9/openjdk-21-runtime
 artifacts:
 - name: server
-  url: https://downloads.jboss.org/infinispan/15.0.0.Dev06/infinispan-server-15.0.0.Dev06.zip
+  url: https://downloads.jboss.org/infinispan/15.0.0.Dev07/infinispan-server-15.0.0.Dev07.zip
 packages:
   manager: microdnf
 ports:
@@ -20,9 +20,9 @@ labels:
 - name: name
   value: Infinispan Server
 - name: version
-  value: 15.0.0.Dev06
+  value: 15.0.0.Dev07
 - name: release
-  value: 15.0.0.Dev06
+  value: 15.0.0.Dev07
 - name: io.k8s.description
   value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
 - name: io.k8s.display-name
