@@ -20,6 +20,16 @@
                         <updatePolicy>never</updatePolicy>
                     </snapshots>
                 </repository>
+                <!-- Next we have the OSSRH repository where Infinispan releases are pushed to first -->
+                <repository>
+                    <id>ossrn</id>
+                    <name>Maven Central</name>
+                    <url>https://s01.oss.sonatype.org/content/groups/public/</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </snapshots>
+                </repository>
                 <!-- Then look in JBoss.org Nexus as not all we need is available in Central -->
                 <repository>
                     <id>jboss-public-repository-group</id>
