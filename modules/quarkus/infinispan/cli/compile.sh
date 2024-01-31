@@ -2,5 +2,13 @@
 set -e
 
 cd /opt/build
-./mvnw clean install -s /tmp/scripts/quarkus.infinispan.src/maven-settings.xml -Pnative -Pdistribution -DskipTests -am -pl 'quarkus/cli' -Dquarkus.native.native-image-xmx=8g
+
+./mvnw package -s /tmp/scripts/quarkus.infinispan.src/maven-settings.xml \
+    -Pnative \
+    -Pdistribution \
+    -DskipTests \
+    -pl 'quarkus/cli' \
+    -Dquarkus.native.native-image-xmx=8g \
+    -Dmaven.buildNumber.revisionOnScmFailure=no-scm
+
 cp /opt/build/quarkus/cli/target/infinispan-cli /opt/cli
