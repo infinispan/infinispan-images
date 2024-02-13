@@ -100,7 +100,7 @@ Below shows how a [docker volume](https://docs.docker.com/storage/volumes/) can 
 the Infinispan image with the local configuration file `my-infinispan-config.xml` located in the users current working directory.
 
 ```bash
-docker run -v $(pwd):/user-config -e IDENTITIES_BATCH="/user-config/identities.batch" -p 11222:11222 infinispan/server -c `/user-config/my-infinispan-config.xml`
+docker run -v $(pwd):/user-config -e IDENTITIES_BATCH="/user-config/identities.batch" -p 11222:11222 infinispan/server -c /user-config/my-infinispan-config.xml
 ```
 
 #### Kubernetes/Openshift Clustering
