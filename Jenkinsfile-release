@@ -93,6 +93,10 @@ pipeline {
         label 'slave-group-graalvm'
     }
 
+    options {
+        timeout(time: 4, unit: 'HOURS')
+    }
+
     parameters {
         string(name: 'ispnVersion', description: 'Version of Infinispan artifact to be used')
         string(name: 'quarkusVersion', description: 'Version of Infinispan Quarkus to be used (blank to use same as ispnVersion)')
