@@ -1,0 +1,150 @@
+name: Release Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "The infinispan-images branch to checkout when cutting the release."
+        required: true
+        default: "main"
+      ispnVersion:
+        description: 'Version of Infinispan artifacts to be used'
+        required: true
+        type: string
+      images:
+        description: 'A comma-separated list of images to be released'
+        default: 'server, server-native, cli'
+        type: string
+      latest:
+        description: 'If true, updates the :latest tag to equal this release for each selected image'
+        default: true
+        type: boolean
+      push:
+        description: 'If false, we skip pushing the image to remote repositories'
+        default: true
+        type: boolean
+
+jobs:
+  meta:
+    runs-on: ubuntu-latest
+    outputs:
+      image-matrix: ${{ steps.images.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - id: images
+        run: |
+          IMAGES=$(echo ${{ inputs.images }} | sed -n 's/server/server-openjdk/p')
+          echo "matrix=$(echo ${IMAGES}  | jq -Rc 'split(", ")')" >> $GITHUB_OUTPUT
+
+  release:
+    needs: [meta]
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        descriptor: ${{ fromJson(needs.meta.outputs.image-matrix) }}
+    env:
+      IMAGE: ${{ matrix.descriptor == 'server-openjdk' && 'server' || matrix.descriptor }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Install CEKit
+        uses: cekit/actions-setup-cekit@v1.1.5
+
+      - name: Install yq
+        run: sudo snap install yq
+
+      - name: Update Descriptor Versions
+        run: echo "IMAGE_VERSION=$(./.github/scripts/update_image_descriptors.sh)" >> $GITHUB_ENV
+        env:
+          ISPN_VERSION: ${{ inputs.ispnVersion }}
+          DESCRIPTOR: ${{ matrix.descriptor }}
+
+      - name: Generate Image Tags
+        run: echo "IMAGE_TAGS=$(./.github/scripts/image_tags.sh)" >> $GITHUB_ENV
+        env:
+          IMAGE_VERSION: ${{ env.IMAGE_VERSION }}
+          DESCRIPTOR: ${{ matrix.descriptor }}
+          LATEST: ${{ inputs.latest }}
+
+      - name: Create Dockerfile
+        run: cekit -v --descriptor ${{ matrix.descriptor }}.yaml build --dry-run docker --pull
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Login to Quay
+        uses: docker/login-action@v3
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_TOKEN }}
+
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: ./target/image
+          platforms: linux/amd64,linux/arm64
+          pull: true
+          push: ${{ inputs.push }}
+          file: target/image/Dockerfile
+          tags: ${{ env.IMAGE_TAGS }}
+
+      - name: Commit changes and create patch
+        run: |
+          git config user.email "infinispan@infinispan.org"
+          git config user.name "Infinispan"
+          git add ${{ matrix.descriptor }}.yaml
+          git commit -m "Releasing Version ${IMAGE_VERSION} of ${IMAGE} image"
+          git format-patch -1 --stdout > patch
+
+      - name: Upload Patch
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.IMAGE }}-${{ env.IMAGE_VERSION }}
+          path: patch
+
+  tag:
+    needs: [release]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Download Patches
+        uses: actions/download-artifact@v4
+        with:
+          path: patches
+
+      - name: Commit changes and create tag
+        run: |
+          ls -R patches
+          git config user.email "infinispan@infinispan.org"
+          git config user.name "Infinispan"
+          for PATCH in $(find patches -maxdepth 1 -mindepth 1 -type d -printf '%f\n'); do
+            git am < patches/${PATCH}/patch
+            git tag ${PATCH}
+          done
+          git log -4
+
+      - name: Push Git changes
+        uses: ad-m/github-push-action@master
+        if: inputs.push
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ inputs.branch }}
+          tags: true

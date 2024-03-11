@@ -1,0 +1,62 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - 14.0.x
+      - main
+  pull_request:
+    branches:
+      - 14.0.x
+      - main
+
+concurrency:
+  group: ${{ github.head_ref || github.ref_name }} 
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        descriptor: [server-openjdk, server-native, cli]
+
+    env:
+      IMAGE: ${{ matrix.descriptor == 'server-openjdk' && 'server' || matrix.descriptor }}
+      TAG: ${{ github.event_name == 'pull_request' && format('PR-{0}', github.event.number) || 'latest' }}
+
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install CEKit
+      uses: cekit/actions-setup-cekit@v1.1.5
+
+    - name: Create Dockerfile
+      run: |
+        cekit -v --descriptor ${{ matrix.descriptor }}.yaml build --overrides "{\"version\": \"$TAG\"}" --dry-run docker --pull
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: network=host
+
+    - name: Build
+      uses: docker/build-push-action@v3
+      with:
+        context: ./target/image
+        platforms: linux/amd64,linux/arm64
+        file: target/image/Dockerfile
+        tags: localhost:5000/infinispan/${{ env.IMAGE }}:${{ env.TAG }}
+        pull: true
+        push: true

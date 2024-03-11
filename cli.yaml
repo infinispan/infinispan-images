@@ -3,43 +3,43 @@
   from: quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21
   description: Builder image for native components
   artifacts:
-  - name: quarkus-src
-    url: https://github.com/infinispan/infinispan/archive/15.0.0.Final.tar.gz
-    target: quarkus-src.tar.gz
+    - name: quarkus-src
+      url: https://github.com/infinispan/infinispan/archive/15.0.0.Final.tar.gz
+      target: quarkus-src.tar.gz
   modules:
     repositories:
-    - path: modules
+      - path: modules
     install:
-    - name: quarkus.infinispan.src
-    - name: quarkus.infinispan.cli
+      - name: quarkus.infinispan.src
+      - name: quarkus.infinispan.cli
 - name: infinispan/cli
   version: 15.0.0.Final-1
   description: Infinispan Quarkus Server
   from: registry.access.redhat.com/ubi9/ubi-minimal
   artifacts:
-  - name: cli
-    image: native-builder
-    path: /opt/cli
+    - name: cli
+      image: native-builder
+      path: /opt/cli
   labels:
-  - name: name
-    value: Infinispan CLI
-  - name: version
-    value: 15.0.0.Final
-  - name: release
-    value: 15.0.0.Final
-  - name: io.k8s.description
-    value: Provides a CLI to remotely access Infinispan servers.
-  - name: io.k8s.display-name
-    value: Infinispan CLI
-  - name: io.openshift.tags
-    value: datagrid,java,jboss,xpaas
+    - name: name
+      value: Infinispan CLI
+    - name: version
+      value: 15.0.0.Final
+    - name: release
+      value: 15.0.0.Final
+    - name: io.k8s.description
+      value: Provides a CLI to remotely access Infinispan servers.
+    - name: io.k8s.display-name
+      value: Infinispan CLI
+    - name: io.openshift.tags
+      value: datagrid,java,jboss,xpaas
   modules:
     repositories:
-    - path: modules
+      - path: modules
     install:
-    - name: org.infinispan.cli
+      - name: org.infinispan.cli
   run:
     entrypoint:
-    - ./cli
+      - ./cli
     user: 185
     workdir: /opt/infinispan

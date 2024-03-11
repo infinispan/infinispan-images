@@ -3,80 +3,80 @@
   from: quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21
   description: Builder image for native components
   artifacts:
-  - name: quarkus-src
-    url: https://github.com/infinispan/infinispan/archive/15.0.0.Final.tar.gz
-    target: quarkus-src.tar.gz
+    - name: quarkus-src
+      url: https://github.com/infinispan/infinispan/archive/15.0.0.Final.tar.gz
+      target: quarkus-src.tar.gz
   modules:
     repositories:
-    - path: modules
+      - path: modules
     install:
-    - name: quarkus.infinispan.src
-    - name: quarkus.infinispan.cli
-    - name: quarkus.infinispan.server
+      - name: quarkus.infinispan.src
+      - name: quarkus.infinispan.cli
+      - name: quarkus.infinispan.server
 - name: infinispan/server-native
   version: 15.0.0.Final-1
   description: Infinispan Quarkus Server
   from: registry.access.redhat.com/ubi9/ubi-minimal
   artifacts:
-  - name: cli
-    image: native-builder
-    path: /opt/cli
-  - name: server
-    image: native-builder
-    path: /opt/server
+    - name: cli
+      image: native-builder
+      path: /opt/cli
+    - name: server
+      image: native-builder
+      path: /opt/server
   packages:
     manager: microdnf
   ports:
-  - value: 2157
-  - value: 7800
-  - value: 7900
-  - value: 11221
-  - value: 11222
-  - value: 11223
-  - value: 46655
-  - value: 57600
+    - value: 2157
+    - value: 7800
+    - value: 7900
+    - value: 11221
+    - value: 11222
+    - value: 11223
+    - value: 46655
+    - value: 57600
   labels:
-  - name: name
-    value: Infinispan Server
-  - name: version
-    value: 15.0.0.Final
-  - name: release
-    value: 15.0.0.Final
-  - name: io.k8s.description
-    value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
-  - name: io.k8s.display-name
-    value: Infinispan Server
-  - name: io.openshift.expose-services
-    value: 8080:http
-  - name: io.openshift.tags
-    value: datagrid,java,jboss,xpaas
-  - name: io.openshift.s2i.scripts-url
-    value: image:///usr/local/s2i
+    - name: name
+      value: Infinispan Server
+    - name: version
+      value: 15.0.0.Final
+    - name: release
+      value: 15.0.0.Final
+    - name: io.k8s.description
+      value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
+    - name: io.k8s.display-name
+      value: Infinispan Server
+    - name: io.openshift.expose-services
+      value: 8080:http
+    - name: io.openshift.tags
+      value: datagrid,java,jboss,xpaas
+    - name: io.openshift.s2i.scripts-url
+      value: image:///usr/local/s2i
   envs:
-  - name: ISPN_HOME
-    value: /opt/infinispan
-  - name: IDENTITIES_BATCH
-    description: The path to the cli batch file used to create user identities.
-  - name: USER
-    description: When provided with the PASS variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
-  - name: PASS
-    description: When provided with the USER variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
-  - name: JAVA_OPTIONS
-    description: Allows java properties and options to be provided to the JVM when the server is launched.
-  - name: SERVER_LIBS
-    description: A list of artifacts to install in the server lib directory.
+    - name: ISPN_HOME
+      value: /opt/infinispan
+    - name: IDENTITIES_BATCH
+      description: The path to the cli batch file used to create user identities.
+    - name: USER
+      description: When provided with the PASS variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
+    - name: PASS
+      description: When provided with the USER variable, this value is used to generate a credential identitiy in a yaml file which is used to set IDENTITIES_PATH
+    - name: JAVA_OPTIONS
+      description: Allows java properties and options to be provided to the JVM when the server is launched.
+    - name: SERVER_LIBS
+      description: A list of artifacts to install in the server lib directory.
   modules:
     repositories:
-    - path: modules
+      - path: modules
     install:
-    - name: org.infinispan.cli
-    - name: org.infinispan.dependencies
-      version: infinispan
-    - name: org.infinispan.distribution
-      version: native
-    - name: org.infinispan.runtime
+      - name: org.infinispan.cli
+      - name: org.infinispan.dependencies
+        version: infinispan
+      - name: org.infinispan.distribution
+        version: native
+      - name: org.infinispan.runtime
   run:
     entrypoint:
-    - ./bin/launch.sh
+      - ./bin/launch.sh
     user: 185
     workdir: /opt/infinispan
