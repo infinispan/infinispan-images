@@ -24,14 +24,6 @@ fi
 
 source "$JBOSS_CONTAINER_UTIL_LOGGING_MODULE/logging.sh"
 
-# ==========================================================
-# Generic run script for running arbitrary Java applications
-#
-# This has forked (and diverged) from:
-# at https://github.com/fabric8io/run-java-sh
-#
-# ==========================================================
-
 # Combine all java options
 get_java_options() {
   local jvm_opts
