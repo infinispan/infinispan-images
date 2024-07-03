@@ -1,0 +1,115 @@
+name: CI Release Images
+
+on:
+  workflow_call:
+    inputs:
+      repository:
+        description: 'Name of the repo to download server artifact from'
+        type: string
+      runId:
+        description: 'Id of the run to download server artifact from'
+        type: string
+      serverArtifact:
+         description: 'Artifact name to download'
+         type: string
+      tags:
+        description: 'Tags for the image'
+        type: string
+      push:
+         description: 'If true push image.'
+         default: true
+         type: boolean
+      branch:
+         description: 'infinispan-image branch to checkout.'
+         default: main
+         type: string
+    secrets:
+      token:
+         required: true
+         description: 'GH token'
+      quayUser:
+         required: true
+      quayPass:
+         required: true
+
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: 'Name of the repo to download server artifact from'
+        type: string
+      runId:
+        description: 'Id of the run to download server artifact from'
+        type: string
+      serverArtifact:
+        description: 'Artifact name to download'
+        type: string
+      tags:
+       description: 'Tags for the image'
+       type: string
+      push:
+         description: 'If true push image.'
+         default: true
+         type: boolean
+      branch:
+         description: 'infinispan-image branch to checkout.'
+         default: main
+         type: string
+
+jobs:
+   image:
+      runs-on: ubuntu-latest
+      steps:
+         - name: Checkout
+           uses: actions/checkout@v4
+           with:
+               repository: 'infinispan/infinispan-images'
+               ref: ${{ inputs.branch }}
+
+         - name: Download Artifact
+           uses: actions/download-artifact@v4.1.7
+           with:
+             repository: '${{ inputs.repository }}'
+             run-id: '${{ inputs.runId }}'
+             name:  '${{ inputs.serverArtifact }}'
+             github-token: ${{ secrets.token }}
+
+         - name: Unzip Artifact
+           id: unzip_artifact
+           run: |
+               echo "serverzip=$(ls infinispan-server-*.zip)" >> $GITHUB_OUTPUT
+         - name: Install CEKit
+           uses: cekit/actions-setup-cekit@v1.1.5
+
+         - name: Set up Docker Buildx
+           uses: docker/setup-buildx-action@v3
+
+         - name: Create Dockerfile
+           env:
+             SERVER_ZIP: ${{ steps.unzip_artifact.outputs.serverzip }}
+             TAGS: ${{ inputs.tags }}
+           run: |
+               pwd
+               ls
+               SERVER_OVERRIDE="{\"artifacts\":[{\"name\":\"server\",\"path\":\"${GITHUB_WORKSPACE}/${SERVER_ZIP}\"}]}"
+               TAG="${TAGS%%,*}"
+               IMG_NAME="${TAG%%:*}"
+               IMG_VER="${TAG##*:}"
+               cekit -v --descriptor server-openjdk.yaml build --overrides '{"version": "'${IMG_VER}'", "name": "'${IMG_NAME}'"}' --overrides ${SERVER_OVERRIDE} --dry-run docker
+
+         - name: Login to Quay
+           uses: docker/login-action@v3
+           with:
+             registry: quay.io
+             username: ${{ secrets.quayUser }}
+             password: ${{ secrets.quayPass }}
+
+         - name: Build
+           uses: docker/build-push-action@v3
+           with:
+             context: ./target/image
+             platforms: linux/amd64
+             pull: true
+             push: ${{ inputs.push }}
+             file: target/image/Dockerfile
+             tags: ${{ inputs.tags }}
+             load: true
