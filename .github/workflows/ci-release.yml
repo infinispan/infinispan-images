@@ -39,7 +39,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
          - name: Download Release 1
-           uses: robinraju/release-downloader@v1.11
+           uses: robinraju/release-downloader@v1.10
            with:
             repository: 'rigazilla/infinispan'
             tag: '${{ github.event.inputs.releaseId }}'
