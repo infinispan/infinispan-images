@@ -42,5 +42,5 @@ jobs:
            uses: robinraju/release-downloader@v1.11
            with:
             repository: 'rigazilla/infinispan'
-            tag: 'main-devel'
+            tag: '${{ github.event.inputs.releaseId }}'
             fileName: 'infinispan-server-*.zip'
