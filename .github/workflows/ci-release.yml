@@ -38,9 +38,9 @@ jobs:
    download-release:
       runs-on: ubuntu-latest
       steps:
-         - name: Download Release
+         - name: Download Release 1
            uses: robinraju/release-downloader@v1.11
            with:
             repository: 'rigazilla/infinispan'
-            tag: main-devel
+            tag: 'main-devel'
             fileName: 'infinispan-server-*.zip'
