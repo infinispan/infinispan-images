@@ -33,7 +33,6 @@ on:
          description: 'The release id to download files from'
          type: string
 
-
 jobs:
    download-release:
       runs-on: ubuntu-latest
@@ -41,6 +40,7 @@ jobs:
          - name: Download Release 1
            uses: robinraju/release-downloader@v1.10
            with:
-            repository: 'rigazilla/infinispan'
             tag: '${{ github.event.inputs.releaseId }}'
+            releaseId: '${{ github.event.inputs.releaseId }}'
+            repository: 'rigazilla/infinispan'
             fileName: 'infinispan-server-*.zip'
