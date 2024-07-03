@@ -1,0 +1,46 @@
+name: Release Images
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: "The infinispan-images branch to checkout when cutting the release."
+        required: true
+        default: "main"
+        type: string
+      repository:
+        description: "The repository to checkout when cutting the release."
+        required: true
+        default: "infinispan/infinispan-images"
+        type: string
+      ispnVersion:
+        description: 'Version of Infinispan artifacts to be used'
+        required: true
+        type: string
+      images:
+        description: 'A comma-separated list of images to be released'
+        default: 'server, server-native, cli'
+        type: string
+      latest:
+        description: 'If true, updates the :latest tag to equal this release for each selected image'
+        default: true
+        type: boolean
+      push:
+        description: 'If false, we skip pushing the image to remote repositories'
+        default: true
+        type: boolean
+      releaseId:
+         description: 'The release id to download files from'
+         type: string
+
+
+jobs:
+   download-release:
+      runs-on: ubuntu-latest
+      steps:
+         - name: Download Release
+           uses: robinraju/release-downloader@v1.11
+           with:
+            repository: 'rigazilla/infinispan'
+            releaseId: ${{ github.event.inputs.releaseId }}
+            fileName: 'infinispan-server-*.zip'
