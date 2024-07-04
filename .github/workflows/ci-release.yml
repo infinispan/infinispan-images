@@ -46,6 +46,8 @@ jobs:
            env:
              SERVER_ZIP: ${{ inputs.run-id }}.zip
            run: |
+               pwd
+               ls
                SERVER_OVERRIDE="{\"artifacts\":[{\"name\":\"server\",\"path\":\"${GITHUB_WORKSPACE}/${SERVER_ZIP}\"}]}"
                cekit -v --descriptor server-openjdk.yaml build --overrides '{'version': '${{ github.sha }}'}' --overrides ${SERVER_OVERRIDE} --dry-run docker
 
