@@ -14,13 +14,41 @@ on:
         type: string
 
 jobs:
-   download-release:
+   image:
       runs-on: ubuntu-latest
       steps:
-        - name: Download a Build Artifact
-          uses: actions/download-artifact@v4.1.7
-          with:
-              repository: '${{ inputs.repository }}'
-              run-id: '${{ inputs.run-id }}'
-              name:  '${{ inputs.name }}'
-              github-token: ${{ secrets.GITHUB_TOKEN }}
+         - name: Checkout
+           uses: actions/checkout@v4
+
+         - name: Download a Build Artifact
+           uses: actions/download-artifact@v4.1.7
+           with:
+             repository: '${{ inputs.repository }}'
+             run-id: '${{ inputs.run-id }}'
+             name:  '${{ inputs.name }}'
+             github-token: ${{ secrets.GITHUB_TOKEN }}
+
+         - name: Install CEKit
+           uses: cekit/actions-setup-cekit@v1.1.5
+
+         - name: Create Dockerfile
+           env:
+             SERVER_ZIP: ${{ inputs.run-id }}.zip
+           run: |
+               SERVER_OVERRIDE="{\"artifacts\":[{\"name\":\"server\",\"path\":\"${GITHUB_WORKSPACE}/${SERVER_ZIP}\"}]}"
+               cekit -v --descriptor server-openjdk.yaml build --overrides '{'version': '${{ github.sha }}'}' --overrides ${SERVER_OVERRIDE} --dry-run docker
+
+         - name: Set up Docker Buildx
+           uses: docker/setup-buildx-action@v3
+
+         - name: Build Image
+           run: |
+               cat target/image/Dockerfile
+               docker buildx build --load -t localhost:5001/server:${{ github.sha }} target/image
+               docker save localhost:5001/server:${{ github.sha }} > /tmp/operand-image.tar
+
+         - name: Upload
+           uses: actions/upload-artifact@v4
+           with:
+               name: operand-image
+               path: /tmp/operand-image.tar
