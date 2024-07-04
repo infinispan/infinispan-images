@@ -59,6 +59,7 @@ jobs:
            run: |
                cat target/image/Dockerfile
                docker buildx build --load -t localhost:5001/server:${{ github.sha }} target/image
+               docker tag localhost:5001/server:${{ github.sha }} quay.io/rigazilla/infinispan-server:test-${{ github.run_id}}
                docker save localhost:5001/server:${{ github.sha }} > /tmp/operand-image.tar
 
          - name: Upload
@@ -66,3 +67,12 @@ jobs:
            with:
                name: operand-image
                path: /tmp/operand-image.tar
+
+         - name: Push To Registry
+           uses: redhat-actions/push-to-registry@v2
+           with:
+            registry: quay.io/rigazilla
+            image: infinispan-server
+            tags: test-${{ github.run_id}}
+            username:  rigazilla+ghimages
+            password: ${{ secrets.QUAY_IO_PASSWORD }}
