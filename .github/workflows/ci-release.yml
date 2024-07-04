@@ -3,44 +3,24 @@ name: Release Images
 on:
   workflow_call:
     inputs:
-      branch:
-        description: "The infinispan-images branch to checkout when cutting the release."
-        required: true
-        default: "main"
-        type: string
       repository:
-        description: "The repository to checkout when cutting the release."
-        required: true
-        default: "infinispan/infinispan-images"
+        description: 'Name of the repo to download files from'
         type: string
-      ispnVersion:
-        description: 'Version of Infinispan artifacts to be used'
-        required: true
+      run-id:
+        description: 'Id of the run to download files from'
         type: string
-      images:
-        description: 'A comma-separated list of images to be released'
-        default: 'server, server-native, cli'
+      name:
+        description: 'Artifact name to download'
         type: string
-      latest:
-        description: 'If true, updates the :latest tag to equal this release for each selected image'
-        default: true
-        type: boolean
-      push:
-        description: 'If false, we skip pushing the image to remote repositories'
-        default: true
-        type: boolean
-      releaseId:
-         description: 'The release id to download files from'
-         type: string
 
 jobs:
    download-release:
       runs-on: ubuntu-latest
       steps:
-         - name: Download Release 1
-           uses: robinraju/release-downloader@v1.10
-           with:
-            tag: '${{ github.event.inputs.releaseId }}'
-            releaseId: '${{ github.event.inputs.releaseId }}'
-            repository: 'rigazilla/infinispan'
-            fileName: 'infinispan-server-*.zip'
+        - name: Download a Build Artifact
+          uses: actions/download-artifact@v4.1.7
+          with:
+              repository: '${{ github.event.inputs.repository }}'
+              run-id: '${{ github.event.inputs.run-id }}'
+              name:  '${{ github.event.inputs.name }}'
+              github-token: ${{ secrets.GITHUB_TOKEN }}
