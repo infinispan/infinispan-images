@@ -68,11 +68,13 @@ jobs:
                name: operand-image
                path: /tmp/operand-image.tar
 
-         - name: Push To Registry
-           uses: redhat-actions/push-to-registry@v2
+         - name: Push to Quay.io
+           uses: opspresso/action-docker@master
            with:
-            registry: quay.io/rigazilla
-            image: infinispan-server
-            tags: test-${{ github.run_id}}
-            username:  rigazilla+ghimages
-            password: ${{ secrets.QUAY_IO_PASSWORD }}
+               args: --docker
+           env:
+               USERNAME: rigazilla+ghimages
+               PASSWORD: ${{ secrets.QUAY_IO_PASSWORD }}
+               REGISTRY: "quay.io/rigazilla"
+               TAG_NAME: test-${{ github.run_id }}
+               IMAGE_NAME: infinispan-server
