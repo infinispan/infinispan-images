@@ -70,10 +70,12 @@ jobs:
              pull: true
              push: true
              file: target/image/Dockerfile
-             tags: quay.io/rigazilla/infinispan-server:test-${{ github.run_id }},localhost:5001/server:${{ github.sha }}
+             tags: quay.io/rigazilla/infinispan-server:test-${{ github.run_id }}
+             load: true
 
          - name: Tag Image
            run: |
+               docker tag quay.io/rigazilla/infinispan-server:test-${{ github.run_id }} localhost:5001/server:${{ github.sha }}
                docker save localhost:5001/server:${{ github.sha }} > /tmp/operand-image.tar
 
          - name: Upload
@@ -81,14 +83,3 @@ jobs:
            with:
                name: operand-image
                path: /tmp/operand-image.tar
-
-         - name: Push to Quay.io
-           uses: opspresso/action-docker@master
-           with:
-               args: --docker
-           env:
-               USERNAME: rigazilla+ghimages
-               PASSWORD: ${{ secrets.QUAY_IO_PASSWORD }}
-               REGISTRY: "quay.io/rigazilla"
-               TAG_NAME: test-${{ github.run_id }}
-               IMAGE_NAME: infinispan-server
