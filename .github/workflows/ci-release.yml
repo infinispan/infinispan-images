@@ -45,7 +45,7 @@ jobs:
 
          - name: Create Dockerfile
            env:
-             SERVER_ZIP: ${{ inputs.run-id }}.zip
+             SERVER_ZIP: ${{ inputs.name }}.zip
            run: |
                pwd
                ls
