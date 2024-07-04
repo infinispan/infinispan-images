@@ -20,7 +20,7 @@ jobs:
         - name: Download a Build Artifact
           uses: actions/download-artifact@v4.1.7
           with:
-              repository: '${{ github.event.inputs.repository }}'
-              run-id: '${{ github.event.inputs.run-id }}'
-              name:  '${{ github.event.inputs.name }}'
+              repository: '${{ inputs.repository }}'
+              run-id: '${{ inputs.run-id }}'
+              name:  '${{ inputs.name }}'
               github-token: ${{ secrets.GITHUB_TOKEN }}
