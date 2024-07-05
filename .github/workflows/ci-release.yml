@@ -9,9 +9,12 @@ on:
       run-id:
         description: 'Id of the run to download files from'
         type: string
+      art-name:
+         description: 'Artifact name to download'
+         type: string
       name:
-        description: 'Artifact name to download'
-        type: string
+         description: 'file name to unzip, no extension'
+         type: string
   workflow_dispatch:
      inputs:
        repository:
