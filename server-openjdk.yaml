@@ -1,5 +1,5 @@
 name: infinispan/server
-version: 15.0.5.Final-1
+version: 15.0.5.Final-2
 description: Infinispan Server
 from: registry.access.redhat.com/ubi9/openjdk-21-runtime
 artifacts:
