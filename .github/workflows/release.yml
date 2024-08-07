@@ -60,10 +60,6 @@ jobs:
     outputs:
       image-matrix: ${{ steps.images.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.branch }}
-
       - id: images
         run: |
           IMAGES=$(echo ${{ inputs.images }} | sed -n 's/server/server-openjdk/p')
@@ -83,7 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ inputs.branch }}
           repository: ${{ inputs.repository }}
 
       - name: Install CEKit
@@ -154,7 +150,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ inputs.branch }}
           repository: ${{ inputs.repository }}
 
       - name: Download Patches
