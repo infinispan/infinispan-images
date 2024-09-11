@@ -4,10 +4,10 @@ on:
   workflow_call:
     inputs:
       repository:
-        description: 'Name of the repo to download files from'
+        description: 'Name of the repo to download server artifact from'
         type: string
       run-id:
-        description: 'Id of the run to download files from'
+        description: 'Id of the run to download server artifact from'
         type: string
       art-name:
          description: 'Artifact name to download'
@@ -15,13 +15,16 @@ on:
       name:
          description: 'file name to unzip, no extension'
          type: string
+      tags:
+        description: 'Tags for the image'
+        type: string
   workflow_dispatch:
      inputs:
        repository:
-         description: 'Name of the repo to download files from'
+         description: 'Name of the repo to download server artifact from'
          type: string
        run-id:
-         description: 'Id of the run to download files from'
+         description: 'Id of the run to download server artifact from'
          type: string
        art-name:
          description: 'Artifact name to download'
@@ -29,6 +32,9 @@ on:
        name:
          description: 'file name to unzip, no extension'
          type: string
+      tags:
+        description: 'Tags for the image'
+        type: string
 
 jobs:
    image:
@@ -65,8 +71,8 @@ jobs:
            uses: docker/login-action@v3
            with:
              registry: quay.io
-             username: rigazilla+ghimages
-             password: ${{ secrets.QUAY_IO_PASSWORD }}
+             username: ${{ secrets.QUAY_USERNAME }}
+             password: ${{ secrets.QUAY_TOKEN }}
 
          - name: Build
            uses: docker/build-push-action@v3
@@ -76,16 +82,5 @@ jobs:
              pull: true
              push: true
              file: target/image/Dockerfile
-             tags: quay.io/rigazilla/infinispan-server:test-${{ github.run_id }}
+             tags: ${{ inputs.tags }}
              load: true
-
-         - name: Tag Image
-           run: |
-               docker tag quay.io/rigazilla/infinispan-server:test-${{ github.run_id }} localhost:5001/server:${{ github.sha }}
-               docker save localhost:5001/server:${{ github.sha }} > /tmp/operand-image.tar
-
-         - name: Upload
-           uses: actions/upload-artifact@v4
-           with:
-               name: operand-image
-               path: /tmp/operand-image.tar
