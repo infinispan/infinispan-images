@@ -16,19 +16,19 @@ on:
         description: 'Tags for the image'
         type: string
   workflow_dispatch:
-     inputs:
-       repository:
-         description: 'Name of the repo to download server artifact from'
-         type: string
-       run-id:
-         description: 'Id of the run to download server artifact from'
-         type: string
-       art-name:
-         description: 'Artifact name to download'
-         type: string
-      tags:
-        description: 'Tags for the image'
+    inputs:
+      repository:
+        description: 'Name of the repo to download server artifact from'
         type: string
+      run-id:
+        description: 'Id of the run to download server artifact from'
+        type: string
+      art-name:
+        description: 'Artifact name to download'
+        type: string
+      tags:
+       description: 'Tags for the image'
+       type: string
 
 jobs:
    image:
