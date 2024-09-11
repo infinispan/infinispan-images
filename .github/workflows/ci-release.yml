@@ -12,9 +12,6 @@ on:
       art-name:
          description: 'Artifact name to download'
          type: string
-      name:
-         description: 'file name to unzip, no extension'
-         type: string
       tags:
         description: 'Tags for the image'
         type: string
@@ -28,9 +25,6 @@ on:
          type: string
        art-name:
          description: 'Artifact name to download'
-         type: string
-       name:
-         description: 'file name to unzip, no extension'
          type: string
       tags:
         description: 'Tags for the image'
