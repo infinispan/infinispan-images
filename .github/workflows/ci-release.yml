@@ -50,8 +50,7 @@ jobs:
          - name: Unzip Artifact
            id: unzip_artifact
            run: |
-               unzip ${{ inputs.art-name }}.zip
-               echo "serverzip=$(unzip -Z1 ${{ inputs.art-name }}.zip | grep infinispan-server)" >> $GITHUB_OUTPUT
+               echo "serverzip=$(ls infinispan-server-*.zip)" >> $GITHUB_OUTPUT
          - name: Install CEKit
            uses: cekit/actions-setup-cekit@v1.1.5
 
