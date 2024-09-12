@@ -15,6 +15,10 @@ on:
       tags:
         description: 'Tags for the image'
         type: string
+      push:
+         description: 'If true push image.'
+         default: true
+         type: boolean
     secrets:
       token:
          required: true
@@ -37,6 +41,10 @@ on:
       tags:
        description: 'Tags for the image'
        type: string
+      push:
+         description: 'If true push image.'
+         default: true
+         type: boolean
 
 jobs:
    image:
@@ -87,7 +95,7 @@ jobs:
              context: ./target/image
              platforms: linux/amd64
              pull: true
-             push: false
+             push: ${{ inputs.push }}
              file: target/image/Dockerfile
              tags: ${{ inputs.tags }}
              load: true
