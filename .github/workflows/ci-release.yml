@@ -15,6 +15,14 @@ on:
       tags:
         description: 'Tags for the image'
         type: string
+    secrets:
+      token:
+         required: true
+         description: 'GH token'
+      quay_user:
+         required: true
+      quay_pass:
+         required: true
   workflow_dispatch:
     inputs:
       repository:
@@ -45,7 +53,7 @@ jobs:
              repository: '${{ inputs.repository }}'
              run-id: '${{ inputs.run-id }}'
              name:  '${{ inputs.art-name }}'
-             github-token: ${{ secrets.GITHUB_TOKEN }}
+             github-token: ${{ secrets.token }}
 
          - name: Unzip Artifact
            id: unzip_artifact
@@ -70,8 +78,8 @@ jobs:
            uses: docker/login-action@v3
            with:
              registry: quay.io
-             username: ${{ secrets.QUAY_IO_USERNAME }}
-             password: ${{ secrets.QUAY_IO_PASSWORD }}
+             username: ${{ secrets.quay_user }}
+             password: ${{ secrets.quay_pass }}
 
          - name: Build
            uses: docker/build-push-action@v3
