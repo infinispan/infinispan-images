@@ -80,7 +80,7 @@ jobs:
                SERVER_OVERRIDE="{\"artifacts\":[{\"name\":\"server\",\"path\":\"${GITHUB_WORKSPACE}/${SERVER_ZIP}\"}]}"
                TAG="${TAGS%%,*}"
                IMG_NAME="${TAG%%:*}"
-               IMG_VER="${TAG##:*}"
+               IMG_VER="${TAG##*:}"
                cekit -v --descriptor server-openjdk.yaml build --overrides '{version: '${IMG_VER}', name:'${IMG_NAME}'}' --overrides ${SERVER_OVERRIDE} --dry-run docker
 
          - name: Set up Docker Buildx
