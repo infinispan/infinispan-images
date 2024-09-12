@@ -81,7 +81,7 @@ jobs:
                TAG="${TAGS%%,*}"
                IMG_NAME="${TAG%%:*}"
                IMG_VER="${TAG##*:}"
-               cekit -v --descriptor server-openjdk.yaml build --overrides '{version: '${IMG_VER}', name:'${IMG_NAME}'}' --overrides ${SERVER_OVERRIDE} --dry-run docker
+               cekit -v --descriptor server-openjdk.yaml build --overrides '{"version": "'${IMG_VER}'", "name": "'${IMG_NAME}'"}' --overrides ${SERVER_OVERRIDE} --dry-run docker
 
          - name: Set up Docker Buildx
            uses: docker/setup-buildx-action@v3
