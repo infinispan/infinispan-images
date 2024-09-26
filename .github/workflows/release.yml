@@ -87,7 +87,7 @@ jobs:
           repository: ${{ inputs.repository }}
 
       - name: Install CEKit
-        uses: cekit/actions-setup-cekit@v1.1.5
+        uses: cekit/actions-setup-cekit@v1.1.6
 
       - name: Install yq
         run: sudo snap install yq
