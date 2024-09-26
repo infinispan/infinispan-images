@@ -42,7 +42,7 @@ pipeline {
                         sh "docker run --rm --privileged quay.io/infinispan-test/binfmt:qemu-v8.0.4-33  --install arm64"
                         sh "docker buildx rm multiarch || true"
                         sh "docker buildx create --name multiarch --use"
-                        sh "docker buildx build --platform linux/amd64,linux/arm64 -t ${imageFQN} target-${name}/image"
+                        sh "docker buildx build --platform linux/amd64,linux/arm64 -t ${imageFQN} target-${name}/image --pull"
                         // Build the image again separately to overcome https://github.com/docker/buildx/issues/59 so that we can still archive the image
                         sh "docker buildx build --load -t ${imageFQN} target-${name}/image"
                     }
