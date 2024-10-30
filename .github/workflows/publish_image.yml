@@ -108,7 +108,7 @@ jobs:
                   --overrides ${SERVER_OVERRIDE} --dry-run docker
                else
                   cekit -v --descriptor server-openjdk.yaml build \
-                  --overrides '{"labels" : [{"name" : "quay.expires-after", "value" :"'${EXPIRES}'"}]}' \
+                  --overrides '{"labels" : [{"name" : "quay.expires-after", "value" :"4w"}]}' \
                   --overrides '{"version": "'${IMG_VER}'", "name": "'${IMG_NAME}'"}' \
                   --overrides ${SERVER_OVERRIDE} --dry-run docker
                fi
