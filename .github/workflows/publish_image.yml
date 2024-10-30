@@ -112,6 +112,7 @@ jobs:
                   --overrides '{"version": "'${IMG_VER}'", "name": "'${IMG_NAME}'"}' \
                   --overrides ${SERVER_OVERRIDE} --dry-run docker
                fi
+               cat target/image/Dockerfile
          - name: Login to Quay
            uses: docker/login-action@v3
            with:
