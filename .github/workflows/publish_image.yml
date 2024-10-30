@@ -23,7 +23,7 @@ on:
          description: 'infinispan-image branch to checkout.'
          default: main
          type: string
-      expireAfter:
+      expiresAfter:
          description: 'Set expiration time for image on Quay'
          type: string
     secrets:
@@ -57,7 +57,7 @@ on:
          description: 'infinispan-image branch to checkout.'
          default: main
          type: string
-      expireAfter:
+      expiresAfter:
          description: 'Set expiration time for image on Quay'
          type: string
 
@@ -93,7 +93,7 @@ jobs:
            env:
              SERVER_ZIP: ${{ steps.unzip_artifact.outputs.serverzip }}
              TAGS: ${{ inputs.tags }}
-             EXPIRES: ${{inputs.expireAfter }}
+             EXPIRES: ${{inputs.expiresAfter }}
            run: |
                pwd
                ls
