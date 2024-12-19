@@ -179,4 +179,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ inputs.branch }}
+          repository: ${{ inputs.repository }}
           tags: true
