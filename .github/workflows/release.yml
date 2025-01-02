@@ -177,7 +177,7 @@ jobs:
         uses: ad-m/github-push-action@master
         if: inputs.push
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.API_TOKEN_GITHUB }}
           branch: ${{ inputs.branch }}
           repository: ${{ inputs.repository }}
           tags: true
