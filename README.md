@@ -5,7 +5,7 @@ This repository contains various artifacts to create Infinispan server and CLI i
 Currently we provide the following images which are all based upon the [ubi-minimal](https://catalog.redhat.com/software/containers/detail/5c359a62bed8bd75a2c3fba8)
 base image:
 
-- `infinispan/server` - Infinispan is executed using the Java 11 openjdk JVM
+- `infinispan/server` - Infinispan server running on OpenJDK.
 - `infinispan/cli` - A natively compiled version of the Infinispan CLI.
 
 ## CLI
