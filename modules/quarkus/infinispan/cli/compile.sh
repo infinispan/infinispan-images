@@ -7,6 +7,7 @@ cd /opt/build
     -Pnative \
     -Pdistribution \
     -DskipTests \
+    -Dcheckstyle.skip \
     -pl 'quarkus/cli' \
     -Dquarkus.native.native-image-xmx=8g \
     -Dmaven.buildNumber.revisionOnScmFailure=no-scm
