@@ -12,9 +12,7 @@ We leverage [cekit descriptor files](https://docs.cekit.io/en/latest/descriptor/
 image types.
 
 - `server-openjdk.yaml` - Creates the `infinispan/server` image.
-- `server-native.yaml` - Creates the `infinispan/server-native` image.
 - `cli.yaml` - Creates the `infinispan/cli` image with a natively compiled cli.
-- `server-dev-native.yaml` - Creates the `infinispan/server-native` image using local artifact paths that must be added to the descriptor.
 - `cli-dev.yaml` - Creates the `infinispan/cli` image using a local cli executable that must be added to the descriptor.
 
 ### Recreate Image Releases
@@ -35,6 +33,6 @@ necessary to update the paths of the artifacts in the descriptor then issue the 
 
 ```
 BUILD_ENGINE="podman"
-DESCRIPTOR="server-dev-native.yaml"
+DESCRIPTOR="cli-dev.yaml"
 cekit -v --descriptor $DESCRIPTOR build $BUILD_ENGINE
 ```
