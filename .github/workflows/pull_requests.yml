@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        descriptor: [server-openjdk, server-native, cli]
+        descriptor: [server-openjdk, cli]
 
     env:
       IMAGE: ${{ matrix.descriptor == 'server-openjdk' && 'server' || matrix.descriptor }}

@@ -19,7 +19,7 @@ on:
         type: string
       images:
         description: 'A comma-separated list of images to be released'
-        default: 'server, server-native, cli'
+        default: 'server, cli'
         type: string
       latest:
         description: 'If true, updates the :latest tag to equal this release for each selected image'
@@ -43,7 +43,7 @@ on:
         type: string
       images:
         description: 'A comma-separated list of images to be released'
-        default: 'server, server-native, cli'
+        default: 'server, cli'
         type: string
       latest:
         description: 'If true, updates the :latest tag to equal this release for each selected image'
