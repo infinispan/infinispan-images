@@ -3,8 +3,8 @@ version: 14.0.32.Final-4
 description: Infinispan Server
 from: registry.access.redhat.com/ubi8/openjdk-17-runtime
 artifacts:
-- name: server
-  url: https://downloads.jboss.org/infinispan/14.0.32.Final/infinispan-server-14.0.32.Final.zip
+  - name: server
+    url: https://github.com/infinispan/infinispan/releases/download/14.0.32.Final/infinispan-server-14.0.32.Final.zip
 packages:
   manager: microdnf
 ports:
