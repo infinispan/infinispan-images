@@ -31,7 +31,7 @@ if [[ "${DESCRIPTOR}" == "server-openjdk" ]]; then
     CURRENT_VERSION=$(yq '.version' ${YAML})
     IMAGE_VERSION=$(nextImageVersion)
     yq -i ".version = \"${IMAGE_VERSION}\"" ${YAML}
-    yq -i ".artifacts[0].url = \"https://downloads.jboss.org/infinispan/${ISPN_VERSION}/infinispan-server-${ISPN_VERSION}.zip\"" ${YAML}
+    yq -i ".artifacts[0].url = \"https://github.com/infinispan/infinispan/releases/download/${ISPN_VERSION}/infinispan-server-${ISPN_VERSION}.zip\"" ${YAML}
     yq -i "(.labels[] | select(.name == \"version\" or .name == \"release\") | .value) = \"${ISPN_VERSION}\"" ${YAML}
 else
     # Multi-stage build
