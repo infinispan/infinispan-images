@@ -4,7 +4,7 @@ description: Infinispan Server
 from: registry.access.redhat.com/ubi9/openjdk-21-runtime
 artifacts:
   - name: server
-    url: https://downloads.jboss.org/infinispan/15.1.4.Final/infinispan-server-15.1.4.Final.zip
+    url: https://github.com/infinispan/infinispan/releases/download/15.1.4.Final/infinispan-server-15.1.4.Final.zip
 packages:
   manager: microdnf
 ports:
