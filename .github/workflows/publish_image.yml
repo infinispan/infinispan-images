@@ -1,5 +1,11 @@
-name: CI Release Images
-
+name: CI Images
+description: |
+  This workflow builds and publishes Infinispan images to Quay.io.
+  It is triggered by the `workflow_call` event, which allows it to be called from other workflows.
+  It can also be triggered manually using the `workflow_dispatch` event.
+  The workflow downloads a server artifact from a specified repository and run ID, unzips it, and then builds the image using CEKit.
+  Finally, it pushes the built image to Quay.io.
+  The workflow_dispatch requires: `github.token` can read artifacts in the given repo, QUAY_IO_USERNAME, and QUAY_IO_PASSWORD to be set in the repository secrets.
 on:
   workflow_call:
     inputs:
@@ -71,7 +77,7 @@ jobs:
              repository: '${{ inputs.repository }}'
              run-id: '${{ inputs.runId }}'
              name:  '${{ inputs.serverArtifact }}'
-             github-token: ${{ secrets.token }}
+             github-token: ${{ secrets.token || github.token }}
 
          - name: Unzip Artifact
            id: unzip_artifact
@@ -100,16 +106,14 @@ jobs:
            uses: docker/login-action@v3
            with:
              registry: quay.io
-             username: ${{ secrets.quayUser }}
-             password: ${{ secrets.quayPass }}
+             username: ${{ secrets.quayUser || secrets.QUAY_IO_USERNAME }}
+             password: ${{ secrets.quayPass || secrets.QUAY_IO_PASSWORD }}
 
          - name: Build
            uses: docker/build-push-action@v3
            with:
              context: ./target/image
-             platforms: linux/amd64
-             pull: true
+             platforms: linux/amd64, linux/arm64
              push: ${{ inputs.push }}
              file: target/image/Dockerfile
              tags: ${{ inputs.tags }}
-             load: true
