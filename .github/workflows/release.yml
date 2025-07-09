@@ -152,6 +152,8 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
           repository: ${{ inputs.repository }}
+          persist-credentials: false # needed for push to use API_TOKEN_GITHUB
+          fetch-depth: 0             # needed to push tags
 
       - name: Download Patches
         uses: actions/download-artifact@v4
