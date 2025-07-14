@@ -23,6 +23,10 @@ labels:
     value: 15.2.1.Final
   - name: release
     value: 15.2.1.Final
+  - name: org.jboss.product
+    value: infinispan
+  - name: org.jboss.product.version
+    value: 15.2.1.Final
   - name: io.k8s.description
     value: Provides a scalable in-memory distributed database designed for fast access to large volumes of data.
   - name: io.k8s.display-name
@@ -33,6 +37,13 @@ labels:
     value: datagrid,java,jboss,xpaas
   - name: io.openshift.s2i.scripts-url
     value: image:///usr/local/s2i
+  - name: maintainer
+    value: infinispan-core-team@redhat.com
+  - name: vendor
+    value: Red Hat, Inc.
+  - name: url
+    value: https://infinispan.org/  
+
 envs:
   - name: ISPN_HOME
     value: /opt/infinispan
