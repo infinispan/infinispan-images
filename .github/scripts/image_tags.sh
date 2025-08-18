@@ -14,7 +14,7 @@ function requiredEnv() {
   done
 }
 
-requiredEnv IMAGE_VERSION DESCRIPTOR LATEST
+requiredEnv IMAGE_VERSION DESCRIPTOR TYPE
 
 if [[ "${DESCRIPTOR}" == "server-openjdk" ]]; then
   IMAGE="server"
@@ -26,7 +26,7 @@ ISPN_VERSION=${IMAGE_VERSION%-*}
 MAJOR_MINOR_VERSION=${ISPN_VERSION%.*.*}
 
 TAGS="${MAJOR_MINOR_VERSION} ${ISPN_VERSION} ${IMAGE_VERSION}"
-if [[ "${LATEST}" == "true" ]]; then
+if [[ "${TYPE}" == "latest" ]]; then
   TAGS+=" latest"
 fi
 
