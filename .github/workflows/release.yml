@@ -21,12 +21,13 @@ on:
         description: 'A comma-separated list of images to be released'
         default: 'server, cli'
         type: string
-      latest:
-        description: 'If true, updates the :latest tag to equal this release for each selected image'
-        default: true
-        type: boolean
+      type:
+         type: string
+         description: 'The type of release (default, latest, prerelease)'
+         required: true
+         default: 'default'
       push:
-        description: 'If false, we skip pushing the image to remote repositories'
+        description: 'Push to remote repositories'
         default: true
         type: boolean
 
@@ -45,12 +46,17 @@ on:
         description: 'A comma-separated list of images to be released'
         default: 'server, cli'
         type: string
-      latest:
-        description: 'If true, updates the :latest tag to equal this release for each selected image'
-        default: true
-        type: boolean
+      type:
+         type: choice
+         description: The type of release
+         required: true
+         default: default
+         options:
+            - default
+            - latest
+            - prerelease
       push:
-        description: 'If false, we skip pushing the image to remote repositories'
+        description: 'Push to remote repositories'
         default: true
         type: boolean
 
@@ -99,7 +105,7 @@ jobs:
         env:
           IMAGE_VERSION: ${{ env.IMAGE_VERSION }}
           DESCRIPTOR: ${{ matrix.descriptor }}
-          LATEST: ${{ inputs.latest }}
+          TYPE: ${{ inputs.type }}
 
       - name: Create Dockerfile
         run: cekit -v --descriptor ${{ matrix.descriptor }}.yaml build --dry-run docker --pull
