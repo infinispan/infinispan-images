@@ -1,7 +1,0 @@
-schema_version: 1
-
-name: org.infinispan.runtime
-version: 1.0
-
-execute:
-  - script: extract.sh
